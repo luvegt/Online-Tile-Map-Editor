@@ -5,10 +5,10 @@
 		<title>Online-Tile-Map-Editor</title>
 
 		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:600">
-		<link rel="stylesheet" type="text/css" href="css/main.css">
 		<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
 		<link rel="stylesheet" type="text/css" href="css/jquery-ui-1.10.3.custom.min.css">
 		<link rel="stylesheet" type="text/css" href="css/jquery.jscrollpane.css">
+		<link rel="stylesheet" type="text/css" href="css/main.css">
 	</head>
 
 	<body>
@@ -57,8 +57,8 @@
 					<div id="tileset"><div id="tileset_container"></div></div>
 
 					<div class="buttons">
-						<a href="#" data-template="tileset_form">Add tileset</a>
-						<a href="#" id="tilesets_remove" class="remove">Remove tileset</a>
+						<a href="#" data-template="tileset_form"><span class="icon-plus-sign"></span> Add tileset</a>
+						<a href="#" id="tilesets_remove" class="remove"><span class="icon-minus-sign"></span> Remove tileset</a>
 					</div>
 				</div>
 			</section>
@@ -67,11 +67,9 @@
 				<h2>Layers</h2>
 
 				<div>
-					<ul id="layerlist">
-					</ul>
-					
+					<ul id="layerlist"></ul>
 					<div class="buttons">
-						<a href="#" id="layers_add">Add layer</a>
+						<a href="#" id="layers_add"><span class="icon-plus-sign"></span> Add layer</a>
 					</div>
 				</div>
 			</section>

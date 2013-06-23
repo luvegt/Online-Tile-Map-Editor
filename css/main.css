@@ -35,6 +35,10 @@ a:hover {
 	background-color: #900 !important;
 }
 
+/* ========================= */
+/* ====== CONTEXTMENU ====== */
+/* ========================= */
+
 #contextmenu {
 	position: absolute;
 	top: 0px;
@@ -74,6 +78,10 @@ a:hover {
 #contextmenu > li > ul > li { display: none; }
 #contextmenu > li:hover ul > li { display: block !important; }
 
+/* ===================== */
+/* ====== MENUBAR ====== */
+/* ===================== */
+
 #menubar {
 	color: #999;
 	font-size: 12px;
@@ -106,9 +114,13 @@ a:hover {
 	cursor: pointer;
 }
 
-#menubar > li span { padding-right: 5px; }
+#menubar > li:hover,
+#menubar > li.open {
+	color: #CCC;
+	background-color: #333;
+}
 
-#menubar > li:hover, #menubar > li.open { color: #CCC; background-color: #333; }
+#menubar > li span { padding-right: 5px; }
 #menubar > li:first-child { border-left: none; }
 #menubar > li:last-child { border-right: none; }
 #menubar > li.open ul { display: block; }
@@ -135,9 +147,9 @@ a:hover {
 #menubar li ul li:first-child { border-top: none; }
 #menubar li ul li:last-child { border-radius: 0px 0px 3px 3px; }
 
-/* ===================== */
-/* ====== CANVAS ========== */
-/* ===================== */
+/* ==================== */
+/* ====== CANVAS ====== */
+/* ==================== */
 
 #canvas {
 	position: absolute;
@@ -155,13 +167,7 @@ a:hover {
 	image-rendering: -o-crisp-edges;
 	image-rendering:-webkit-optimize-contrast;
 	-ms-interpolation-mode:nearest-neighbor;
-}
-
-
-#tiles .layer {
-	position: absolute;
-	width: 100%;
-	height: 100%;
+	display: none;
 }
 
 #canvas .selection {
@@ -170,15 +176,10 @@ a:hover {
 	opacity: 0.5;
 }
 
-#grid {
+#tiles .layer {
 	position: absolute;
-	top: 0px;
-	left: 0px;
-	z-index: 1;
-
 	width: 100%;
 	height: 100%;
-	background-repeat: repeat;
 }
 
 #viewport {
@@ -201,15 +202,12 @@ a:hover {
 /* ====== TOOLBAR ====== */
 /* ===================== */
 
-#toolbar .jspDrag, #toolbar .jspTrack{ display: none; }
-#tilesets .jspDrag, #tilesets .jspTrack{ display: block; }
-
 #toolbar {
 	color: #CCC;
 	font-size: 12px;
 	text-shadow: 1px 1px 0px #000;
 
-	width: 250px;
+	width: 300px;
 	height: 100%;
 
 	padding: 10px;
@@ -233,9 +231,7 @@ a:hover {
 	padding: 5px;
 }
 
-.buttons { margin-top: 20px; }
-
-#toolbar section:last-child { margin-bottom: 20px; }
+#toolbar .buttons { margin-top: 20px; }
 
 #toolbar section > h2 {
 	color: #FFF;
@@ -262,14 +258,6 @@ a:hover {
 
 #toolbar section > h2.collapsed {
 	border-radius: 3px;
-}
-
-#output > h2 {
-	background-image: linear-gradient(0deg, #669900, #99CC00);
-	background-size: contain !important;
-	background-repeat: repeat !important;
-	background-position: 0px 0px !important;
-	border-radius: 3px !important;
 }
 
 #toolbar section > div {
@@ -328,9 +316,8 @@ a:hover {
 	-webkit-appearance: none;
 }
 
+#tileset { height: 250px; }
 #tilesets select[name=tileset_select] option { color: #333; }
-
-#tilesets #tileset { height: 200px; }
 
 .loading {
 	position: absolute;
