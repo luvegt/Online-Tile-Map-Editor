@@ -7,6 +7,7 @@ define(["jquery-ui"], function($) {
 		Editor = namespace;
 		
 		$("*[data-template]").on("click", this.open_dialog);
+		$("*[data-toggle]").on("click", this.toggle);
 
 		return this;
 	};
@@ -22,6 +23,24 @@ define(["jquery-ui"], function($) {
 				resizable: false
 			});
 		});
+	};
+
+	Menubar.toggle = function(e) {
+		var value = $(e.currentTarget).attr("data-toggle"),
+			extra = value.split(":"), status;
+
+		if (extra[0] == "visibility") {
+			status = $(extra[1]).toggle();
+			$(e.currentTarget).find("span").toggleClass("icon-check-empty", "icon-check");
+		} else if (extra[0] == "class") {
+			status = $(extra[2]).toggleClass(extra[1]);
+			$(e.currentTarget).find("span").toggleClass("icon-check-empty", "icon-check");
+		} else {
+			Menubar.toggleFunctions[value]();
+		}
+	};
+
+	Menubar.toggleFunctions = {
 	};
 
 	return Menubar;

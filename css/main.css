@@ -170,6 +170,10 @@ a:hover {
 	display: none;
 }
 
+#canvas.nogrid {
+	background-image: none !important;
+}
+
 #canvas .selection {
 	position: absolute;
 	z-index: 99;
