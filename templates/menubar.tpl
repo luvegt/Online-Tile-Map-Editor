@@ -17,7 +17,7 @@
 	<li>
 		View
 		<ul>
-			<li data-setting="viewport_toggle" class="checkbox">Viewport</li>
+			<li data-setting="viewport_toggle" class="checkbox checked">Viewport</li>
 			<li data-setting="grid_toggle" class="checkbox checked">Grid</li>
 		</ul>
 	</li>

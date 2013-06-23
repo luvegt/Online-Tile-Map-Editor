@@ -1,10 +1,17 @@
 <table>
 	<tr>
-		<td>Width (tiles)</td>
+		<td>Measurement</td>
+		<td>
+			<input type="radio" name="measurement" value="pixels"> Pixels
+			<input type="radio" name="measurement" value="tiles"> Tiles
+		</td>
+	</tr>
+	<tr>
+		<td>Canvas Width</td>
 		<td><input type="text" name="canvas_width"></td>
 	</tr>
 	<tr>
-		<td>Height (tiles)</td>
+		<td>Canvas Height</td>
 		<td><input type="text" name="canvas_height"></td>
 	</tr>
 	<tr>
