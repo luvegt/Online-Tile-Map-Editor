@@ -7,7 +7,7 @@ define([
 	"models/export",
 ], function($, Menubar, Canvas, Tilesets, Layers, Export) {
 
-	var Editor = {};null, 
+	var Editor = {}; 
 
 	Editor.config = {
 		// TODO save current tileset/layer here
