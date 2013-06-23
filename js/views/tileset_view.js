@@ -102,6 +102,7 @@ define([
 		var tileset = Editor.Tilesets.get_active();
 		
 		$("style#tileset_" + tileset.id).remove();
+		$("#tiles div.ts_" + tileset.id).remove();
 		$("#tilesets select option:selected").remove();
 
 		delete Editor.Tilesets.collection[tileset.name];
