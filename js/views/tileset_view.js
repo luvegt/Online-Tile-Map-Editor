@@ -109,11 +109,17 @@ define([
 		// TODO add warning; remove tiles using this tileset
 		$("#tileset_container").css({
 			width: 0,
-			height: 0,
-			backgroundImage: "none"
+			height: 0
 		});
 
-		$("#tileset").jScrollPane().data('jsp').destroy();
+		if ($("#tilesets select option").length) {
+			var name = $("#tilesets select option:eq(0)").html()
+
+			// TODO active previous tileset not the first one
+			$("#tilesets select option").removeAttr("selected");
+			$("#tilesets select option:eq(0)").attr("selected", true);
+			Editor.Tilesets.set(name);
+		}
 	};
 
 	TilesetView.change_tileset = function(e) {
