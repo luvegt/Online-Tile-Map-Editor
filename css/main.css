@@ -479,14 +479,14 @@ ul#layerlist > li.active {
 
 #dialog #file_container { position: relative; }
 
-#dialog input[name=tileset_file] {
+#dialog input[name=file] {
 	position: relative;
 	height: 20px;
 	opacity: 0;
 	z-index: 9999;
 }
 
-#dialog input[name=tileset_file_overlay] {
+#dialog input[name=file_overlay] {
 	position: absolute;
 	top: 0px;
 	left: 0px;
