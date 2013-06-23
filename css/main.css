@@ -316,6 +316,12 @@ a:hover {
 	-webkit-appearance: none;
 }
 
+#tilesets select[name=tileset_select] option {
+	background-color: #FFF;
+	color: #000;
+	text-shadow: none;
+}
+
 #tileset { height: 250px; }
 #tilesets select[name=tileset_select] option { color: #333; }
 

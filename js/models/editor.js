@@ -49,7 +49,7 @@ define([
 			Editor.mousedown = e.type == "mousedown" && e.which == 1;
 		});
 
-		$(":not(input, select, textarea, #container)").disableSelection();
+		$("#tileset, #canvas").disableSelection();
 
 		Editor.Layers.add(null, "background");
 		Editor.Layers.add(null, "world");

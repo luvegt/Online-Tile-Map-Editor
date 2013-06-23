@@ -161,7 +161,7 @@ define([
 
 		} else if (e.type == "mousemove") {
 
-			if (Editor.mousedown && Editor.selection) {
+			if (Editor.mousedown ) {
 
 				var sx = Editor.selection[0][0],
 				    sy = Editor.selection[0][1],
