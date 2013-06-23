@@ -20,7 +20,8 @@ define(["jquery-ui"], function($) {
 			$("#dialog").html(data).dialog({
 				title: title, modal: true,
 				closeText: "<span class='icon-remove-sign'></span>",
-				resizable: false
+				resizable: false,
+				width: "auto"
 			});
 		});
 	};

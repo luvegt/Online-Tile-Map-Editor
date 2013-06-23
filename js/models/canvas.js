@@ -122,7 +122,7 @@ define([
 		buffer.width = tw;
 		buffer.height = th;
 
-		bfr.fillStyle = "rgba(255, 255, 255, 0.2)";
+		bfr.fillStyle = "rgba(0, 0, 0, 0.1)";
 		bfr.fillRect(0, th-1, tw, 1);
 		bfr.fillRect(tw-1, 0, 1, th);
 

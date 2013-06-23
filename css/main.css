@@ -26,8 +26,8 @@ a {
 }
 
 a:hover {
-	background-color: #669900;
-	border-top: 2px solid #99CC00;
+	background-color: #2881ab;
+	border-top: 2px solid #83d8ff;
 }
 
 .remove:hover {
@@ -159,7 +159,7 @@ a:hover {
 	height: 600px;
 
 	display: block;
-	background-color: #666;
+	background-color: #FFF;
 	overflow: hidden;
 
 	/* Not supported by chrome yet :( */
@@ -196,7 +196,7 @@ a:hover {
 	z-index: 2;
 
 	background-color: transparent;
-	box-shadow: inset 2px 2px 0px #C00, inset -2px -2px 0px #C00;
+	box-shadow: inset 4px 4px 0px #06C, inset -4px -4px 0px #06C;
 
 	border: 1px solid rgba(0, 0, 0, 0.4);
 	border-width: 0px;
@@ -237,7 +237,7 @@ a:hover {
 
 #toolbar .buttons { margin-top: 20px; }
 
-#toolbar section > h2 {
+#toolbar section > h2, .ui-dialog-titlebar {
 	color: #FFF;
 	font-family: "Source Sans Pro";
 	text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
@@ -245,19 +245,10 @@ a:hover {
 	font-weight: 600;
 	line-height: 20px;
 	letter-spacing: 0px;
-	background-color: #669900;
-
-	background-image: linear-gradient(0deg, #669900, #99CC00);
-
-	background-size: contain;
-	background-repeat: repeat;
-	background-position: 0px 0px;
-
-	border-top: 1px solid #FFF;
+	background-color: #1d9fdb;
+	border-top: 1px solid #83d8ff;
 	border-radius: 3px 3px 0px 0px;
-
-	padding: 10px;
-	cursor: pointer;
+	padding: 8px 10px;
 }
 
 #toolbar section > h2.collapsed {
@@ -371,7 +362,7 @@ ul#layerlist > li {
 }
 
 #layerlist li span {
-	color: #111;
+	color: #222;
 	font-size: 14px;
 	text-shadow: 0px 1px rgba(255, 255, 255, 0.5);
 }
@@ -380,31 +371,17 @@ ul#layerlist > li {
 #layerlist li span:last-child { float: right; }
 
 ul#layerlist > li:last-child { border-bottom: 0px; }
-ul#layerlist > li.active { background-color: #564; }
+ul#layerlist > li.active {
+	background-color: #2881ab;
+	border-top: 1px solid #83d8ff;
+}
 
 /* ======================= */
 /* ====== JQUERY UI ====== */
 /* ======================= */
 
-.ui-dialog-titlebar {
-	color: #FFF;
-	text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
-	font-size: 20px;
-	font-weight: 400;
-	line-height: 20px;
-	letter-spacing: 0px;
-	background-color: #666;
-
-	background-image: linear-gradient(0deg, #669900, #99CC00);
-
-	border-top: 1px solid #FFF;
-	border-radius: 3px 3px 0px 0px;
-
-	padding: 10px;
-	cursor: move;
-}
-
 .ui-dialog {
+	width: auto !important;
 }
 
 .ui-dialog-titlebar-close {
@@ -425,35 +402,6 @@ ul#layerlist > li.active { background-color: #564; }
 	text-indent: 0px !important;
 }
 
-#dialog {
-	background-color: #EEE;
-	padding: 10px;
-	display: none;
-	overflow: hidden;
-}
-
-.ui-dialog-titlebar a {
-	color: #FFF;
-	background-color: transparent;
-	text-decoration: none;
-	border: 0px;
-	border-bottom: 1px dotted #FFF;
-	border-radius: 0px;
-	padding: 0px;
-}
-
-.ui-dialog-titlebar a:hover { border-bottom: 1px solid #FFF; }
-
-.ui-dialog table td {
-	font-size: 12px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-
-	white-space: nowrap;
-}
-
-.ui-dialog table tr:last-child td { padding-bottom: 0px; }
-
 .ui-widget-overlay {
 	position: absolute;
 	top: 0px;
@@ -465,7 +413,32 @@ ul#layerlist > li.active { background-color: #564; }
 /* ====== MISC ====== */
 /* ================== */
 
-.dialog input[type=text], .dialog input[type=number] {
+#dialog {
+	background-color: #EEE;
+	padding: 20px;
+	display: none;
+	overflow: hidden;
+}
+
+#dialog hr {
+	height: 0px;
+	border: 0px;
+	border-top: 1px solid #CCC;
+	border-bottom: 1px solid #FFF;
+	margin: 20px 0px;
+}
+
+#dialog table td {
+	font-size: 12px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+
+	white-space: nowrap;
+}
+
+#dialog table tr:last-child td { padding-bottom: 0px; }
+
+#dialog input[type=text], #dialog input[type=number], #dialog input[type=file]{
 	width: 90px !important;
 	height: 20px;
 	padding: 2px 5px;
@@ -473,21 +446,23 @@ ul#layerlist > li.active { background-color: #564; }
 	border: 1px solid #999;
 }
 
-.dialog input[type=button] {
+#dialog input[type=button] {
 	height: 25px;
 	padding: 2px 5px;
 }
 
-.dialog #file_container { position: relative; }
+.stretch { width: 100%; }
 
-.dialog input[name=tileset_file] {
+#dialog #file_container { position: relative; }
+
+#dialog input[name=tileset_file] {
 	position: relative;
 	height: 20px;
 	opacity: 0;
 	z-index: 9999;
 }
 
-.dialog input[name=tileset_file_overlay] {
+#dialog input[name=tileset_file_overlay] {
 	position: absolute;
 	top: 0px;
 	left: 0px;

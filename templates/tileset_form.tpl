@@ -4,7 +4,7 @@
 		<td>
 			<div id="file_container">
 				<input type="file" name="tileset_file">
-				<input type="button" name="tileset_file_overlay" value="choose tileset"></div>
+				<input type="button" name="tileset_file_overlay" value="choose tileset" class="stretch"></div>
 			</div>
 		</td>
 	</tr>
@@ -24,7 +24,8 @@
 		<td><span class="hint" title="If desired, specify a color in HEX or RGB format which will later become transparent.">Tile Alpha</span></td>
 		<td><input type="text" name="tile_alpha" value="" maxlength="11" placeholder="hex / rgb"></td>
 	</tr>
-	<tr>
-		<td colspan="2"><input type="button" value="add tileset" id="tilesets_add"></td>
-	</tr>
 </table>
+
+<hr>
+
+<input type="button" value="add tileset" id="tilesets_add" class="stretch">
