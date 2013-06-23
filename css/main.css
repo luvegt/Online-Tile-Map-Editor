@@ -45,8 +45,9 @@ a:hover {
 	left: 0px;
 	z-index: 99;
 
-	border: 1px solid #111;
+	border: 1px solid #000;
 	list-style: none;
+	border-radius: 3px;
 }
 
 #contextmenu li {
@@ -56,16 +57,16 @@ a:hover {
 	text-shadow: -1px 0px #333;
 	font-size: 12px;
 
-	background-color: #666;
-	border-top: 1px solid #999;
-	border-bottom: 1px solid #333;
+	background-color: #222;
+	border-top: 1px solid #333;
+	border-bottom: 1px solid #111;
 
 	cursor: pointer;
 }
 
 #contextmenu li:hover {
-	border-top: 1px solid #99CC00;
-	background-color: #669900;
+	background-color: #2881ab;
+	border-top: 1px solid #83d8ff;
 }
 
 #contextmenu > li:hover ul {
@@ -74,7 +75,8 @@ a:hover {
 	margin-top: -19px;
 }
 
-#contextmenu li:last-child { border-bottom: 0px; }
+#contextmenu li:first-child { border-radius: 2px 2px 0px 0px; }
+#contextmenu li:last-child { border-radius: 0px 0px 2px 2px; border-bottom: 0px; }
 #contextmenu > li > ul > li { display: none; }
 #contextmenu > li:hover ul > li { display: block !important; }
 
