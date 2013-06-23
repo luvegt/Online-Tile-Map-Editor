@@ -15,6 +15,7 @@ define([
 
 	Editor.mousedown = false;
 	Editor.selection = null;
+
 	Editor.Menubar = Menubar.initialize(Editor);
 	Editor.Canvas = Canvas.initialize(Editor);
 	Editor.Tilesets = Tilesets.initialize(Editor);

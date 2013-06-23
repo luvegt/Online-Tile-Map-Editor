@@ -9,6 +9,8 @@ define(["jquery-ui"], function($) {
 		$("*[data-template]").on("click", this.open_dialog);
 		$("*[data-toggle]").on("click", this.toggle);
 
+		$("body").on("keydown keyup", "#canvas_settings input", this.canvas_settings);
+		$("body").on("keydown keyup", "#viewport_settings input", this.viewport_settings);
 		return this;
 	};
 
@@ -39,6 +41,26 @@ define(["jquery-ui"], function($) {
 		} else {
 			Menubar.toggleFunctions[value]();
 		}
+	};
+
+	Menubar.canvas_settings = function(e) {
+		var name = $(e.currentTarget).attr("name"),
+		    value = $(e.currentTarget).val(),
+		    tileset = Editor.Tilesets.get_active();
+
+		if (name == "width") { value = (+value) * tileset.tilesize.width; }
+		if (name == "height") { value = (+value) * tileset.tilesize.height; }
+
+		$("#canvas").css(name, value);
+		Editor.Canvas.reposition();
+	};
+
+	Menubar.viewport_settings = function(e) {
+		var name = $(e.currentTarget).attr("name"),
+		    value = +$(e.currentTarget).val();
+
+		$("#viewport").css(name, value);
+		Editor.Canvas.reposition();
 	};
 
 	Menubar.toggleFunctions = {
