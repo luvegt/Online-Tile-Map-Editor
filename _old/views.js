@@ -16,8 +16,6 @@ var MenuBarView = Backbone.View.extend({
 				$("#menubar > li").removeClass("open");
 			}
 		});
-
-		$("body").on("keyup", "#dialog input", { self: this }, this.model.applyInputs);
 	},
 
 	toggleMenu: function(e) {
@@ -38,7 +36,7 @@ var MenuBarView = Backbone.View.extend({
 			var name = $(e.target).attr("data-setting");
 			var value = $(e.target).hasClass("checked");
 
-			self.model.get("settings").set(name, value);
+			self.model.get("settings_view").applyChanges(name, value);
 
 		} else {
 			var template = $(e.target).attr("data-template");
@@ -48,10 +46,8 @@ var MenuBarView = Backbone.View.extend({
 				$("#dialog").html(data);
 				
 				$("#dialog input").each(function(index, input) {
-					if (["radio", "checkbox"].indexOf(input.type) != -1)
-					{ $(input).attr("checked", self.model.get("settings").get(input.name) == input.value); }
-					else
-					{ $(input).val(self.model.get("settings").get(input.name)); }
+					if (self.model.get("settings_view").model.has(input.name))
+					{ $(input).val(self.model.get("settings_view").model.get(input.name)); }
 				});
 
 				$("#dialog").dialog({
@@ -65,11 +61,107 @@ var MenuBarView = Backbone.View.extend({
 	}
 });
 
+var SettingsView = Backbone.View.extend({
+
+	el: "body",
+
+	initialize: function() {
+		for (var i in this.model.attributes) {
+			this.applyChanges(i, this.model.attributes[i]);
+		}
+	},
+
+	events: {
+		"keyup #dialog input": "checkInput",
+		"change #dialog input": "checkInput"
+	},
+
+	checkInput: function(e) {
+		var input = e.target;
+		var val = "";
+
+		switch(input.type) {
+			case "text": val = input.value; break;
+			case "textarea": val = input.innerHTML; break;
+			case "select": val = input.value; break;
+			case "radio": val = input.value; break;
+			case "checkbox": val = input.checked; break;
+		}
+
+		var check = this.model.set(input.name, val);
+
+		// Sets red border on error
+		if (!check) {
+			input.style.borderColor = "#F00";
+		} else {
+			input.style.borderColor = "#999";
+			this.applyChanges(input.name, val);
+		}
+	},
+
+	applyChanges: function(name, value) {
+		switch (name) {
+			case "viewport_width":
+				$("#viewport").css("width", this.tileRelative(name, value));
+			break;
+
+			case "viewport_height":
+				$("#viewport").css("height", this.tileRelative(name, value));
+			break;
+
+			case "viewport_toggle":
+				$("#viewport").css("display", value ? "block" : "none");
+			break;
+
+			case "canvas_width":
+				$("#canvas").css("width", this.tileRelative(name, value));
+				$("#grid").css("width", $("#canvas").css("width"));
+				$("#canvas_tiles").css("width", $("#canvas").css("width"));
+			break;
+
+			case "canvas_height":
+				$("#canvas").css("height", this.tileRelative(name, value));
+				$("#grid").css("height", $("#canvas").css("height"));
+				$("#canvas_tiles").css("height", $("#canvas").css("height"));
+			break;
+
+			case "canvas_bgcolor":
+				$("#canvas").css("backgroundColor", value);
+			break;
+
+			case "grid_toggle":
+				$("#grid").css("display", value ? "block" : "none");
+			break;
+		}
+	},
+
+	tileRelative: function(name, value) {
+		if ($("#dialog input[name=measurement][value=tiles]").length) {
+			var tile_relative = $("#dialog input[name=measurement][value=tiles]")[0].checked ? true : false;
+
+			var tw = window.tileSize[0];
+			var th = window.tileSize[1];
+
+			var mod = name.indexOf("width") != -1 ? tw : th;
+
+			return tile_relative ? parseInt(value, 10) * mod : value;
+		}
+
+		return value;
+	}
+});
+
 var LayerCollectionView = Backbone.View.extend({
 
 	el: "ul#layer_list",
 
 	initialize: function() {
+
+		this.collection = new LayerCollection([
+			{ name: "background", active: true, index: 0 },
+			{ name: "world", index: 1 }
+		]);
+
 		this.$el.sortable({ axis: "y" });
 		this.$el.bind("sortchange", { self: this }, this.sortByIndex);
 
@@ -278,6 +370,12 @@ var TilesetCollectionView = Backbone.View.extend({
 	el: "#tilesets",
 
 	initialize: function() {
+
+		this.collection = new TilesetCollection([
+			//{ src: "img/tilesets/forest_tiles.png", tile_size: [16, 16], alpha: [255, 0, 255] },
+			{ src: "img/tilesets/mage_city.png", tile_size: [32, 32] }
+		]);
+
 		this.init();
 		this.$el.find("#tileset").jScrollPane();
 
@@ -299,17 +397,25 @@ var TilesetCollectionView = Backbone.View.extend({
 
 	// Loads up default tilesets
 	init: function() {
+		var self = this;
 		var tileset = this.collection.models[0];
-		var w = tileset.get("tile_size")[0];
-		var h = tileset.get("tile_size")[1];
-		window.tileSize = [w, h];
 
-		$("#tileset_container").css("width", tileset.get("src").width + "px");
-		$("#tileset_container").css("height", tileset.get("src").height + "px");
-		$("#tileset_container").css("backgroundImage", "url('" + tileset.get("src").src + "')");
-		$("select[name=tileset_select]").append("<option>" + tileset.get("name") + "</option>");
-		this.addTilesetClass();
-		$("#loading").hide();
+		var preload = window.setInterval(function() {
+			if (tileset.get("ready")) {
+				var w = tileset.get("tile_size")[0];
+				var h = tileset.get("tile_size")[1];
+				window.tileSize = [w, h];
+
+				$("#tileset_container").css("width", tileset.get("src").width + "px");
+				$("#tileset_container").css("height", tileset.get("src").height + "px");
+				$("#tileset_container").css("backgroundImage", "url('" + tileset.get("src").src + "')");
+				$("select[name=tileset_select]").append("<option>" + tileset.get("name") + "</option>");
+
+				self.addTilesetClass();
+				$("#loading").hide();
+				window.clearInterval(preload);
+			}
+		}, 500);
 	},
 
 	// Creates a css class with the current tileset as the background-image

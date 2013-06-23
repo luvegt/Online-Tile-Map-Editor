@@ -13,7 +13,7 @@ A web based tile map editor for all kinds of 2d games and applications.
   * Tileset handling
   * Layer handling
   * Drawing
-  * Fancy Ui
+  * Fancy UI
 
 ###### In Progress
 

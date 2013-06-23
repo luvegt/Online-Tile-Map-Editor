@@ -7,7 +7,8 @@ html, body {
 }
 
 body {
-	font-family: Arial;
+	font-size: 16px;
+	font-family: "Source Sans Pro", Arial, sans-serif;
 	background-color: #333;
 	box-shadow: inset 0px 0px 100px rgba(0, 0, 0, 0.5);
 	overflow: hidden;
@@ -34,6 +35,10 @@ a:hover {
 	border-color: #C00 !important;
 	background-color: #900 !important;
 }
+
+/* ========================= */
+/* ====== CONTEXTMENU ====== */
+/* ========================= */
 
 #contextmenu {
 	position: absolute;
@@ -74,16 +79,21 @@ a:hover {
 #contextmenu > li > ul > li { display: none; }
 #contextmenu > li:hover ul > li { display: block !important; }
 
+/* ===================== */
+/* ====== MENUBAR ====== */
+/* ===================== */
+
 #menubar {
 	color: #999;
-	font-size: 12px;
+	font-size: 14px;
 	text-shadow: 0px 1px #000;
 
-	width: 100%;
+	width: auto;
 	height: 25px;
 	padding: 0px 10px;
 
 	list-style: none;
+	line-height: 14px;
 
 	background-color: #222;
 	border-bottom: 1px solid #333;
@@ -91,8 +101,8 @@ a:hover {
 
 	position: absolute;
 	top: 0px;
-	left: 0px;
-	z-index: 999;	
+	left: 0px; right: 0px;
+	z-index: 99;	
 }
 
 #menubar > li {
@@ -106,6 +116,7 @@ a:hover {
 	cursor: pointer;
 }
 
+#menubar > li span { padding-right: 5px; }
 #menubar > li:hover, #menubar > li.open { color: #CCC; background-color: #333; }
 #menubar > li:first-child { border-left: none; }
 #menubar > li:last-child { border-right: none; }
@@ -133,64 +144,38 @@ a:hover {
 #menubar li ul li:first-child { border-top: none; }
 #menubar li ul li:last-child { border-radius: 0px 0px 3px 3px; }
 
-#menubar li ul li.checkbox {
-	background-image: url("../img/icons/unchecked.png");
-	background-repeat: no-repeat;
-	background-position: 5px 50%;
-	padding-left: 26px;
-}
-
-#menubar li ul li.checkbox:hover { background-image: url("../img/icons/unchecked_hover.png"); }
-#menubar li ul li.checked { background-image: url("../img/icons/checked.png"); }
-#menubar li ul li.checked:hover { background-image: url("../img/icons/checked_hover.png"); }
-
-
-/* ===================== */
-/* === CANVAS ========== */
-/* ===================== */
-
-#container {
-	position: absolute;
-
-	/* Not supported by chrome yet :( */
-	image-rendering:-moz-crisp-edges;
-	image-rendering: -o-crisp-edges;
-	image-rendering:-webkit-optimize-contrast;
-	-ms-interpolation-mode:nearest-neighbor;
-}
+/* ==================== */
+/* ====== CANVAS ====== */
+/* ==================== */
 
 #canvas {
 	position: absolute;
 	z-index: 0;
-
-	display: block;
-	background-color: #666;
+	width: 800px;
+	height: 600px;
 	overflow: hidden;
+	background-color: #666;
+
+	image-rendering: -webkit-optimize-contrast;
+	image-rendering: -moz-crisp-edges;
+	image-rendering: -o-crisp-edges;
+	-ms-interpolation-mode: nearest-neighbor;
+	display: none;
 }
 
-#canvas_tiles { position: absolute; }
-
-#canvas_tiles .layer {
+#tiles .layer {
 	position: absolute;
 	width: 100%;
 	height: 100%;
 }
 
-#canvas_selection {
+#canvas .selection {
 	position: absolute;
+	top: 0px; left: 0px;
 	z-index: 99;
+
+	background-color: #FFF;
 	opacity: 0.5;
-}
-
-#grid {
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	z-index: 1;
-
-	width: 100%;
-	height: 100%;
-	background-repeat: repeat;
 }
 
 #viewport {
@@ -198,9 +183,8 @@ a:hover {
 	height: 600px;
 
 	position: absolute;
-	top: 0px;
-	left: 0px;
-	z-index: 2;
+	top: 0px; left: 0px;
+	z-index: 1;
 
 	background-color: transparent;
 	box-shadow: inset 2px 2px 0px #C00, inset -2px -2px 0px #C00;
@@ -209,23 +193,17 @@ a:hover {
 	border-width: 0px;
 }
 
-
 /* ===================== */
-/* === TOOLBAR ========= */
+/* ====== TOOLBAR ====== */
 /* ===================== */
-
-#toolbar .jspDrag, #toolbar .jspTrack{ display: none; }
-#tilesets .jspDrag, #tilesets .jspTrack{ display: block; }
 
 #toolbar {
 	color: #CCC;
 	font-size: 12px;
 	text-shadow: 1px 1px 0px #000;
 
-	width: 250px;
-	height: 100%;
-
-	padding: 10px;
+	width: 320px;
+	height:auto;
 	overflow: hidden;
 
 	background-color: #444;
@@ -233,24 +211,25 @@ a:hover {
 	box-shadow: 0px 0px 100px rgba(0, 0, 0, 0.5);
 
 	position: absolute;
-	top: 27px;
-	left: 0px;
-	z-index: 99;
+	bottom:0; top:0;
+	left:0; right:0;
+	z-index: 1;
+
+	margin-top: 27px;
 }
 
 #toolbar section {
 	background-color: #333;
 	border-radius: 5px;
-
-	margin-bottom: 10px;
 	padding: 5px;
+	margin: 10px;
 }
 
 #toolbar section:last-child { margin-bottom: 20px; }
 
 #toolbar section > h2 {
 	color: #FFF;
-	font-family: "Source Sans Pro";
+	font-family: "Source Sans Pro", Arial, sans-serif;
 	text-shadow: 1px 1px rgba(0, 0, 0, 0.5);
 	font-size: 18px;
 	font-weight: 600;
@@ -258,11 +237,11 @@ a:hover {
 	letter-spacing: 0px;
 	background-color: #669900;
 
-	background-image: url("../img/icons/collapse.png"), url("../img/gradient.svg");
+	background-image: linear-gradient(0deg, #669900, #99CC00);
 
-	background-size: 22px 22px, contain;
-	background-repeat: no-repeat, repeat;
-	background-position: 210px 50%, 0px 0px;
+	background-size: contain;
+	background-repeat: repeat;
+	background-position: 0px 0px;
 
 	border-top: 1px solid #FFF;
 	border-radius: 3px 3px 0px 0px;
@@ -272,12 +251,11 @@ a:hover {
 }
 
 #toolbar section > h2.collapsed {
-	background-image: url("../img/icons/expand.png"), url("../img/gradient.svg");
 	border-radius: 3px;
 }
 
 #output > h2 {
-	background-image: url("../img/gradient.svg") !important;
+	background-image: linear-gradient(0deg, #669900, #99CC00);
 	background-size: contain !important;
 	background-repeat: repeat !important;
 	background-position: 0px 0px !important;
@@ -290,19 +268,22 @@ a:hover {
 	border: 1px solid #222;
 	border-top: 0px;
 
-	box-shadow: inset 0px 0px 10px #222;
 	padding: 10px;
+	box-shadow: inset 0px 0px 10px #222;
 	border-radius: 0px 0px 3px 3px;
 
 	overflow: hidden;
 }
 
+#toolbar section > div .buttons {
+	margin-top: 10px;
+}
 
-/* ===================== */
-/* === TILESETS ======== */
-/* ===================== */
+/* ====================== */
+/* ====== TILESETS ====== */
+/* ====================== */
 
-#selector {
+#tilesets .selection {
 	position: absolute;
 	pointer-events: none;
 	top: 0px;
@@ -316,6 +297,7 @@ a:hover {
 	width: 100%;
 	height: 30px;
 	overflow: hidden;
+
 	background-color: #666;
 	box-shadow: inset 0px -5px 10px rgba(0, 0, 0, 0.2);
 	background-image: url("../img/icons/select_arrow.png");
@@ -329,7 +311,7 @@ a:hover {
 }
 
 #tilesets select[name=tileset_select] {
-	width: 360px;
+	width: 100%;
 	padding: 5px 0px 5px 5px;
 	color: #CCC;
 	font-size: 14px;
@@ -343,9 +325,16 @@ a:hover {
 
 #tilesets select[name=tileset_select] option { color: #333; }
 
-#tilesets #tileset { height: 200px; }
+#tileset {
+	height: 250px;
+}
 
-#loading {
+#tileset_container {
+	background-repeat: no-repeat;
+	width: 100%;
+}
+
+#tilesets .loading {
 	position: absolute;
 	top: 0px;
 	left: 0px;
@@ -358,19 +347,18 @@ a:hover {
 	border-radius: 5px;
 }
 
-#loading > img { padding-top: 100px; }
+#tilesets .loading > img { padding-top: 100px; }
 
+/* ==================== */
+/* ====== LAYERS ====== */
+/* ==================== */
 
-/* ===================== */
-/* === LAYERS ========== */
-/* ===================== */
-
-ul#layer_list {
+ul#layerlist {
 	border: 1px solid #111;
 	list-style: none;
 }
 
-ul#layer_list > li {
+ul#layerlist li {
 	height: 10px;
 
 	color: #CCC;
@@ -378,28 +366,30 @@ ul#layer_list > li {
 	font-size: 12px;
 	line-height: 10px;
 
-	padding: 10px;
-	padding-left: 35px;
+	padding: 6px 10px 12px 10px;
 	background-color: #666;
 
 	border-top: 1px solid #999;
 	border-bottom: 1px solid #333;
 
-	background-image: url("../img/icons/eye_open.png"), url("../img/icons/cog.png");
-	background-repeat: no-repeat;
-	background-position: 10px center, 193px center;
-
 	cursor: pointer;
 }
 
-ul#layer_list > li:last-child { border-bottom: 0px; }
-ul#layer_list > li.hide { background-image: url("../img/icons/eye_closed.png"), url("../img/icons/cog.png"); }
-ul#layer_list > li.active { background-color: #564; }
+ul#layerlist li span {
+	color: #222;
+	font-size: 14px;
+	text-shadow: 0px 1px rgba(255, 255, 255, 0.5);
+}
 
+ul#layerlist li span:first-child { padding-right: 10px;}
+ul#layerlist li span:last-child { float: right; }
 
-/* ===================== */
-/* === JQUERY UI ======= */
-/* ===================== */
+ul#layerlist li:last-child { border-bottom: 0px; }
+ul#layerlist li.active { background-color: #564; }
+
+/* ======================= */
+/* ====== JQUERY UI ====== */
+/* ======================= */
 
 .ui-dialog-titlebar {
 	color: #FFF;
@@ -410,7 +400,7 @@ ul#layer_list > li.active { background-color: #564; }
 	letter-spacing: 0px;
 	background-color: #666;
 
-	background-image: url("../img/gradient.svg");
+	background-image: linear-gradient(0deg, #669900, #99CC00);
 
 	border-top: 1px solid #FFF;
 	border-radius: 3px 3px 0px 0px;
@@ -420,29 +410,22 @@ ul#layer_list > li.active { background-color: #564; }
 }
 
 .ui-dialog {
-	box-shadow: inset 0px 0px 10px #222;
-	border: 1px solid #999;
-	border-radius: 5px;
+
 }
 
 .ui-dialog-titlebar-close {
-	float: right;
+
 }
 
-.dialog {
+#dialog {
 	background-color: #EEE;
 	padding: 10px;
 	display: none;
+	overflow: hidden;
 }
 
 .ui-dialog-titlebar a {
-	color: #FFF;
-	background-color: transparent;
-	text-decoration: none;
-	border: 0px;
-	border-bottom: 1px dotted #FFF;
-	border-radius: 0px;
-	padding: 0px;
+
 }
 
 .ui-dialog-titlebar a:hover { border-bottom: 1px solid #FFF; }
@@ -464,12 +447,11 @@ ul#layer_list > li.active { background-color: #564; }
 	background-color: rgba(0, 0, 0, 0.5);
 }
 
+/* ================== */
+/* ====== MISC ====== */
+/* ================== */
 
-/* ===================== */
-/* === MISC ============ */
-/* ===================== */
-
-.dialog input[type=text], .dialog input[type=number] {
+#dialog input[type=text], #dialog input[type=number] {
 	width: 90px !important;
 	height: 20px;
 	padding: 2px 5px;
@@ -477,21 +459,21 @@ ul#layer_list > li.active { background-color: #564; }
 	border: 1px solid #999;
 }
 
-.dialog input[type=button] {
+#dialog input[type=button] {
 	height: 25px;
 	padding: 2px 5px;
 }
 
-.dialog #file_container { position: relative; }
+#dialog #file_container { position: relative; }
 
-.dialog input[name=tileset_file] {
+#dialog input[name=tileset_file] {
 	position: relative;
 	height: 20px;
 	opacity: 0;
 	z-index: 9999;
 }
 
-.dialog input[name=tileset_file_overlay] {
+#dialog input[name=tileset_file_overlay] {
 	position: absolute;
 	top: 0px;
 	left: 0px;
@@ -501,4 +483,27 @@ ul#layer_list > li.active { background-color: #564; }
 .hint {
 	cursor: help;
 	border-bottom: 1px dotted #000;
+}
+
+.ui-button {
+	border: 0px;
+	background-color: transparent;
+	position: relative;
+}
+
+.ui-icon-closethick {
+	color: #900;
+	font-style: 20px;
+}
+
+.ui-button-text .icon-remove-sign {
+	font-size: 18px;
+	margin-right: 10px;
+	color: #111;
+	text-shadow: 0px 1px rgba(255, 255, 255, 0.5);
+}
+
+.ui-button-icon-only .ui-button-text, .ui-button-icons-only .ui-button-text {
+	padding: 0em !important;
+	text-indent: 0px !important;
 }
