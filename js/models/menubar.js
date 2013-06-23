@@ -5,7 +5,7 @@ define(["jquery-ui"], function($) {
 	Menubar.initialize = function(namespace) {
 
 		Editor = namespace;
-
+		
 		$("*[data-template]").on("click", this.open_dialog);
 
 		return this;

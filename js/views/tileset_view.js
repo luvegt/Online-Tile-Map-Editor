@@ -12,8 +12,10 @@ define([
 	TilesetView.tmp = {};
 
 	TilesetView.initialize = function(namespace) {
+
 		Editor = namespace;
 
+		// Tileset UI functionality
 		$("body").on("change", "#tilesets select", this.change_tileset);
 		$("body").on("change", "input[name=tileset_file]", this.cacheFile);
 		$("body").on("click", "#tilesets_add", this.add);
@@ -27,6 +29,7 @@ define([
 
 	// Todo disallow mixing different tilesizes
 	TilesetView.add = function(e) {
+
 		var opts = {
 
 			tilesize: {
@@ -41,7 +44,6 @@ define([
 		
 		// HEX
 		if (hex && hex[1]) {
-
 			hex = hex[1];
 
 			if (hex.length == 3) {
@@ -50,7 +52,6 @@ define([
 					parseInt(hex[1]+hex[1], 16),
 					parseInt(hex[2]+hex[2], 16)
 				];
-
 			} else if (hex.length == 6) {
 				opts.alpha = [
 					parseInt(hex[0]+hex[1], 16),
@@ -62,29 +63,31 @@ define([
 		// RGB
 		} else if (opts.alpha.match(/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])(, ?|$)){3}$/)) {
 			opts.alpha = _.map(opts.alpha.split(","), function(num) { return parseInt(num, 10); });
-
 		} else { opts.alpha = null; }
 
 		// $("#loading").show();
 
+		// URL or FileReader event
 		if (!window.FileReader) {
 			data = TilesetView.tmp.match(/.+\/(.+)\.+/);
 			opts.name = data[1];
 			type = data[2].toLowerCase();
-
 		} else {
 			opts.name = TilesetView.tmp.name;
 			type = TilesetView.tmp.type.split("/")[1];
 		}
 
+		// Wrong file type
 		if (TilesetView.config.filetypes.indexOf(type.toLowerCase()) == -1) {
 			alert("Wrong file type in \"" + opts.name + "\"\nSupported file types: " + TilesetView.config.filetypes.join(", "));
 			//$("#loading").hide();
 
+		// Tileset does already exist
 		} else if ($("#tilesets select option:contains(" + opts.name + ")").length) {
 			alert("File \"" + opts.name + "\" does already exist.");
 			//$("#loading").hide();
 
+		// Process tileset
 		} else {
 			if (window.FileReader) {
 				var reader = new FileReader();
@@ -95,11 +98,15 @@ define([
 	};
 
 	TilesetView.remove = function() {
-		delete Editor.Tilesets.collection[Editor.Tilesets.get_active()];
+
+		var tileset = Editor.Tilesets.get_active();
+		
+		$("style#tileset_" + tileset.id).remove();
 		$("#tilesets select option:selected").remove();
 
-		// TODO add warning; remove tiles using this tileset
+		delete Editor.Tilesets.collection[tileset.name];
 
+		// TODO add warning; remove tiles using this tileset
 		$("#tileset_container").css({
 			width: 0,
 			height: 0,

@@ -7,35 +7,38 @@ define([
 	Tilesets.collection = {};
 
 	Tilesets.initialize = function(namespace) {
+
 		Editor = namespace;
 		this.view = TilesetView.initialize(Editor);
 
-		this.add("img/tilesets/mage_city.png", {
-			tilesize: {
-				width: 32,
-				height: 32
-			},
+		// this.add("img/tilesets/forest_tiles.png", {
+		// 	tilesize: { width: 16, height: 16 },
+		// 	alpha: "#F0F"
+		// });
 
-			margin: null,
-			alpha: null
+		this.add("img/tilesets/mage_city.png", {
+			tilesize: { width: 32, height: 32 }
 		});
 
 		return this;
 	};
 
 	Tilesets.set = function(name) {
-		$("#tileset_container").css({
-			width: Tilesets.collection[name].width,
-			height: Tilesets.collection[name].height,
-			backgroundImage: "url('" + Tilesets.collection[name].base64 + "')"
-		});
 
-		$("#tilesets select option").removeAttr("selected", true);
-		$("#tilesets select option:contains(" + name + ")").removeAttr("selected", true);
+		var tileset = Tilesets.collection[name];
+
+		$("#tileset_container").css({
+			width: tileset.width,
+			height: tileset.height,
+		}).attr("class", "ts_" + tileset.id);
+
+		$("#tilesets select option").removeAttr("selected");
+		$("#tilesets select option:contains(" + name + ")").attr("selected", true);
 		$("#tilesets .loading").remove();
 	}
 
 	Tilesets.add = function(src, opts) {
+
 		var img = new Image(),
 		    ctx = document.createElement("canvas").getContext("2d"),
 		    name = opts.name || src.match(/(?:.+)\/([^\/]+)/)[1],

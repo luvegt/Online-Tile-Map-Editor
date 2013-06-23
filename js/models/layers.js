@@ -1,11 +1,12 @@
 define(["jquery-ui"], function($) {
 
 	var Layers = {}, Editor;
-	Layers.collection = {};
 
 	Layers.initialize = function(namespace) {
+
 		Editor = namespace;
 
+		// Layer UI functionality
 		$("#layerlist").on("click", "li", function(e) {
 			
 			$("#layerlist li").removeClass("active");
@@ -18,8 +19,11 @@ define(["jquery-ui"], function($) {
 
 		$("body").on("click", "#layer-clear", this.clear);
 		$("body").on("click", "#layer-rename", this.rename);
-		$("body").on("click", "#layer-remove", this.remove)
+		$("body").on("click", "#layer-remove", this.remove);
 
+		$("#layers_add").on("click", this.add);
+
+		// Dismiss Contextmenu
 		$("body").on("mousedown", function(e) {
 			if ($(e.target).parent().attr("id") != "contextmenu") {
 				if ($("body #contextmenu").length)
@@ -27,6 +31,7 @@ define(["jquery-ui"], function($) {
 			}
 		});
 
+		// Make layers sortable
 		$("#layerlist").sortable({
 			axis: "y",
 			mouseButton: 1,
@@ -34,15 +39,14 @@ define(["jquery-ui"], function($) {
 			update:this.sortByIndex
 		});
 
-		$("#layers_add").on("click", this.add);
-
 		return this;
 	};
 
 	Layers.add = function(e, name) {
-		if (!name) { name = window.prompt("Layer name: (a-z, A-Z, _, -)"); }
+
 		var id = $("#layerlist li").length;
 
+		if (!name) { name = window.prompt("Layer name: (a-z, A-Z, _, -)"); }
 		if (!name || !name.match(/^[a-zA-Z_-][a-zA-Z0-9_-]{2,}$/)) {
 			if (name) { alert("Name invalid or too short!"); }
 			return;
@@ -51,38 +55,41 @@ define(["jquery-ui"], function($) {
 		$("#layerlist li").removeClass("active");
 		$("#layerlist").append("<li class='active' data-id='" + id + "'><span class='icon-eye-open'></span> " + name + "<span class='icon-cog'></span></li>");
 		$("#layerlist").sortable("refresh");
-
 		$("#tiles").append("<div class='layer' data-name='" + name + "' data-id='" + id + "'></div>");
 	};
 
 	Layers.remove = function(id) {
+
 		var name = $(Layers.contextTarget).text().trim(),
-		     id = $(Layers.contextTarget).attr("data-id");
+		    id = $(Layers.contextTarget).attr("data-id");
 
 		if (confirm("Remove \"" + name + "\" ?")) {
 
+			// TODO make this possible?
 			if ($("#layerlist li").length == 1) {
 				alert("Cannot remove last layer!");
 				return;
 			}
 
 			$(Layers.contextTarget).remove();
-			$("body #contextmenu").remove();
+			$("#contextmenu").remove();
 			$(".layer[data-id=" + id + "]").remove();
 		}
 	};
 
 	Layers.clear = function(e) {
+
 		var name = $(Layers.contextTarget).text().trim(),
 		    id = $(Layers.contextTarget).attr("data-id");
 
 		if (confirm("Remove all tiles from \"" + name + "\" ?")) {
 			$(".layer[data-id=" + id + "]").html("");
-			$("body #contextmenu").remove();
+			$("#contextmenu").remove();
 		}
 	};
 
 	Layers.rename = function(e) {
+
 		var name = $(Layers.contextTarget).text().trim(),
 		    id = $(Layers.contextTarget).attr("data-id"),
 		    new_name = prompt("Enter new name for \"" + name + "\":");
@@ -94,10 +101,11 @@ define(["jquery-ui"], function($) {
 
 		$(".layer[data-id=" + id + "]").attr("data-name", new_name);
 		$(Layers.contextTarget).html("<span class='icon-eye-open'></span> " + new_name + "<span class='icon-cog'></span>");
-		$("body #contextmenu").remove();
+		$("#contextmenu").remove();
 	};
 
 	Layers.get_active = function() {
+
 		var id = $("#layerlist li.active").attr("data-id");
 
 		return { 
@@ -108,6 +116,7 @@ define(["jquery-ui"], function($) {
 
 	// TODO Switch z-index while sorting
 	Layers.sortByIndex = function(e, ui) {
+
 		var id, drag_name = ui ? $(ui.item).children().val() : "";
 
 		$("#layerlist li").each(function(i) {
@@ -132,14 +141,11 @@ define(["jquery-ui"], function($) {
 
 		$.get("templates/cm_layer.tpl", function(data) {
 
+
 			$("body").append(data);
-			$("#contextmenu").css("left", e.pageX + "px");
-			$("#contextmenu").css("top", e.pageY + "px");
+			$("#contextmenu").css("left", e.pageX);
+			$("#contextmenu").css("top", e.pageY);
 		});
-	};
-
-	Layers.render = function() {
-
 	};
 
 	return Layers;

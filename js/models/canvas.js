@@ -45,46 +45,6 @@ define([
 		return this;
 	};
 
-	// Updates the tile information of the current layer
-	// based on the selection made in LayerCollectionView
-	Canvas.updateMap = function() {
-		var cx = this.get("cursor")[0];
-		var cy = this.get("cursor")[1];
-
-		if (Editor.selection) {
-			var sx = Editor.selection[0][0];
-			var sy = Editor.selection[0][1];
-			var ex = Editor.selection[1][0];
-			var ey = Editor.selection[1][1];
-
-			var tileset = this.get("tileset_view").getActive();
-			var layer = this.get("layer_view").getActive();
-			var map = JSON.parse(JSON.stringify(layer.get("map")));
-			if (!map[tileset.get("name")]) { map[tileset.get("name")] = {}; }
-
-			var base_x = sx/tileset.tilesize.width;
-			var base_y = sy/tileset.tilesize.height;
-
-			var base_width = $("input[name=measurement]").checked ? parseInt($("#canvas").css("width"), 10) : parseInt($("#canvas").css("width"), 10) / tileset.tilesize.width;
-			var base_height = $("input[name=measurement]").checked ? parseInt($("#canvas").css("height"), 10) : parseInt($("#canvas").css("height"), 10) / tileset.tilesize.height;
-
-			for (var y = base_y, ly = ey/tileset.tilesize.height; y <= ly; y++) {
-				for (var x = base_x, lx = ex/tileset.tilesize.width; x <= lx; x++) {
-
-					var pos_x = cx+(x-base_x);
-					var pos_y = cy+(y-base_y);
-
-					if (pos_x < base_width && pos_y < base_height)
-					{ map[tileset.get("name")][pos_x+"_"+pos_y] = [x, y]; }
-				}
-			}
-
-			layer.set("map", map);
-		}
-
-		this.draw();
-	};
-
 	Canvas.draw = function() {
 		var tileset = Editor.Tilesets.get_active(),
 		    layer = Editor.Layers.get_active(),
