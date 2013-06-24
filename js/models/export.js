@@ -18,7 +18,8 @@ define(["jquery-ui"], function($) {
 		    output, layer, coords, tileset, elem, sub_elem, text_node, y, x, query;
 
 		if (type == "JSON") {
-			output = [];
+			output = {};
+			output.layers = [];
 
 			$(".layer").each(function() {
 
@@ -36,13 +37,15 @@ define(["jquery-ui"], function($) {
 					}
 				}
 
-				output.push(layer);
+				output.layers.push(layer);
 			});
+
+			output.tilesets = [];
 
 			for (tileset in Editor.Tilesets.collection) {
 				tileset = Editor.Tilesets.collection[tileset];
-				
-				output.push({
+
+				output.tilesets.push({
 					name: tileset.name,
 					image: tileset.url || tileset.base64,
 					imagewidth: tileset.width,

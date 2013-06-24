@@ -42,7 +42,7 @@ define([
 
 		}, hex = opts.alpha.match(/^#?(([0-9a-fA-F]{3}){1,2})$/), type, data;
 		
-		// HEX
+		// Parse HEX to rgb
 		if (hex && hex[1]) {
 			hex = hex[1];
 
@@ -60,7 +60,7 @@ define([
 				];
 			}
 
-		// RGB
+		// Parse RGB
 		} else if (opts.alpha.match(/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])(, ?|$)){3}$/)) {
 			opts.alpha = _.map(opts.alpha.split(","), function(num) { return parseInt(num, 10); });
 		} else { opts.alpha = null; }
