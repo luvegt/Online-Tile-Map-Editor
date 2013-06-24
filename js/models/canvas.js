@@ -134,7 +134,7 @@ define([
 	// Creates a base64 image with two borders
 	// resulting in a grid when used as a repeated background
 	Canvas.update_grid = function() {
-		var buffer = document.createElement("canvas");
+		var buffer = document.createElement("canvas"),
 		    bfr = buffer.getContext("2d"),
 		    tileset = Editor.active_tileset,
 		    tw = tileset.tilesize.width,

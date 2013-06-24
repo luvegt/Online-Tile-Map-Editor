@@ -8,7 +8,6 @@ define(["jquery-ui"], function($) {
 
 		// Layer UI functionality
 		$("#layerlist").on("mousedown", "li", function(e) {
-
 			$("#layerlist li").removeClass("active");
 			$(e.currentTarget).addClass("active");
 		})
@@ -104,8 +103,10 @@ define(["jquery-ui"], function($) {
 			return;
 		}
 
-		
+		// Rename associated div too
 		$(".layer[data-id=" + id + "]").attr("data-name", new_name);
+
+		// Create and append a new layer element to the toolbar
 		$(Layers.contextTarget).html("<span class='icon-eye-open'></span> " + new_name + "<span class='icon-cog'></span>");
 		$("#contextmenu").remove();
 	};
@@ -146,8 +147,6 @@ define(["jquery-ui"], function($) {
 		Layers.contextTarget = $(e.currentTarget).parent();
 
 		$.get("templates/cm_layer.tpl", function(data) {
-
-
 			$("body").append(data);
 			$("#contextmenu").css("left", e.pageX);
 			$("#contextmenu").css("top", e.pageY);

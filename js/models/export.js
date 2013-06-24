@@ -24,6 +24,7 @@ define(["jquery-ui"], function($) {
 		    output, layer, coords, tileset, y, x, query, elem, data;
 
 		if (type == "JSON") {
+			
 			output = {};
 			output.layers = [];
 
