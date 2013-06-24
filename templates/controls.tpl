@@ -11,4 +11,12 @@
 
 <hr>
 
-You can also resize the toolbar by dragging the edge.
+<h4>Toolbar</h4><br>
+
+You can  resize the toolbar by dragging the edge.
+
+<hr>
+
+<h4>Tilesets</h4><br>
+
+Click and drag to select multiple tiles
