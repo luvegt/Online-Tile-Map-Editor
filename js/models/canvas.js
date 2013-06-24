@@ -13,9 +13,9 @@ define([
 		$("#canvas").on("mousedown mousemove", function(e) {
 
 			// Tileset hasn't loaded yet
-			if (!Editor.Tilesets.get_active()) { return; }
+			if (!Editor.active_tileset) { return; }
 
-			var tileset = Editor.Tilesets.get_active(),
+			var tileset = Editor.active_tileset,
 		        tw = tileset.tilesize.width,
 		        th = tileset.tilesize.height;
 
@@ -46,7 +46,7 @@ define([
 	};
 
 	Canvas.draw = function() {
-		var tileset = Editor.Tilesets.get_active(),
+		var tileset = Editor.active_tileset,
 		    layer = Editor.Layers.get_active(),
 
 		    cx = this.cursor[0],
@@ -114,7 +114,7 @@ define([
 	Canvas.update_grid = function() {
 		var buffer = document.createElement("canvas");
 		    bfr = buffer.getContext("2d"),
-		    tileset = Editor.Tilesets.get_active(),
+		    tileset = Editor.active_tileset,
 		    tw = tileset.tilesize.width,
 		    th = tileset.tilesize.height;
 

@@ -99,7 +99,7 @@ define([
 
 	TilesetView.remove = function() {
 
-		var tileset = Editor.Tilesets.get_active();
+		var tileset = Editor.active_tileset;
 
 		if (!confirm("This will remove all tiles associated with \"" + tileset.name + "\", continue?")) { return; }
 		
@@ -156,7 +156,7 @@ define([
 
 		if (!$("#tilesets select option:selected").length) { return; }
 
-		var tileset = Editor.Tilesets.get_active(),
+		var tileset = Editor.active_tileset,
 			tw = tileset.tilesize.width,
 		    th = tileset.tilesize.height,
 

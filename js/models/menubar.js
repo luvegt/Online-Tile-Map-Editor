@@ -19,11 +19,22 @@ define(["jquery-ui"], function($) {
 		    title = $(e.currentTarget).text();
 
 		$.get("templates/" + template + ".tpl", function(data) {
+
 			$("#dialog").html(data).dialog({
 				title: title, modal: true,
 				closeText: "<span class='icon-remove-sign'></span>",
 				resizable: false,
 				width: "auto"
+			});
+
+			$("#dialog").find("input[data-value]").each(function() {
+				var pair = $(this).attr("data-value").split(":"),
+				    type = $(this).attr("type"),
+				    value = $(pair[0]).css(pair[1]);
+
+				if (type == "number") { value = parseInt(value, 10); }
+				if (pair[2] == "tiles") { value = Math.floor(value / Editor.active_tileset.tilesize[pair[1]]); }
+				$(this).val(value);
 			});
 		});
 	};
@@ -46,7 +57,7 @@ define(["jquery-ui"], function($) {
 	Menubar.canvas_settings = function(e) {
 		var name = $(e.currentTarget).attr("name"),
 		    value = $(e.currentTarget).val(),
-		    tileset = Editor.Tilesets.get_active();
+		    tileset = Editor.active_tileset;
 
 		if (name == "width") { value = (+value) * tileset.tilesize.width; }
 		if (name == "height") { value = (+value) * tileset.tilesize.height; }

@@ -13,7 +13,7 @@ define(["jquery-ui"], function($) {
 	Export.process = function() {
 		var type = $("select[name=export_format]").val(),
 			include_base64 = $("select[name=include_base64]").val() == "yes",
-		    tileset = Editor.Tilesets.get_active(),
+		    tileset = Editor.active_tileset,
 
 		    w = $("#canvas").width() / tileset.tilesize.width,
 		    h = $("#canvas").height() / tileset.tilesize.height,

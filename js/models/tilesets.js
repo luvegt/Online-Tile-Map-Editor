@@ -31,6 +31,7 @@ define([
 	Tilesets.set = function(name) {
 
 		var tileset = Tilesets.collection[name];
+		Editor.active_tileset = tileset;
 
 		$("#tileset_container").css({
 			width: tileset.width,
