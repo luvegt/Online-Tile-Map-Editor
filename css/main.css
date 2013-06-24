@@ -33,7 +33,7 @@ a:hover {
 }
 
 .remove:hover {
-	background-color: #900;
+	background-color: #900 !important;
 	box-shadow: inset 0px 1px #C00;
 }
 
@@ -71,6 +71,11 @@ a span { padding-right: 2px; }
 #contextmenu li:hover {
 	background-color: #2881ab;
 	border-top: 1px solid #83d8ff;
+}
+
+#contextmenu li.remove:hover {
+	border-top: 1px solid #C00;
+	box-shadow: none;
 }
 
 #contextmenu > li:hover ul {
