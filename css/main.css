@@ -53,10 +53,10 @@ a span { padding-right: 2px; }
 
 	position: absolute;
 	top: 0px; left: 0px;
-	z-index: 999;
+	z-index: 9999;
 	text-align: center;
 
-	background-color: #F5F5F5;
+	background-color: #EEE;
 	display: table;
 }
 
@@ -163,7 +163,7 @@ a span { padding-right: 2px; }
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	z-index: 99;	
+	z-index: 999;	
 }
 
 #menubar > li {
