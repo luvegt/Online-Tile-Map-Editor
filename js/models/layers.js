@@ -7,7 +7,7 @@ define(["jquery-ui"], function($) {
 		Editor = namespace;
 
 		// Layer UI functionality
-		$("#layerlist").on("click", "li", function(e) {
+		$("#layerlist").on("mousedown", "li", function(e) {
 			
 			$("#layerlist li").removeClass("active");
 			$(e.currentTarget).addClass("active");
