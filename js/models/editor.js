@@ -55,11 +55,7 @@ define([
 		Editor.Layers.add(null, "background");
 		Editor.Layers.add(null, "world");
 
-		$("#loading_screen > div > div > div").delay(500).animate({ opacity: 0 }, function() {
-			$("#loading_screen > div > div").animate({ height: 0, padding: 0, border: 0 }, function() {
-				$("#loading_screen").fadeOut();
-			});
-		});
+		$("#loading_screen").delay(500).fadeOut();
 	};
 
 	return Editor;
