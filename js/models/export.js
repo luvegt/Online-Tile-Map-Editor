@@ -59,6 +59,7 @@ define(["jquery-ui"], function($) {
 			}
 
 			output = JSON.stringify(output);
+
 		} else if (type == "XML") {
 
 			output = $("<root>").append("<layers>");
@@ -76,7 +77,8 @@ define(["jquery-ui"], function($) {
 				for (y = 0; y < h; y++) {
 					for (x = 0; x < w; x++) {
 						query = $(this).find("div[data-coords='" + x + "." + y + "']");
-						coords = query.length ? parseFloat(query.attr("data-coords-tileset"), 10) : 0.0;
+						coords = query.length ? query.attr("data-coords-tileset") : "0.0";
+						if (x == w-1) { coords += "\r\n"; }
 						data.push(coords);
 					}
 				}
@@ -104,7 +106,7 @@ define(["jquery-ui"], function($) {
 				output.find("tilesets").append(elem);
 			}
 
-			output = (new XMLSerializer()).serializeToString(output[0]);
+			output = encodeURIComponent((new XMLSerializer()).serializeToString(output[0]));
 		}
 
 		window.open("data:text/" + type + ";charset=UTF-8;," + output, "_blank");

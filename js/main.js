@@ -4,9 +4,9 @@ require.config({
 
 	shim: {
 		"jquery-ui": {
-            exports: "$",
-            deps: ["jquery", "jquery.mousewheel", "jquery.jscrollpane"]
-        },
+			exports: "$",
+			deps: ["jquery", "jquery.mousewheel", "jquery.jscrollpane"]
+		},
 
 		"underscore": {
 			exports: "_"
