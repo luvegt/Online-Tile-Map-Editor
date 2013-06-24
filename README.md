@@ -7,17 +7,18 @@ A web based tile map editor for all kinds of 2d games and applications.
 ----
 
 ######Update (2013-02-11): This project is no longer in development. I'd love to finish it, but the code got way to messy (it was my first time using backbone.js.). I might rewrite this application in the near future.
-#####Update (2013-06-22): I started working on it again! A fair amount of people have contacted me and encouraged me to finish this project. I'm currently rewriting it from the ground up and will commit the first update soon, so stay tuned! :)
+######Update (2013-06-22): I started working on it again! A fair amount of people have contacted me and encouraged me to finish this project. I'm currently rewriting it from the ground up and will commit the first update soon, so stay tuned! :)
 -----
 
 #Features
 
 ###### Implemented
   
+  * Menubar
   * Tileset handling
   * Layer handling
   * Drawing
-  * Fancy Ui
+  * Fancy UI
 
 ###### In Progress
 
@@ -31,8 +32,8 @@ A web based tile map editor for all kinds of 2d games and applications.
 #Dependencies
 
   * **[HTML5 FileReader API](http://www.w3.org/TR/FileAPI/#dfn-filereader)** [1]
-  * **[Backbone.js](http://backbonejs.org/), [Underscore.js](http://underscorejs.org/)**
-  * **[jQuery](http://jquery.com/), [jQuery Ui](http://jqueryui.com/)**
+  * **[jQuery](http://jquery.com/), [jQuery UI](http://jqueryui.com/)**
+  * **[Underscore.js](http://underscorejs.org/)**
 
 
 ######Browser Support
@@ -40,7 +41,9 @@ A web based tile map editor for all kinds of 2d games and applications.
   * Google Chrome
   * Mozilla Firefox
   * Opera (latest)
-  * Internet Explorer 9 [2]
+  * Internet Explorer 9+ [2]
+
+Version info will be added soon.
 
 ----
 [1] Ajax is used as a fallback solution  
