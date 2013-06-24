@@ -39,6 +39,7 @@ define([
 
 		$("#tilesets select").val(name);
 		$("#tilesets .loading").remove();
+		this.update_selection();
 	}
 
 	Tilesets.add = function(src, opts) {
@@ -152,6 +153,13 @@ define([
 
 		return bfr.canvas.toDataURL();
 	};
+
+	Tilesets.update_selection = function() {
+		$("#canvas .selection").attr("class", "selection");
+		$("#tileset .selection").remove();
+		Editor.selection = null;
+	};
+
 
 	Tilesets.get_active = function() { return Tilesets.collection[$("#tilesets select option:selected").val()]; }
 
