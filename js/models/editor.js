@@ -27,7 +27,7 @@ define([
 		$("#toolbar").resizable({
 			minWidth: 250,
 			mouseButton: 1,
-			handles: "w",
+			handles: "e",
 			alsoResize: "#tileset, #tileset .jspPane, #tileset .jspContainer, #tileset .jspHorizontalBar *",
 			stop: function() { $("#tileset").jScrollPane(); }
 		});
