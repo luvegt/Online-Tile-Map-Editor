@@ -69,7 +69,7 @@ define([
 
 		// URL or FileReader event
 		if (!window.FileReader) {
-			data = TilesetView.tmp.match(/.+\/(.+)\.+/);
+			data = TilesetView.tmp.match(/.+\/(.+)\.(.+)/);
 			opts.name = data[1];
 			type = data[2].toLowerCase();
 		} else {
@@ -144,7 +144,7 @@ define([
 	TilesetView.cacheFile = function(e) {
 		if (!window.FileReader) {
 			e.preventDefault();
-			TilesetView.tmp = prompt("Your browser doesn't support local file upload.\nPlease insert an image URL below:");
+			TilesetView.tmp = prompt("Your browser doesn't support local file upload.\nPlease insert an image URL below:", "");
 		} else if (e.type == "change") {
 			TilesetView.tmp = e.target.files[0];
 			$("#dialog input[name=tileset_file_overlay]").val(TilesetView.tmp.name);
