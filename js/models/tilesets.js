@@ -54,6 +54,7 @@ define([
 			
 			opts.base64 = ctx.canvas.toDataURL();
 			opts.id = id;
+			opts.url = opts.name ? undefined : src;
 			opts.name = name;
 
 			Tilesets.collection[name] = opts;

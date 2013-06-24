@@ -17,7 +17,7 @@ define([
 
 		// Tileset UI functionality
 		$("body").on("change", "#tilesets select", this.change_tileset);
-		$("body").on("change", "input[name=tileset_file]", this.cacheFile);
+		$("body").on("change", "input[name=file]", this.cacheFile);
 		$("body").on("click", "#tilesets_add", this.add);
 		$("body").on("click", "#tilesets_remove", this.remove);
 

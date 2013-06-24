@@ -80,9 +80,9 @@ define([
 				left = pos_x * tw;
 				top = pos_y * th;
 
-				coords = pos_x + "_" + pos_y;
+				coords = pos_x + "." + pos_y;
 
-				$div = $(layer.elem).find("div[data-coords=" + coords + "]");
+				$div = $(layer.elem).find("div[data-coords='" + coords + "']");
 				exists = $div.length;
 				$div = exists ? $div : $("<div>");
 
@@ -94,6 +94,7 @@ define([
 					})
 
 					.attr("data-coords", coords)
+					.attr("data-coords-tileset", (Math.abs(bgx/tw)+x) + "." + (Math.abs(bgy/th)+y))
 					.attr("data-tileset", tileset.name);
 				}
 
