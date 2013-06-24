@@ -50,7 +50,7 @@ define([
 			Editor.mousedown = e.type == "mousedown" && e.which == 1;
 		});
 
-		$("#tileset, #canvas").disableSelection();
+		$("#tileset, #canvas_wrapper").disableSelection();
 
 		Editor.Layers.add(null, "background");
 		Editor.Layers.add(null, "world");
