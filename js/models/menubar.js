@@ -15,6 +15,8 @@ define(["jquery-ui"], function($) {
 		return this;
 	};
 
+	// Elements with a data-template attribute will
+	// automaticly open a dialog with the correspondig template
 	Menubar.open_dialog = function(e) {
 		var template = $(e.currentTarget).attr("data-template"),
 		    title = $(e.currentTarget).text();
@@ -40,19 +42,25 @@ define(["jquery-ui"], function($) {
 		});
 	};
 
+	// Elements with a data-toggle attribute will
+	// automaticly be toggled when clicked
 	Menubar.toggle = function(e) {
 		var value = $(e.currentTarget).attr("data-toggle"),
 		    extra = value.split(":"), status;
 
+		// data-toggle="visibility:elem">
 		if (extra[0] == "visibility") {
+
 			status = $(extra[1]).toggle();
 			$(e.currentTarget).find("span").toggleClass("icon-check-empty", "icon-check");
+
+		// data-toggle="class:classname:elem"
 		} else if (extra[0] == "class") {
+
 			status = $(extra[2]).toggleClass(extra[1]);
 			$(e.currentTarget).find("span").toggleClass("icon-check-empty", "icon-check");
-		} else {
-			Menubar.toggleFunctions[value]();
-		}
+
+		} else { Menubar.toggleFunctions[value](); }
 	};
 
 	Menubar.canvas_settings = function(e) {

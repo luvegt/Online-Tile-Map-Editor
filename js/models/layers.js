@@ -37,6 +37,10 @@ define(["jquery-ui"], function($) {
 			update: this.sortByIndex
 		});
 
+		// Add predefined layers
+		this.add(null, "background");
+		this.add(null, "world");
+
 		return this;
 	};
 

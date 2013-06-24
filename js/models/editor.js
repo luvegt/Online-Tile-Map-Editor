@@ -9,10 +9,6 @@ define([
 
 	var Editor = {}; 
 
-	Editor.config = {
-		// TODO save current tileset/layer here
-	};
-
 	Editor.mousedown = false;
 	Editor.selection = null;
 
@@ -23,14 +19,6 @@ define([
 	Editor.Export = Export.initialize(Editor);
 
 	Editor.initialize = function() {
-
-		$("#toolbar").resizable({
-			minWidth: 250,
-			mouseButton: 1,
-			handles: "e",
-			alsoResize: "#tileset, #tileset .jspPane, #tileset .jspContainer, #tileset .jspHorizontalBar *",
-			stop: function() { $("#tileset").jScrollPane(); }
-		});
 
 		// Menubar interaction
 		$("#menubar > li").on("click mouseover", function(e) {
@@ -45,16 +33,24 @@ define([
 			}
 		});
 
+		// Make toolbar resizable
+		$("#toolbar").resizable({
+			minWidth: 250,
+			mouseButton: 1,
+			handles: "e",
+			alsoResize: "#tileset, #tileset .jspPane, #tileset .jspContainer, #tileset .jspHorizontalBar *",
+			stop: function() { $("#tileset").jScrollPane(); }
+		});
+
 		// Global mouse status
 		$(document).on("mousedown mouseup", function(e) {
 			Editor.mousedown = e.type == "mousedown" && e.which == 1;
 		});
 
+		// Disable selection
 		$("#tileset, #canvas_wrapper").disableSelection();
 
-		Editor.Layers.add(null, "background");
-		Editor.Layers.add(null, "world");
-
+		// Hide the loading screen
 		$("#loading_screen").delay(500).fadeOut();
 	};
 
