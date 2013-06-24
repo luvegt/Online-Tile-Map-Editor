@@ -43,6 +43,54 @@ a:hover { text-decoration: underline; }
 
 a span { padding-right: 2px; }
 
+/* ============================ */
+/* ====== LOADING SCREEN ====== */
+/* ============================ */
+
+#loading_screen {
+	width: 100%;
+	height: 100%;
+
+	position: absolute;
+	top: 0px; left: 0px;
+	z-index: 999;
+	text-align: center;
+
+	background-color: #F5F5F5;
+	display: table;
+}
+
+#loading_screen > div {
+	display: table-cell;
+	vertical-align: middle;
+	position: relative;
+	color: #FFF;
+	font-weight: bold;
+}
+
+#loading_screen > div > div {
+	border-top: 1px solid #2881ab;
+	border-bottom: 1px solid #2881ab;
+	background-color: #1d9fdb;
+	margin-top: -100px;
+	margin-left: -100px;
+	box-shadow: inset 0px 0px 100px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
+	padding: 20px 0px;
+}
+
+#loading_screen h1 {
+	font-size: 30px;
+	margin-bottom: 50px;
+}
+
+#loading_screen span {
+	font-size: 150px;
+	color: #FFF;
+	display: inline-block;
+	margin-right: 50px;
+}
+
 /* ========================= */
 /* ====== CONTEXTMENU ====== */
 /* ========================= */
@@ -115,7 +163,7 @@ a span { padding-right: 2px; }
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	z-index: 999;	
+	z-index: 99;	
 }
 
 #menubar > li {
