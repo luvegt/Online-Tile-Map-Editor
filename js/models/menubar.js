@@ -11,6 +11,7 @@ define(["jquery-ui"], function($) {
 
 		$("body").on("keydown keyup", "#canvas_settings input", this.canvas_settings);
 		$("body").on("keydown keyup", "#viewport_settings input", this.viewport_settings);
+
 		return this;
 	};
 
@@ -41,7 +42,7 @@ define(["jquery-ui"], function($) {
 
 	Menubar.toggle = function(e) {
 		var value = $(e.currentTarget).attr("data-toggle"),
-			extra = value.split(":"), status;
+		    extra = value.split(":"), status;
 
 		if (extra[0] == "visibility") {
 			status = $(extra[1]).toggle();

@@ -8,10 +8,9 @@ define(["jquery-ui"], function($) {
 
 		// Layer UI functionality
 		$("#layerlist").on("mousedown", "li", function(e) {
-			
+
 			$("#layerlist li").removeClass("active");
 			$(e.currentTarget).addClass("active");
-
 		})
 
 		.on("click", "li span:first-child", this.toggle_visibility)
@@ -55,6 +54,8 @@ define(["jquery-ui"], function($) {
 		$("#layerlist li").removeClass("active");
 		$("#layerlist").append("<li class='active' data-id='" + id + "'><span class='icon-eye-open'></span> " + name + "<span class='icon-cog'></span></li>");
 		$("#layerlist").sortable("refresh");
+
+		// Create and append an associated layer div inside the canvas
 		$("#tiles").append("<div class='layer' data-name='" + name + "' data-id='" + id + "'></div>");
 	};
 
@@ -87,6 +88,7 @@ define(["jquery-ui"], function($) {
 				"data-tileset": "",
 				"class": "layer"
 			});
+
 			$("#contextmenu").remove();
 		}
 	};
@@ -102,6 +104,7 @@ define(["jquery-ui"], function($) {
 			return;
 		}
 
+		
 		$(".layer[data-id=" + id + "]").attr("data-name", new_name);
 		$(Layers.contextTarget).html("<span class='icon-eye-open'></span> " + new_name + "<span class='icon-cog'></span>");
 		$("#contextmenu").remove();

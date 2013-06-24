@@ -40,8 +40,8 @@ define([
 
 		$("#tilesets select").val(name);
 		$("#tilesets .loading").remove();
-		this.update_selection();
-	}
+		this.reset_selection();
+	};
 
 	Tilesets.add = function(src, opts) {
 
@@ -57,7 +57,7 @@ define([
 			bfr.canvas.width = opts.width = this.width;
 			bfr.canvas.height = opts.height = this.height;
 
-
+			// Process tileset
 			if (opts.alpha) { opts.base64 = Tilesets.setAlpha(this, opts.alpha); }
 			if (opts.margin) { opts.base64 = Tilesets.slice(this, opts); }
 
@@ -72,18 +72,23 @@ define([
 			Tilesets.collection[name] = opts;
 			Tilesets.set(name);
 
+			// Add a global css class so tiles can use
+			// it in conjunction with background-position
 			$(style).attr("id", "tileset_" + id);
-
 			css = ".ts_" + id + ", .ts_" + id + " > div {\n";
 			css += "\twidth: " + opts.tilesize.width + "px;\n";
 			css += "\theight: " + opts.tilesize.height + "px;\n";
 			css += "\tbackground-image: url('" + opts.base64 + "');\n";
 			css += "}";
-
 			$(style).append(css);
+
 			$("head").append(style);
+
+			// Update select element
 			$("#tilesets select").append("<option>" + name + "</option>");
 			$("#tilesets select").val(name);
+
+			// Update custom scrollbars and grid
 			$("#tileset").jScrollPane();
 			Editor.Canvas.update_grid();
 
@@ -155,12 +160,11 @@ define([
 		return bfr.canvas.toDataURL();
 	};
 
-	Tilesets.update_selection = function() {
+	Tilesets.reset_selection = function() {
 		$("#canvas .selection").attr("class", "selection");
 		$("#tileset .selection").remove();
 		Editor.selection = null;
 	};
-
 
 	Tilesets.get_active = function() { return Tilesets.collection[$("#tilesets select option:selected").val()]; }
 

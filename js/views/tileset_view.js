@@ -110,7 +110,6 @@ define([
 
 		delete Editor.Tilesets.collection[tileset.name];
 
-		// TODO add warning; remove tiles using this tileset
 		$("#tileset_container").css({
 			width: 0,
 			height: 0
@@ -134,6 +133,8 @@ define([
 		Editor.Canvas.update_grid();
 	};
 
+	// Form validation is done
+	// task is passed to the model's add method
 	TilesetView.process = function(e, opts) {
 		var data = e ? e.target.result : TilesetView.tmp;
 
@@ -152,6 +153,8 @@ define([
 	};
 
 	// TODO use index values for Editor.selection
+	// This method is somewhat hairy and should be optimized
+	// I wrote it a year ago and can't quite tell what each condition is meant for (...but hey it works ;p)
 	TilesetView.make_selection = function(e) {
 
 		if (!$("#tilesets select option:selected").length) { return; }

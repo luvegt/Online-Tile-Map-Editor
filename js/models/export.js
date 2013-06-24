@@ -3,6 +3,7 @@ define(["jquery-ui"], function($) {
 	var Export = {}, Editor;
 
 	Export.initialize = function(namespace) {
+
 		Editor = namespace;
 
 		$("body").on("click", "#export", this.process);
@@ -10,6 +11,7 @@ define(["jquery-ui"], function($) {
 		return this;
 	};
 
+	// TODO comment this
 	Export.process = function() {
 		var type = $("select[name=export_format]").val(),
 			include_base64 = $("select[name=include_base64]").val() == "yes",
