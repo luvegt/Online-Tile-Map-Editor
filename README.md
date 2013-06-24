@@ -33,7 +33,7 @@ A web based tile map editor for all kinds of 2d games and applications.
 
   * **[HTML5 FileReader API](http://www.w3.org/TR/FileAPI/#dfn-filereader)** [1]
   * **[jQuery](http://jquery.com/), [jQuery UI](http://jqueryui.com/)**
-  * **[Underscore.js](http://underscorejs.org/)**
+  * **[Underscore.js](http://underscorejs.org/)**, **[RequireJS](http://requirejs.org/)**
 
 
 ######Browser Support
