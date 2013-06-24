@@ -10,6 +10,15 @@
 		</td>
 	</tr>
 	<tr>
+		<td>Format output</td>
+		<td>
+			<select name="format_output" class="stretch">
+				<option>yes</option>
+				<option>no</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
 		<td>Include src (base64)</td>
 		<td>
 			<select name="include_base64" class="stretch">

@@ -13,6 +13,7 @@ define(["jquery-ui"], function($) {
 	Export.process = function() {
 		var type = $("select[name=export_format]").val(),
 			include_base64 = $("select[name=include_base64]").val() == "yes",
+			format_output = $("select[name=format_output]").val() == "yes",
 		    tileset = Editor.active_tileset,
 
 		    w = $("#canvas").width() / tileset.tilesize.width,
@@ -78,7 +79,7 @@ define(["jquery-ui"], function($) {
 					for (x = 0; x < w; x++) {
 						query = $(this).find("div[data-coords='" + x + "." + y + "']");
 						coords = query.length ? query.attr("data-coords-tileset") : "0.0";
-						if (x == w-1) { coords += "\r\n"; }
+						if (x == w-1 && format_output) { coords += "\r\n"; }
 						data.push(coords);
 					}
 				}
