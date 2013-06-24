@@ -36,7 +36,7 @@ define(["jquery-ui"], function($) {
 			axis: "y",
 			mouseButton: 1,
 			appendTo: document.body,
-			update:this.sortByIndex
+			update: this.sortByIndex
 		});
 
 		return this;
