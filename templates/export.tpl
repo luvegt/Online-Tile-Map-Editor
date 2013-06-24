@@ -12,7 +12,7 @@
 	<tr>
 		<td>Include src (base64)</td>
 		<td>
-			<select name="export_format" class="stretch">
+			<select name="include_base64" class="stretch">
 				<option>no</option>
 				<option>yes</option>
 			</select>

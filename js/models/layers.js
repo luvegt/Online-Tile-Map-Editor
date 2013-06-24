@@ -83,7 +83,7 @@ define(["jquery-ui"], function($) {
 		    id = $(Layers.contextTarget).attr("data-id");
 
 		if (confirm("Remove all tiles from \"" + name + "\" ?")) {
-			$(".layer[data-id=" + id + "]").html("");
+			$(".layer[data-id=" + id + "]").html("").attr("data-tileset", "");
 			$("#contextmenu").remove();
 		}
 	};

@@ -37,8 +37,7 @@ define([
 			height: tileset.height,
 		}).attr("class", "ts_" + tileset.id);
 
-		$("#tilesets select option").removeAttr("selected");
-		$("#tilesets select option:contains(" + name + ")").attr("selected", true);
+		$("#tilesets select").val(name);
 		$("#tilesets .loading").remove();
 	}
 
@@ -66,7 +65,6 @@ define([
 			}
 
 			opts.id = id;
-			opts.url = opts.name ? undefined : src;
 			opts.name = name;
 
 			Tilesets.collection[name] = opts;
@@ -82,7 +80,8 @@ define([
 
 			$(style).append(css);
 			$("head").append(style);
-			$("#tilesets select").append("<option selected>" + name + "</option>");
+			$("#tilesets select").append("<option>" + name + "</option>");
+			$("#tilesets select").val(name);
 			$("#tileset").jScrollPane();
 			Editor.Canvas.update_grid();
 
@@ -141,7 +140,7 @@ define([
 
 					(x * (tw+m)) + m,
 					(y * (th+m)) + m,
-					
+
 					tw, th,
 
 					x*tw,

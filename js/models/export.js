@@ -12,10 +12,13 @@ define(["jquery-ui"], function($) {
 
 	Export.process = function() {
 		var type = $("select[name=export_format]").val(),
+			include_base64 = $("select[name=include_base64]").val() == "yes",
 		    tileset = Editor.Tilesets.get_active(),
+
 		    w = $("#canvas").width() / tileset.tilesize.width,
 		    h = $("#canvas").height() / tileset.tilesize.height,
-		    output, layer, coords, tileset, elem, sub_elem, text_node, y, x, query;
+
+		    output, layer, coords, tileset, y, x, query, elem, data;
 
 		if (type == "JSON") {
 			output = {};
@@ -47,7 +50,7 @@ define(["jquery-ui"], function($) {
 
 				output.tilesets.push({
 					name: tileset.name,
-					image: tileset.url || tileset.base64,
+					image: include_base64 ? tileset.base64 : tileset.name,
 					imagewidth: tileset.width,
 					imageheight: tileset.height,
 					tilewidth: tileset.tilesize.width,
@@ -58,31 +61,50 @@ define(["jquery-ui"], function($) {
 			output = JSON.stringify(output);
 		} else if (type == "XML") {
 
-			// output = $.parseXML("<root/>");
+			output = $("<root>").append("<layers>");
 
-			// $(".layer").each(function() {
-			// 	layer = $(this).attr("data-name");
+			$(".layer").each(function() {
+console.log($(this).attr("data-tileset"))
+				layer = $("<layer>");
+				layer.attr({
+					name: $(this).attr("data-name"),
+					tileset: $(this).attr("data-tileset"),
+				});
 
-			// 	$(this).find("div").each(function() {
-			// 		coords = $(this).attr("data-coords");
-			// 		tileset = $(this).attr("data-tileset");
-			
-			// 		if (!output.querySelector("layer[tileset='" + tileset + "']")) {
-			// 			elem = output.createElement("layer");
-			// 			elem.setAttribute("tileset", tileset);
-			// 			output.documentElement.appendChild(elem);
-			// 		}
+				data = [];
 
-			// 		elem = output.querySelector("layer[tileset='" + tileset + "']");
-			// 		sub_elem = output.createElement("coords");
-			// 		text_node = document.createTextNode(coords);
-			// 		sub_elem.appendChild(text_node);
-			// 		elem.appendChild(sub_elem);
-			// 		output.documentElement.appendChild(elem);
-			// 	});
-			// });
+				for (y = 0; y < h; y++) {
+					for (x = 0; x < w; x++) {
+						query = $(this).find("div[data-coords='" + x + "." + y + "']");
+						coords = query.length ? parseFloat(query.attr("data-coords-tileset"), 10) : 0.0;
+						data.push(coords);
+					}
+				}
 
-			// output = (new XMLSerializer()).serializeToString(output);
+				layer.text(data.join(","));
+				output.find("layers").append(layer);
+			});
+
+			output.append("<tilesets>");
+
+			for (tileset in Editor.Tilesets.collection) {
+				tileset = Editor.Tilesets.collection[tileset];
+
+				elem = $("<tileset>");
+
+				elem.attr({
+					name: tileset.name,
+					image: include_base64 ? tileset.base64 : tileset.name,
+					imagewidth: tileset.width,
+					imageheight: tileset.height,
+					tilewidth: tileset.tilesize.width,
+					tileheight: tileset.tilesize.height
+				});
+
+				output.find("tilesets").append(elem);
+			}
+
+			output = (new XMLSerializer()).serializeToString(output[0]);
 		}
 
 		window.open("data:text/" + type + ";charset=UTF-8;," + output, "_blank");

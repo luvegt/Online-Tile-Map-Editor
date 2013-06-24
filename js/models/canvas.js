@@ -70,6 +70,14 @@ define([
 		    top, left, coords,
 		    $div, exists, x, y;
 
+		if (!$(layer.elem).attr("data-tileset")) {
+			$(layer.elem).attr("data-tileset", tileset.name);
+		} else if ($(layer.elem).attr("data-tileset") != tileset.name) {
+			if (!$("#canvas .warning:visible").length)
+			{ $("#canvas .warning").html("Cannot use different tilesets on one layer, please clear the layer first.").show().delay(2000).fadeOut(1000); }
+			return;
+		}
+
 		// Iterate through the selection
 		for (y = 0; y <= ly; y++) {
 			for (x = 0; x <= lx; x++) {
@@ -94,8 +102,7 @@ define([
 					})
 
 					.attr("data-coords", coords)
-					.attr("data-coords-tileset", (Math.abs(bgx/tw)+x) + "." + (Math.abs(bgy/th)+y))
-					.attr("data-tileset", tileset.name);
+					.attr("data-coords-tileset", (Math.abs(bgx/tw)+x) + "." + (Math.abs(bgy/th)+y));
 				}
 
 				$div.attr("class", "ts_" + tileset.id);

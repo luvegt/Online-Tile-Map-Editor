@@ -126,6 +126,7 @@ define([
 	TilesetView.change_tileset = function(e) {
 		var name = $("#tilesets select option:selected").html();
 		Editor.Tilesets.set(name);
+		Editor.Canvas.update_grid();
 	}
 
 	TilesetView.process = function(e, opts) {
