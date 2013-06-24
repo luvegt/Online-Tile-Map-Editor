@@ -66,11 +66,11 @@ define([
 		    bgx = parseInt($("#canvas .selection").css("background-position").split(" ")[0], 10),
 		    bgy = parseInt($("#canvas .selection").css("background-position").split(" ")[1], 10),
 
-		    pos_x, pos_y,
-		    top, left, coords,
-		    $div, exists, x, y;
+		    pos_x, pos_y, coords,
+		    $div, exists, x, y, query;
 
 		if (!$(layer.elem).attr("data-tileset")) {
+			$(layer.elem).addClass("ts_" + tileset.id);
 			$(layer.elem).attr("data-tileset", tileset.name);
 		} else if ($(layer.elem).attr("data-tileset") != tileset.name) {
 			if (!$("#canvas .warning:visible").length)
@@ -82,30 +82,21 @@ define([
 		for (y = 0; y <= ly; y++) {
 			for (x = 0; x <= lx; x++) {
 
-				pos_x = (cx + x);
-				pos_y = (cy + y);
-
-				left = pos_x * tw;
-				top = pos_y * th;
+				pos_x = cx + x;
+				pos_y = cy + y;
 
 				coords = pos_x + "." + pos_y;
 
-				$div = $(layer.elem).find("div[data-coords='" + coords + "']");
-				exists = $div.length;
-				$div = exists ? $div : $("<div>");
+				query = $(layer.elem).find("div[data-coords='" + coords + "']");
+				$div = query.length ? query : $("<div>").css({
+					position: "absolute",
+					left: pos_x * tw,
+					top: pos_y * th
+				})
 
-				if (!exists) {
-					$div.css({
-						position: "absolute",
-						left: left,
-						top: top
-					})
+				.attr("data-coords", coords)
+				.attr("data-coords-tileset", (Math.abs(bgx/tw)+x) + "." + (Math.abs(bgy/th)+y));
 
-					.attr("data-coords", coords)
-					.attr("data-coords-tileset", (Math.abs(bgx/tw)+x) + "." + (Math.abs(bgy/th)+y));
-				}
-
-				$div.attr("class", "ts_" + tileset.id);
 				$div.css("background-position", (bgx-(x*tw)) + "px" + " " + (bgy-(y*th)) + "px");
 				$(layer.elem).append($div);
 			}

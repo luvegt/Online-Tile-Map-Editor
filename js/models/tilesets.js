@@ -73,7 +73,7 @@ define([
 
 			$(style).attr("id", "tileset_" + id);
 
-			css = ".ts_" + id + " {\n";
+			css = ".ts_" + id + ", .ts_" + id + " > div {\n";
 			css += "\twidth: " + opts.tilesize.width + "px;\n";
 			css += "\theight: " + opts.tilesize.height + "px;\n";
 			css += "\tbackground-image: url('" + opts.base64 + "');\n";
