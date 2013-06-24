@@ -100,9 +100,12 @@ define([
 	TilesetView.remove = function() {
 
 		var tileset = Editor.Tilesets.get_active();
+
+		if (!confirm("This will remove all tiles associated with \"" + tileset.name + "\", continue?")) { return; }
 		
 		$("style#tileset_" + tileset.id).remove();
 		$("#tiles div.ts_" + tileset.id).remove();
+		$(".layer[data-tileset='" + tileset.name + "']").removeAttr("data-tileset");
 		$("#tilesets select option:selected").remove();
 
 		delete Editor.Tilesets.collection[tileset.name];
@@ -125,7 +128,7 @@ define([
 
 	TilesetView.change_tileset = function(e) {
 		var name = $("#tilesets select option:selected").html();
-		
+
 		Editor.Tilesets.set(name);
 		Editor.Tilesets.update_selection();
 		Editor.Canvas.update_grid();
