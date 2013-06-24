@@ -105,7 +105,7 @@ define([
 
 	Canvas.reposition = function(e) {
 		var extra = $("#toolbar").width() + $("#canvas").width() < $(window).width() ? $("#toolbar").width() / 2 : 0;
-		var left = ($(window).width() / 2) - ($("#canvas").width() / 2) + extra;
+		var left = ($(window).width() / 2) - ($("#canvas").width() / 2) - extra;
 		var top = ($(window).height() / 2) - ($("#canvas").height() / 2);
 
 		$("#canvas").css({ top: top, left: left });

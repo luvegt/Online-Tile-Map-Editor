@@ -313,12 +313,12 @@ a span { padding-right: 2px; }
 	overflow: hidden;
 
 	background-color: #464646;
-	border-right: 3px double #282828;
+	border-left: 3px double #282828;
 	box-shadow: 0px 0px 100px rgba(0, 0, 0, 0.5);
 
 	position: absolute;
 	top: 26px;
-	left: 0px;
+	right: 0px;
 	z-index: 99;
 }
 
