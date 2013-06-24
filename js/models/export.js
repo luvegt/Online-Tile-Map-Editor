@@ -64,7 +64,7 @@ define(["jquery-ui"], function($) {
 			output = $("<root>").append("<layers>");
 
 			$(".layer").each(function() {
-console.log($(this).attr("data-tileset"))
+
 				layer = $("<layer>");
 				layer.attr({
 					name: $(this).attr("data-name"),
