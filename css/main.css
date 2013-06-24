@@ -189,7 +189,7 @@ a span { padding-right: 2px; }
 
 #canvas .warning {
 	position: absolute;
-	top: 10px;
+	top: 5%;
 	left: 5%;
 	width: 90%;
 	padding: 5px 10px;
@@ -323,11 +323,6 @@ a span { padding-right: 2px; }
 	background-position: right;
 	background-repeat: no-repeat;
 
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-ms-box-sizing: border-box;
-	-o-box-sizing: border-box;
-	box-sizing: border-box;
 }
 
 #custom_select:hover { background-image: url("../img/icons/select_arrow_hover.png"); }
@@ -514,4 +509,12 @@ ul#layerlist > li.active {
 .hint {
 	cursor: help;
 	border-bottom: 1px dotted #000;
+}
+
+.border-box {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	box-sizing: border-box;
 }
