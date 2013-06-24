@@ -19,4 +19,4 @@ You can  resize the toolbar by dragging the edge.
 
 <h4>Tilesets</h4><br>
 
-Click and drag to select multiple tiles
+Click and drag to select multiple tiles.
