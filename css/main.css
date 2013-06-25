@@ -406,6 +406,15 @@ a span { padding-right: 2px; }
 	box-shadow: inset 0px 1px #666;
 }
 
+
+#toolbar hr {
+	height: 0px;
+	border: 0px;
+	border-top: 1px solid #333;
+	border-bottom: 1px solid #666;
+	margin: 20px 0px;
+}
+
 /* ====================== */
 /* ====== TILESETS ====== */
 /* ====================== */
