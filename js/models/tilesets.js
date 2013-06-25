@@ -161,9 +161,9 @@ define([
 	};
 
 	Tilesets.reset_selection = function() {
-		$("#canvas .selection").attr("class", "selection");
+		$("#canvas .selection").remove();
 		$("#tileset .selection").remove();
-		Editor.selection = null;
+		delete Editor.selection;
 	};
 
 	Tilesets.get_active = function() { return Tilesets.collection[$("#tilesets select option:selected").val()]; }

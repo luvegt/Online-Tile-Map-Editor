@@ -11,7 +11,7 @@ define([
 		Editor = namespace;
 
 		// Selection movement
-		$("#canvas").on("mousedown mousemove", function(e) {
+		$("#canvas").on("mousedown mousemove mouseup", function(e) {
 
 			// Tileset hasn't loaded yet
 			if (!Editor.active_tileset) { return; }
@@ -32,12 +32,9 @@ define([
 
 			Canvas.cursor = [x, y];
 
-			if (
-				((e.type == "mousedown" && e.which == 1) || Editor.mousedown) &&
-				Editor.selection && !Editor.keystatus.spacebar
-			) {
-				if (Editor.selection) { Canvas.draw(); }
-				else { Canvas.make_selection(); }
+			if (!Editor.keystatus.spacebar) {
+				if (Editor.selection && ((e.type == "mousedown" && e.which == 1) || Editor.mousedown)) { Canvas.draw(); }
+				else if (!Editor.selection) { Canvas.make_selection(e); }
 			}
 		});
 
@@ -90,7 +87,7 @@ define([
 		    pos_x, pos_y, coords,
 
 		    // Misc
-		    $div, x, y, query;
+		    $div, x, y, query, cxp, cyp, $tile, top, left;
 
 		// TODO optimize this:
 		// Checks if the current tileset differs
@@ -107,37 +104,108 @@ define([
 			return;
 		}
 
-		// Iterate through selected tiles
-		for (y = 0; y <= ly; y++) {
-			for (x = 0; x <= lx; x++) {
+		if (Editor.selection.custom) {
 
-				pos_x = cx + x;
-				pos_y = cy + y;
+			cxp = cx*tw;
+			cyp = cy*th;
 
-				coords = pos_x + "." + pos_y;
+			$("#canvas .selection").find("div").each(function() {
+				top = parseInt($(this).css("top"), 10);
+				left = parseInt($(this).css("left"), 10);
+
+				$tile = $(this).clone();
+				$tile.css({
+					top: top + cyp,
+					left: left + cxp
+				});
+
+				coords = ((left+cxp)/tw) + "." + ((top+cyp)/th);
 				query = $(layer.elem).find("div[data-coords='" + coords + "']");
 
-				// Update existing tile or create a new one and position it
-				$div = query.length ? query : $("<div>").css({
-					position: "absolute",
-					left: pos_x * tw,
-					top: pos_y * th
-				})
+				if (query.length) {
+					$(query).attr("style", $tile.attr("style"));
+				} else {
+					$tile.attr("data-coords", coords);
+					$(layer.elem).append($tile);
+				}
+			});
 
-				.attr("data-coords", coords)
-				.attr("data-coords-tileset", (Math.abs(bgx/tw)+x) + "." + (Math.abs(bgy/th)+y));
+		} else {
+			// Iterate through selected tiles
+			for (y = 0; y <= ly; y++) {
+				for (x = 0; x <= lx; x++) {
 
-				// Set/update the background-position of the current tile element
-				$div.css("background-position", (bgx-(x*tw)) + "px" + " " + (bgy-(y*th)) + "px");
+					pos_x = cx + x;
+					pos_y = cy + y;
 
-				// Append the tile if it didn't on that coordinate
-				if (!query.length) { $(layer.elem).append($div); }
+					coords = pos_x + "." + pos_y;
+					query = $(layer.elem).find("div[data-coords='" + coords + "']");
+
+					// Update existing tile or create a new one and position it
+					$div = query.length ? query : $("<div>").css({
+						position: "absolute",
+						left: pos_x * tw,
+						top: pos_y * th
+					})
+
+					.attr("data-coords", coords)
+					.attr("data-coords-tileset", (Math.abs(bgx/tw)+x) + "." + (Math.abs(bgy/th)+y));
+
+					// Set/update the background-position of the current tile element
+					$div.css("background-position", (bgx-(x*tw)) + "px" + " " + (bgy-(y*th)) + "px");
+
+					// Append the tile if it didn't on that coordinate
+					if (!query.length) { $(layer.elem).append($div); }
+				}
 			}
 		}
 	};
 
-	Canvas.make_selection = function() {
+	Canvas.make_selection = function(e) {
 
+		var tileset, tw, th, ex, ey, $selection, layer, top, left, $tile;
+
+		Editor.Utils.make_selection(e, "#canvas");
+
+		if (e.type == "mousedown") {
+
+			$("#canvas").find(".selection").css("background-color", "rgba(0, 0, 0, 0.3)");
+
+		} else if (e.type == "mouseup") {
+			tileset = Editor.active_tileset;
+			tw = tileset.tilesize.width;
+			th = tileset.tilesize.height;
+
+			sx = Editor.selection[0][0] * tw;
+			sy = Editor.selection[0][1] * th;
+			ex = Editor.selection[1][0] * tw;
+			ey = Editor.selection[1][1] * th;
+
+			$selection = $("#canvas").find(".selection");
+			layer = Editor.Layers.get_active();
+
+			// Find all elements that are in range of
+			// the selection and append a copy of them
+			$(layer.elem).find("div").each(function() {
+				top = parseInt($(this).css("top"), 10);
+				left = parseInt($(this).css("left"), 10);
+
+				if (left >= sx && left <= ex && top >= sy && top <= ey) {
+					$tile = $(this).clone();
+
+					$tile.css({
+						top: top - sy,
+						left: left - sx
+					});
+					
+					$selection.append($tile);
+				}
+			});
+
+			$selection.css("background-color", "transparent");
+			$selection.addClass($(layer.elem).attr("class").replace("layer", "nobg"));
+			Editor.selection.custom = true;
+		}
 	};
 
 	Canvas.reposition = function(e) {

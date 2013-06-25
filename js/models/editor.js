@@ -1,12 +1,13 @@
 define([
 	"jquery-ui", 
+	"models/utils",
 	"models/menubar",
 	"models/tools",
 	"models/canvas",
 	"models/tilesets",
 	"models/layers",
 	"models/export",
-], function($, Menubar, Tools, Canvas, Tilesets, Layers, Export) {
+], function($, Utils, Menubar, Tools, Canvas, Tilesets, Layers, Export) {
 
 	var Editor = {}; 
 
@@ -14,6 +15,7 @@ define([
 	Editor.mousedown = false;
 	Editor.selection = null;
 
+	Editor.Utils = Utils.initialize(Editor);
 	Editor.Menubar = Menubar.initialize(Editor);
 	Editor.Tools = Tools.initialize(Editor);
 	Editor.Canvas = Canvas.initialize(Editor);

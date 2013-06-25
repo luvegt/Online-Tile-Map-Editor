@@ -256,6 +256,12 @@ a span { padding-right: 2px; }
 	position: absolute;
 	z-index: 99;
 	opacity: 0.5;
+
+	pointer-events: none;
+}
+
+.nobg {
+	background-image: none !important;
 }
 
 #canvas .warning {
@@ -435,14 +441,13 @@ a span { padding-right: 2px; }
 
 #tilesets .selection {
 	position: absolute;
-	top: 0px; left: 0px;
-
-	width: 32px;
-	height: 32px;
-
 	background-color: rgba(0, 0, 0, 0.3);
 	background-image: none !important;
 	pointer-events: none;
+}
+
+.selection {
+	box-shadow: inset 0px 0px 0px 1px #000;
 }
 
 #custom_select {
