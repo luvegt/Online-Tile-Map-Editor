@@ -1,18 +1,21 @@
 define([
 	"jquery-ui", 
 	"models/menubar",
+	"models/tools",
 	"models/canvas",
 	"models/tilesets",
 	"models/layers",
 	"models/export",
-], function($, Menubar, Canvas, Tilesets, Layers, Export) {
+], function($, Menubar, Tools, Canvas, Tilesets, Layers, Export) {
 
 	var Editor = {}; 
 
+	Editor.keystatus = {};
 	Editor.mousedown = false;
 	Editor.selection = null;
 
 	Editor.Menubar = Menubar.initialize(Editor);
+	Editor.Tools = Tools.initialize(Editor);
 	Editor.Canvas = Canvas.initialize(Editor);
 	Editor.Tilesets = Tilesets.initialize(Editor);
 	Editor.Layers = Layers.initialize(Editor);
@@ -45,6 +48,16 @@ define([
 		// Global mouse status
 		$(document).on("mousedown mouseup", function(e) {
 			Editor.mousedown = e.type == "mousedown" && e.which == 1;
+		});
+
+		// Global input status
+		$(document).on("keydown keyup", function(e) {
+			var c = e.keyCode, down = e.type == "keydown";
+			
+			if (e.altKey) { Editor.keystatus.altKey = down; }
+			if (e.ctrlKey) { Editor.keystatus.ctrlKey = down; }
+			if (e.shiftKey) { Editor.keystatus.shiftKey = down; }
+			if (c == 32) { Editor.keystatus.spacebar = down; }
 		});
 
 		// Disable selection

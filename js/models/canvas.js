@@ -15,6 +15,7 @@ define([
 
 			// Tileset hasn't loaded yet
 			if (!Editor.active_tileset) { return; }
+			if (e.which == 3) { Editor.Tilesets.reset_selection(); return; }
 
 			var tileset = Editor.active_tileset,
 		        tw = tileset.tilesize.width,
@@ -30,13 +31,25 @@ define([
 			});
 
 			Canvas.cursor = [x, y];
-			if (((e.type == "mousedown" && e.which == 1) || Editor.mousedown) && Editor.selection) { Canvas.draw(); }
 
+			if (
+				((e.type == "mousedown" && e.which == 1) || Editor.mousedown) &&
+				Editor.selection && !Editor.keystatus.spacebar
+			) {
+				if (Editor.selection) { Canvas.draw(); }
+				else { Canvas.make_selection(); }
+			}
 		});
 
 		$("#canvas").draggable({
-			mouseButton: 3,
-			cursor: "move"
+			mouseButton: 1,
+			cursor: "move",
+			start: function() {
+				if (!Editor.keystatus.spacebar) {
+					$("body").css("cursor", "");
+					return false;
+				}
+			}
 		});
 
 		this.reposition();
@@ -47,6 +60,7 @@ define([
 	};
 
 	Canvas.draw = function() {
+
 		var tileset = Editor.active_tileset,
 		    layer = Editor.Layers.get_active(),
 
@@ -59,11 +73,10 @@ define([
 		    th = tileset.tilesize.height,
 
 		    // Start x, Start x, End x, End y
-		    // Currently in pixel format, that's why we're dividing
-		    sx = Editor.selection[0][0] / tw,
-		    sy = Editor.selection[0][1] / th,
-		    ex = Editor.selection[1][0] / tw,
-		    ey = Editor.selection[1][1] / th,
+		    sx = Editor.selection[0][0],
+		    sy = Editor.selection[0][1],
+		    ex = Editor.selection[1][0],
+		    ey = Editor.selection[1][1],
 
 		    // Length for iterated x and y variables
 		    lx = ex - sx,
@@ -121,6 +134,10 @@ define([
 				if (!query.length) { $(layer.elem).append($div); }
 			}
 		}
+	};
+
+	Canvas.make_selection = function() {
+
 	};
 
 	Canvas.reposition = function(e) {

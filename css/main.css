@@ -311,7 +311,6 @@ a span { padding-right: 2px; }
 	height: 100%;
 
 	padding: 10px;
-	overflow: hidden;
 
 	background-color: #464646;
 	border-right: 3px double #282828;
@@ -362,6 +361,49 @@ a span { padding-right: 2px; }
 	border-radius: 0px 0px 3px 3px;
 
 	overflow: hidden;
+}
+
+#tools {
+	position: absolute;
+	top: 0px; right: -38px;
+	width: 29px;
+
+	color: #999;
+	font-size: 12px;
+	text-align: center;
+	text-shadow: 0px -1px #111;
+
+	background-color: #464646;
+	border-right: 1px solid #000;
+	border-bottom: 1px solid #000;
+	border-bottom-right-radius: 3px;
+	padding: 4px 0px 0px 5px;
+}
+
+#tools span {
+	display: block;
+	width: 16px;
+	height: 16px;
+
+	margin-bottom: 5px;
+	padding: 4px 2px 0px 3px;
+	border: 1px solid #464646;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+#tools span:hover {
+	color: #EEE;
+	background-color: #555;
+	border: 1px solid #404040;
+	box-shadow: inset 0px 1px #666;
+}
+
+#tools span.active {
+	color: #FFF;
+	background-color: #555;
+	border: 1px solid #333;
+	box-shadow: inset 0px 1px #666;
 }
 
 /* ====================== */

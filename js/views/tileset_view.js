@@ -129,7 +129,7 @@ define([
 		var name = $("#tilesets select option:selected").html();
 
 		Editor.Tilesets.set(name);
-		Editor.Tilesets.update_selection();
+		Editor.Tilesets.reset_selection();
 		Editor.Canvas.update_grid();
 	};
 
@@ -152,9 +152,6 @@ define([
 		}
 	};
 
-	// TODO use index values for Editor.selection
-	// This method is somewhat hairy and should be optimized
-	// I wrote it a year ago and can't quite tell what each condition is meant for (...but hey it works ;p)
 	TilesetView.make_selection = function(e) {
 
 		if (!$("#tilesets select option:selected").length) { return; }
@@ -163,11 +160,16 @@ define([
 			tw = tileset.tilesize.width,
 		    th = tileset.tilesize.height,
 
-		    x = Math.floor(((e.pageX - $("#tileset_container").offset().left) + $("#tileset_container").scrollTop()) / tw) * tw,
-		    y = Math.floor(((e.pageY - $("#tileset_container").offset().top) + $("#tileset_container").scrollLeft()) / th) * th,
+		    $container = $("#tileset_container"),
+		    offset =  $container.offset(),
+
+		    // Current x position relative to the tileset area
+		    x = Math.floor(((e.pageX - offset.left) + $container.scrollTop()) / tw) * tw,
+		    y = Math.floor(((e.pageY - offset.top) + $container.scrollLeft()) / th) * th,
 
 		    $selection = $("#tileset_container .selection");
 
+		// Create and append selection div
 		if (e.type == "mousedown") {
 
 			if (!$selection.length)
@@ -184,7 +186,8 @@ define([
 
 		} else if (e.type == "mousemove") {
 
-			if (Editor.mousedown ) {
+			// Resize selection div in the correct direction
+			if (Editor.mousedown) {
 
 				var sx = Editor.selection[0][0],
 				    sy = Editor.selection[0][1],
@@ -192,66 +195,52 @@ define([
 				    w = Math.abs((x-sx) + tw),
 				    h = Math.abs((y-sy) + th);
 
-				if (sx <= x) {
-					$selection.css({
-						left: sx,
-						width: w
-					});
-				} else {
-					$selection.css({
-						left: x,
-						width: w + tw*2
-					});
-				}
+				// Selection goes right
+				if (sx <= x) { $selection.css({ left: sx, width: w }); }
+				// Selection goes left
+				else { $selection.css({ left: x, width: w + tw*2 }); }
+				// Selection goes down
+				if (sy <= y) { $selection.css({ top: sy, height: h }); }
+				// Selection goes up
+				else { $selection.css({ top: y, height: h + th*2 }); }
 
-				if (sy <= y) {
-					$selection.css({
-						top: sy,
-						height: h
-					});
-				} else {
-					$selection.css({
-						top: y,
-						height: h + th*2
-					});
-				}
+			// Hover selection
 			} else {
 				if (!$selection.length)
 				{ $("#tileset_container").append("<div class='selection'></div>"); }
 
 				$("#tileset_container .selection").css({
-					left: x,
-					top: y,
-					width: tw,
-					height: th
+					left: x, top: y,
+					width: tw, height: th
 				});
 			}
 
 		} else if (e.type == "mouseup" && Editor.selection) {
-			$selection.remove();
 
-			var s = Editor.selection, sx, sy, ex, ey, w, h,
-			    id = $("select[name=tileset_select] option:selected").index();
+			var s = Editor.selection,
+			    id = $("select[name=tileset_select] option:selected").index(),
+			    sx, sy, ex, ey
 
 			s[1][0] = x;
 			s[1][1] = y;
 
+			// Normalize selection, so that the start coordinates
+			// are smaller than the end coordinates
 			sx = s[0][0] < s[1][0] ? s[0][0] : s[1][0];
 			sy = s[0][1] < s[1][1] ? s[0][1] : s[1][1];
 			ex = s[0][0] > s[1][0] ? s[0][0] : s[1][0];
 			ey = s[0][1] > s[1][1] ? s[0][1] : s[1][1];
 
-			Editor.selection = [[sx, sy], [ex, ey]];
-
-			w = (ex-sx) + tw;
-			h = (ey-sy) + th;
+			Editor.selection = [[sx/tw, sy/th], [ex/tw, ey/th]];
 
 			$("#canvas .selection").css({
-				width: w,
-				height: h,
+				width: (ex-sx) + tw,
+				height: (ey-sy) + th,
 				backgroundColor: "transparent",
 				backgroundPosition: (-sx) + "px " + (-sy) + "px"
 			}).attr("class", "selection ts_" + tileset.id);
+
+			$selection.remove();
 		}
 	};
 
