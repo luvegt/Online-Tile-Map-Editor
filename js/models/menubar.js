@@ -46,7 +46,7 @@ define(["jquery-ui"], function($) {
 	// automaticly be toggled when clicked
 	Menubar.toggle = function(e) {
 		var value = $(e.currentTarget).attr("data-toggle"),
-		    extra = value.split(":"), status;
+		    extra = value.split(":"), status, elem;
 
 		// data-toggle="visibility:elem">
 		if (extra[0] == "visibility") {
@@ -59,6 +59,24 @@ define(["jquery-ui"], function($) {
 
 			status = $(extra[2]).toggleClass(extra[1]);
 			$(e.currentTarget).find("span").toggleClass("icon-check-empty", "icon-check");
+
+		} else if (extra[0] == "fullscreen") {
+
+			elem = $(extra[1])[0];
+
+			if (!Editor.fullscreen) {
+				if (elem.requestFullscreen) { elem.requestFullscreen(); }
+				else if (elem.mozRequestFullScreen) { elem.mozRequestFullScreen(); }
+				else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen(); }
+			} else {
+				if (document.cancelFullScreen) { document.cancelFullScreen(); }
+				else if (document.mozCancelFullScreen) { document.mozCancelFullScreen(); }
+				else if (document.webkitCancelFullScreen) { document.webkitCancelFullScreen(); }
+			}
+
+			$(e.currentTarget).find(".text").html(Editor.fullscreen ? "Fullscreen" : "Windowed");
+			$(e.currentTarget).find("span:eq(0)").toggleClass("icon-resize-small", "icon-resize-full");
+			Editor.fullscreen = !Editor.fullscreen;
 
 		} else { Menubar.toggleFunctions[value](); }
 	};
