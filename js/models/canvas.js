@@ -163,12 +163,11 @@ define([
 						position: "absolute",
 						left: pos_x * tw,
 						top: pos_y * th
-					})
+					}).attr("data-coords", coords);
 
-					.attr("data-coords", coords)
-					.attr("data-coords-tileset", (Math.abs(bgx/tw)+x) + "." + (Math.abs(bgy/th)+y));
 
-					// Set/update the background-position of the current tile element
+					// Set/update the tileset information
+					$div.attr("data-coords-tileset", (Math.abs(bgx/tw)+x) + "." + (Math.abs(bgy/th)+y));
 					$div.css("background-position", (bgx-(x*tw)) + "px" + " " + (bgy-(y*th)) + "px");
 
 					// Append the tile if it didn't on that coordinate
@@ -227,7 +226,7 @@ define([
 
 					if (x < 0 || x >= fx || y < 0 || y >= fy) { return; }
 
-					if (!$elem.length || $elem.attr("data-coords-tileset") == search_bgpos) {
+					if ((!$elem.length && !search_bgpos) || $elem.attr("data-coords-tileset") == search_bgpos) {
 
 						if (!$elem.length) {
 							$elem = $("<div>").css({
@@ -239,10 +238,10 @@ define([
 							.attr("data-coords", x + "." + y);
 
 							// Set/update the background-position of the current tile element
-							$elem.css("background-position", bgx + "px" + " " + bgy + "px");
 							$(layer.elem).append($elem);
 						}
 
+						$elem.css("background-position", bgx + "px" + " " + bgy + "px");
 						$elem.attr({
 							"data-coords-tileset": replace_bgpos,
 							"data-filled": "true",
