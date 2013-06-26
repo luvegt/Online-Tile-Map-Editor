@@ -6,11 +6,9 @@ A web based tile map editor for all kinds of 2d games and applications.
 
 ----
 
-######Update (2013-02-11): This project is no longer in development. I'd love to finish it, but the code got way to messy (it was my first time using backbone.js.). I might rewrite this application in the near future.
-######Update (2013-06-22): I started working on it again! A fair amount of people have contacted me and encouraged me to finish this project. I'm currently rewriting it from the ground up and will commit the first update soon, so stay tuned! :)
------
+![preview](http://elias-schuett.de/img/content/online-tile-map-editor.png)
 
-#Features
+##Features
 
 ###### Implemented
   
@@ -27,9 +25,8 @@ A web based tile map editor for all kinds of 2d games and applications.
   * Tools `(select, fill, flip/rotate, ...)`
   * Save/Load `(JSON, XML, ...)`
 
------
 
-#Dependencies
+##Dependencies
 
   * **[HTML5 FileReader API](http://www.w3.org/TR/FileAPI/#dfn-filereader)** [1]
   * **[jQuery](http://jquery.com/), [jQuery UI](http://jqueryui.com/)**
