@@ -11,6 +11,7 @@ define([
 
 	var Editor = {}; 
 
+	Editor.tool = "draw";
 	Editor.keystatus = {};
 	Editor.mousedown = false;
 	Editor.selection = null;

@@ -3,8 +3,10 @@ define([
 	"jquery.draggable"
 ], function($) {
 
-	var Canvas = {};
-	var Editor;
+	var Canvas = {}, Editor;
+
+	Canvas.cursor = [];
+	Canvas.cursor.last = []; // Yes that's possible
 
 	Canvas.initialize = function(namespace) {
 
@@ -13,7 +15,6 @@ define([
 		// Selection movement
 		$("#canvas").on("mousedown mousemove mouseup", function(e) {
 
-			// Tileset hasn't loaded yet
 			if (!Editor.active_tileset) { return; }
 			if (e.which == 3) { Editor.Tilesets.reset_selection(); return; }
 
@@ -25,16 +26,31 @@ define([
 			    x = Math.floor((e.pageX - offset.left) / tw),
 			    y = Math.floor((e.pageY - offset.top) / th);
 
-			$("#canvas .selection").css({
+			Canvas.cursor[0] = x;
+			Canvas.cursor[1] = y;
+
+			// Prevent redrawing on the same tile(s)
+			if (
+				Canvas.cursor[0] == Canvas.cursor.last[0] &&
+				Canvas.cursor[1] == Canvas.cursor.last[1] &&
+				Canvas.cursor.last.type == e.type
+			) { return; }
+
+			Canvas.cursor.last = Canvas.cursor.slice(0);
+			Canvas.cursor.last.type = e.type;
+
+			$("#canvas").find(".selection").css({
 				top: y * th,
 				left: x * tw
 			});
 
-			Canvas.cursor = [x, y];
-
 			if (!Editor.keystatus.spacebar) {
-				if (Editor.selection && ((e.type == "mousedown" && e.which == 1) || Editor.mousedown)) { Canvas.draw(); }
-				else if (!Editor.selection) { Canvas.make_selection(e); }
+				if (Editor.selection && ((e.type == "mousedown" && e.which == 1) || Editor.mousedown)) {
+
+					if (Editor.tool == "draw") { Canvas.draw(); }
+					else if (Editor.tool == "fill" && e.type == "mousedown") { Canvas.fill(); }
+
+				} else if (!Editor.selection) { Canvas.make_selection(e); }
 			}
 		});
 
@@ -80,8 +96,9 @@ define([
 		    ly = ey - sy,
 
 		    // Background position
-		    bgx = parseInt($("#canvas .selection").css("background-position").split(" ")[0], 10),
-		    bgy = parseInt($("#canvas .selection").css("background-position").split(" ")[1], 10),
+		    bgpos = $("#canvas").find(".selection").css("background-position").split(" "),
+		    bgx = parseInt(bgpos[0], 10),
+		    bgy = parseInt(bgpos[1], 10),
 
 		    // Tile position on the canvas
 		    pos_x, pos_y, coords,
@@ -109,7 +126,7 @@ define([
 			cxp = cx*tw;
 			cyp = cy*th;
 
-			$("#canvas .selection").find("div").each(function() {
+			$("#canvas").find(".selection").find("div").each(function() {
 				top = parseInt($(this).css("top"), 10);
 				left = parseInt($(this).css("left"), 10);
 
@@ -159,6 +176,101 @@ define([
 				}
 			}
 		}
+	};
+
+	// TODO throw this in a webworker
+	Canvas.fill = function(e) {
+		var tileset = Editor.active_tileset,
+		    layer = Editor.Layers.get_active(),
+
+		    // Cursor position
+		    cx = this.cursor[0],
+		    cy = this.cursor[1],
+
+		    // Tilsize
+		    tw = tileset.tilesize.width,
+		    th = tileset.tilesize.height,
+
+		    // Start x, Start x, End x, End y
+		    sx = Editor.selection[0][0],
+		    sy = Editor.selection[0][1],
+		    ex = Editor.selection[1][0],
+		    ey = Editor.selection[1][1],
+
+		    // Field size in tiles
+		    fx = $("#canvas").width()/tw,
+		    fy = $("#canvas").height()/th,
+
+		    bgpos = $("#canvas").find(".selection").css("background-position").split(" "),
+		    bgx = parseInt(bgpos[0], 10),
+		    bgy = parseInt(bgpos[1], 10),
+
+		    query = $(layer.elem).find("div[data-coords='" + cx + "." + cy + "']"),
+		    search_bgpos = query.length ? query.attr("data-coords-tileset") : null,
+		    replace_bgpos = Math.abs(bgx/tw) + "." + Math.abs(bgy/th),
+
+		    fill_recursive = function(ox, oy) {
+				var coords = [
+					[ox, oy-1], // top
+					[ox, oy+1], // bottom
+					[ox-1, oy], // left
+					[ox+1, oy]  // right
+				], $elem, x, y;
+
+				coords.forEach(function(arr) {
+
+					x = arr[0],
+					y = arr[1];
+
+					$elem = $(layer.elem).find("div[data-coords='" + arr[0] + "." + arr[1] + "']");
+					if ($elem.length && $elem.attr("data-filled")) { return; }
+
+					if (x < 0 || x >= fx || y < 0 || y >= fy) { return; }
+
+					if (!$elem.length || $elem.attr("data-coords-tileset") == search_bgpos) {
+
+						if (!$elem.length) {
+							$elem = $("<div>").css({
+								position: "absolute",
+								left: x * tw,
+								top: y * th
+							})
+
+							.attr("data-coords", x + "." + y);
+
+							// Set/update the background-position of the current tile element
+							$elem.css("background-position", bgx + "px" + " " + bgy + "px");
+							$(layer.elem).append($elem);
+						}
+
+						$elem.attr({
+							"data-coords-tileset": replace_bgpos,
+							"data-filled": "true",
+						});
+
+						fill_recursive(x, y);
+					}
+				});
+			};
+
+		// TODO make this unify this
+		if (!$(layer.elem).attr("data-tileset")) {
+
+			$(layer.elem).addClass("ts_" + tileset.id);
+			$(layer.elem).attr("data-tileset", tileset.name);
+
+		} else if ($(layer.elem).attr("data-tileset") != tileset.name) {
+
+			if (!$("#canvas .warning:visible").length)
+			{ $("#canvas .warning").html("Cannot use different tilesets on one layer, please clear the layer first.").show().delay(2000).fadeOut(1000); }
+			return;
+		}
+
+		// Start the recursive search
+		fill_recursive(cx, cy);
+
+		// Cleanup
+		$(layer.elem).find("div").removeAttr("data-filled");
 	};
 
 	Canvas.make_selection = function(e) {
@@ -233,7 +345,7 @@ define([
 		bfr.fillRect(tw-1, 0, 1, th);
 
 		$("#canvas").css("backgroundImage", "url(" + buffer.toDataURL() + ")");
-		$("#canvas .selection").css({
+		$("#canvas").find(".selection").css({
 			width: tw,
 			height: th
 		});
