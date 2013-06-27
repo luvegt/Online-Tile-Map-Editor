@@ -118,6 +118,7 @@ define([
 
 			if (!$("#canvas .warning:visible").length)
 			{ $("#canvas .warning").html("Cannot use different tilesets on one layer, please clear the layer first.").show().delay(2000).fadeOut(1000); }
+			
 			return;
 		}
 
@@ -207,8 +208,12 @@ define([
 		    query = $(layer.elem).find("div[data-coords='" + cx + "." + cy + "']"),
 		    search_bgpos = query.length ? query.attr("data-coords-tileset") : null,
 		    replace_bgpos = Math.abs(bgx/tw) + "." + Math.abs(bgy/th),
+		    
+		    documentFragment = document.createDocumentFragment(),
+		    closedList = [];
 
 		    fill_recursive = function(ox, oy) {
+
 				var coords = [
 					[ox, oy-1], // top
 					[ox, oy+1], // bottom
@@ -221,10 +226,10 @@ define([
 					x = arr[0],
 					y = arr[1];
 
-					$elem = $(layer.elem).find("div[data-coords='" + arr[0] + "." + arr[1] + "']");
-					if ($elem.length && $elem.attr("data-filled")) { return; }
-
 					if (x < 0 || x >= fx || y < 0 || y >= fy) { return; }
+					if (closedList.indexOf(x + "." + y) != -1) { return; }
+
+					$elem = $(layer.elem).find("div[data-coords='" + arr[0] + "." + arr[1] + "']");
 
 					if ((!$elem.length && !search_bgpos) || $elem.attr("data-coords-tileset") == search_bgpos) {
 
@@ -236,23 +241,19 @@ define([
 							})
 
 							.attr("data-coords", x + "." + y);
-
-							// Set/update the background-position of the current tile element
-							$(layer.elem).append($elem);
+							documentFragment.appendChild($elem[0]);
 						}
 
 						$elem.css("background-position", bgx + "px" + " " + bgy + "px");
-						$elem.attr({
-							"data-coords-tileset": replace_bgpos,
-							"data-filled": "true",
-						});
+						$elem.attr("data-coords-tileset", replace_bgpos);
 
+						closedList.push(x + "." + y);
 						fill_recursive(x, y);
 					}
 				});
 			};
 
-		// TODO make this unify this
+		// TODO make unify this
 		if (!$(layer.elem).attr("data-tileset")) {
 
 			$(layer.elem).addClass("ts_" + tileset.id);
@@ -262,14 +263,13 @@ define([
 
 			if (!$("#canvas .warning:visible").length)
 			{ $("#canvas .warning").html("Cannot use different tilesets on one layer, please clear the layer first.").show().delay(2000).fadeOut(1000); }
+			
 			return;
 		}
 
 		// Start the recursive search
 		fill_recursive(cx, cy);
-
-		// Cleanup
-		$(layer.elem).find("div").removeAttr("data-filled");
+		$(layer.elem).append(documentFragment);
 	};
 
 	Canvas.make_selection = function(e) {
