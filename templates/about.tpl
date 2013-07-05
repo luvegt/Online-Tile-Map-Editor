@@ -2,5 +2,8 @@
 
 <hr>
 
-&copy; 2013 Elias Schütt<br>
-<a href="http://elias-schuett.de">http://elias-schuett.de</a>
+<pre>
+Online Tile Map Editor (https://github.com/elias94xx/Online-Tile-Map-Editor)
+Copyright 2012-2013 Elias Schütt &lt;contact@elias-schuett.de&gt;
+Open source under the MIT or CC-BY-SA license.
+</pre>

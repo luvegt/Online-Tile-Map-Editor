@@ -1,3 +1,9 @@
+/*!
+ Online Tile Map Editor (https://github.com/elias94xx/Online-Tile-Map-Editor)
+ Copyright 2012-2013 Elias Schütt <contact@elias-schuett.de>
+ Open source under the MIT or CC-BY-SA license.
+*/
+
 require.config({
 
 	baseUrl: "js",
