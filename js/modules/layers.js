@@ -66,6 +66,7 @@ define(["jquery-ui"], function($) {
 
 		// Create and append an associated layer div inside the canvas
 		$("#tiles").append("<div class='layer' data-name='" + name + "' data-id='" + id + "'></div>");
+		Layers.sortByIndex();
 	};
 
 	Layers.remove = function(id) {
