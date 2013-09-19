@@ -18,11 +18,6 @@ require.config({
 			exports: "_"
 		},
 
-		"backbone": {
-			deps: ["underscore", "jquery"],
-			exports: "Backbone"
-		},
-
 		"jquery.draggable": {
 			deps: ["jquery-ui"]
 		}
@@ -36,13 +31,12 @@ require.config({
 		"jquery.draggable": "plugins/jquery.draggable",
 
 		"underscore": "libs/underscore",
-		"backbone": "libs/backbone",
 		"text": "plugins/text",
 		"templates": "../templates"
 	}
 });
 
-require(["jquery", "models/editor"], function($, Editor) {
+require(["jquery", "modules/editor"], function($, Editor) {
 	$(document).ready(function() {
 		Editor.initialize();
 	});

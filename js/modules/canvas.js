@@ -6,7 +6,7 @@ define([
 	var Canvas = {}, Editor;
 
 	Canvas.cursor = [];
-	Canvas.cursor.last = []; // Yes that's possible
+	Canvas.cursor.last = {}; // Yes that's possible
 
 	Canvas.initialize = function(namespace) {
 
@@ -20,7 +20,7 @@ define([
 
 			var tileset = Editor.active_tileset,
 		        tw = tileset.tilesize.width,
-		        th = tileset.tilesize.height;
+		        th = tileset.tilesize.height,
 
 			    offset = $("#canvas").offset(),
 			    x = Math.floor((e.pageX - offset.left) / tw),
@@ -29,28 +29,45 @@ define([
 			Canvas.cursor[0] = x;
 			Canvas.cursor[1] = y;
 
-			// Prevent redrawing on the same tile(s)
-			if (
-				Canvas.cursor[0] == Canvas.cursor.last[0] &&
-				Canvas.cursor[1] == Canvas.cursor.last[1] &&
-				Canvas.cursor.last.type == e.type
-			) { return; }
-
-			Canvas.cursor.last = Canvas.cursor.slice(0);
-			Canvas.cursor.last.type = e.type;
-
 			$("#canvas").find(".selection").css({
 				top: y * th,
 				left: x * tw
 			});
 
 			if (!Editor.keystatus.spacebar) {
+
 				if (Editor.selection && ((e.type == "mousedown" && e.which == 1) || Editor.mousedown)) {
 
-					if (Editor.tool == "draw") { Canvas.draw(); }
-					else if (Editor.tool == "fill" && e.type == "mousedown") { Canvas.fill(); }
+					if (Editor.tool == "draw") { 
 
+						// Prevent redrawing of previous drawn tiles.
+						// Start x, Start x, End x, End y
+				        var sx = Editor.selection[0][0],
+					        sy = Editor.selection[0][1],
+					        ex = Editor.selection[1][0],
+					        ey = Editor.selection[1][1],
+
+					        // Length for iterated x and y variables
+					        lx = ex - sx,
+					        ly = ey - sy;
+
+					    // Iterate through selected tiles check to see if they have been previously drawn.
+						for (y = 0; y <= ly; y++) {
+							for (x = 0; x <= lx; x++) {
+								if ([Canvas.cursor[0]+x,Canvas.cursor[1]+y] in Canvas.cursor.last) { return ;}
+							}
+						}
+
+						Canvas.draw();
+
+					} else if (Editor.tool == "fill" && e.type == "mousedown") { Canvas.fill(); }
+					
 				} else if (!Editor.selection) { Canvas.make_selection(e); }
+
+				//On mouseup with selection clear last draw cache.
+				if (Editor.selection && !Editor.mousedown){
+					Canvas.cursor.last = {};
+				}
 			}
 		});
 
@@ -123,7 +140,7 @@ define([
 		}
 
 		if (Editor.selection.custom) {
-
+			console.log('DRAW CUSTOM')
 			cxp = cx*tw;
 			cyp = cy*th;
 
@@ -152,10 +169,10 @@ define([
 			// Iterate through selected tiles
 			for (y = 0; y <= ly; y++) {
 				for (x = 0; x <= lx; x++) {
-
+					
 					pos_x = cx + x;
 					pos_y = cy + y;
-
+					Canvas.cursor.last[[pos_x,pos_y]] = true;
 					coords = pos_x + "." + pos_y;
 					query = $(layer.elem).find("div[data-coords='" + coords + "']");
 

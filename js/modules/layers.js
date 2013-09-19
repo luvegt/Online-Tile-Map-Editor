@@ -47,7 +47,12 @@ define(["jquery-ui"], function($) {
 
 	Layers.add = function(e, name) {
 
-		var id = $("#layerlist li").length;
+		var id = 0, ids = [];
+
+		if ($("#layerlist li").length) {
+			$("#layerlist li").each(function() { ids.push(+this.getAttribute("data-id")); });
+			while (ids.indexOf(id) != -1) { id++; }
+		}
 
 		if (!name) { name = window.prompt("Layer name: (a-z, A-Z, _, -)"); }
 		if (!name || !name.match(/^[a-zA-Z_-][a-zA-Z0-9_-]{2,}$/)) {

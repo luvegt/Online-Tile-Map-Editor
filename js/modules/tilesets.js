@@ -1,6 +1,6 @@
 define([
 	"jquery-ui",
-	"views/tileset_view"
+	"views/tilesets"
 ], function($, TilesetView) {
 
 	var Tilesets = {}, Editor;
