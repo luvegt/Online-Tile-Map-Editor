@@ -600,6 +600,7 @@ ul#layerlist > li.active {
 	padding: 20px;
 	display: none;
 	overflow: hidden;
+	min-width: 350px;
 }
 
 #dialog hr {
