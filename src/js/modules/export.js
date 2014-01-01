@@ -21,7 +21,7 @@ define(["jquery-ui"], function($) {
 		    w = $("#canvas").width() / tileset.tilesize.width,
 		    h = $("#canvas").height() / tileset.tilesize.height,
 
-		    output, layer, coords, tileset, y, x, query, elem, data;
+		    output, layer, coords, y, x, query, elem, data;
 
 		if (type == "JSON") {
 			

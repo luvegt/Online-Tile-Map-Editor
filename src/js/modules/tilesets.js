@@ -48,7 +48,7 @@ define([
 		var img = new Image(),
 		    bfr = document.createElement("canvas").getContext("2d"),
 		    name = opts.name || src.match(/(?:.+)\/([^\/]+)/)[1],
-		    style = style = document.createElement("style"),
+		    style = document.createElement("style"),
 		    id = name.replace(/[^a-zA-Z]/g, '_'), css;
 
 		img.src = src;
@@ -108,7 +108,7 @@ define([
 		tolerance = 10;
 
 		for (i = 0, l = imgData.data.length; i < l; i++) {
-			red = i%4 == 0 ? true : false;
+			red = i%4 === 0 ? true : false;
 
 			if (red) {
 				if (

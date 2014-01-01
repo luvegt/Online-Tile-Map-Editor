@@ -17,6 +17,7 @@ define([
 		var tileset = Editor.active_tileset,
 			tw = tileset.tilesize.width,
 			th = tileset.tilesize.height,
+			sx, sy;
 
 			$container = $(container),
 			offset =  $container.offset(),
@@ -48,10 +49,10 @@ define([
 			// Resize selection div in the correct direction
 			if (Editor.mousedown) {
 
-				var sx = Editor.tmp_selection[0][0],
-					sy = Editor.tmp_selection[0][1],
+				sx = Editor.tmp_selection[0][0];
+				sy = Editor.tmp_selection[0][1];
 
-					w = Math.abs((x-sx) + tw),
+				var w = Math.abs((x-sx) + tw),
 					h = Math.abs((y-sy) + th);
 
 				// Selection goes right
@@ -78,7 +79,7 @@ define([
 
 			var s = Editor.tmp_selection,
 				id = $("select[name=tileset_select] option:selected").index(),
-				sx, sy, ex, ey
+				ex, ey;
 
 			s[1][0] = x;
 			s[1][1] = y;

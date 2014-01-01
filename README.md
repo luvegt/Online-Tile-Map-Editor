@@ -1,8 +1,8 @@
-Online Tile Map Editor
+Online Tile Map Editor [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 ======================
 
 A web based tile map editor for all kinds of 2d games and applications.  
-**Open source under the [MIT](http://opensource.org/licenses/MIT) or [CC-BY-SA](https://creativecommons.org/licenses/by-sa/2.0/) license.**  
+**Open source under the [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) license.**  
 **Live Demo: [http://elias-schuett.de/git/Online-Tile-Map-Editor/](http://elias-schuett.de/git/Online-Tile-Map-Editor/)**  
 
 ----
@@ -43,6 +43,19 @@ A web based tile map editor for all kinds of 2d games and applications.
 
 Version info will be added soon.
 
-----
 [1] Ajax is used as a fallback solution  
 [2] No alpha definition support (yet)
+
+
+##How to Contribute
+
+1. Install [**git**](http://git-scm.com/), [**node**](http://nodejs.org/)  and [**grunt-cli**](http://gruntjs.com/getting-started) and fork this repo:  
+   `git clone https://github.com/elias94xx/Online-Tile-Map-Editor.git`
+3. Enter the direcotry:  
+   `cd Online-Tile-Map-Editor`
+3. Install grunt and its plugins to your directory:  
+   `npm install`
+4. Once you've made your changes, run grunt to minify all css/js files inside the `src` directory:  
+   `grunt`
+
+Also make sure to direct all your pull request to the `pull-requests` branch.

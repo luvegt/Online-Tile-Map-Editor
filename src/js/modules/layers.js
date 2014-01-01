@@ -69,7 +69,7 @@ define(["jquery-ui"], function($) {
 		Layers.sortByIndex();
 	};
 
-	Layers.remove = function(id) {
+	Layers.remove = function() {
 
 		var name = $(Layers.contextTarget).text().trim(),
 		    id = $(Layers.contextTarget).attr("data-id");
