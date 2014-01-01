@@ -31,11 +31,6 @@ module.exports = function(grunt) {
 		requirejs: {
 			compile: {
 				options: {
-					banner: "/*!\n <%= pkg.name %> - v<%= pkg.version %> - " +
-					        "<%= grunt.template.today('yyyy-mm-dd') %> " +
-					        "(https://github.com/elias94xx/G5-JS)\n " +
-					        "Copyright 2012-2014 Elias Schütt <contact@elias-schuett.de>\n " + 
-					        "Open source under the MIT license.\n*/\n\n",
 					name: "main",
 					baseUrl: "src/js",
 					out: "www/build/build.js",
