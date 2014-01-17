@@ -576,14 +576,14 @@ ul#layerlist > li.active {
 	border: 0px;
 }
 
-.ui-button-text .icon-remove-sign {
+.ui-button-text, .fa-times-circle {
 	color: #111;
 	font-size: 18px;
 	margin-right: 10px;
 	text-shadow: 0px 1px rgba(255, 255, 255, 0.5);
 }
 
-.ui-button-icon-only .ui-button-text, .ui-button-icons-only .ui-button-text {
+.ui-button-icon, .icon-only, .ui-button-text, .ui-button-icons-only, .ui-button-text {
 	padding: 0em !important;
 	text-indent: 0px !important;
 }

@@ -1,7 +1,4 @@
-define([
-	"jquery-ui",
-	"underscore"
-], function($, _) {
+define(function() {
 
 	var TilesetView = {}, Editor;
 
@@ -11,34 +8,41 @@ define([
 
 	TilesetView.tmp = {};
 
-	TilesetView.initialize = function(namespace) {
+	/* ======================== */
+	/* ====== INITIALIZE ====== */
+	/* ======================== */
 
-		Editor = namespace;
+	TilesetView.initialize = function() {
+
+		Editor = require("editor");
 
 		// Tileset UI functionality
-		$("body").on("change", "#tilesets select", this.change_tileset);
-		$("body").on("change", "input[name=file]", this.cacheFile);
-		$("body").on("click", "#tilesets_add", this.add);
-		$("body").on("click", "#tilesets_remove", this.remove);
+		Editor.$("body").on("change", "#tilesets select", this.changeTileset)
+		         .on("change", "input[name=file]", this.cacheFile)
+		         .on("click",  "#tilesets_add",    this.add)
+		         .on("click",  "#tilesets_remove", this.remove);
 
-		$("#tileset_container").on("mousedown mouseup mousemove", this.make_selection);
-		$("#tileset_remove").on("click", this.remove);
-
-		return this;
+		Editor.$("#tileset_container").on("mousedown mouseup mousemove", this.makeSelection);
+		Editor.$("#tileset_remove").on("click", this.remove);
 	};
 
+	/* ================= */
+	/* ====== ADD ====== */
+	/* ================= */
+
 	// Todo disallow mixing different tilesizes
+
 	TilesetView.add = function(e) {
 
 		var opts = {
 
 			tilesize: {
-				width: +$("#dialog input[name=tile_width]").val(),
-				height: +$("#dialog input[name=tile_height]").val()
+				width: +Editor.$("#dialog input[name=tile_width]").val(),
+				height: +Editor.$("#dialog input[name=tile_height]").val()
 			},
 
-			margin: +$("#dialog input[name=tile_margin]").val(),
-			alpha: $("#dialog input[name=tile_alpha]").val()
+			margin: +Editor.$("#dialog input[name=tile_margin]").val(),
+			alpha: Editor.$("#dialog input[name=tile_alpha]").val()
 
 		}, hex = opts.alpha.match(/^#?(([0-9a-fA-F]{3}){1,2})$/), type, data;
 		
@@ -65,7 +69,7 @@ define([
 			opts.alpha = _.map(opts.alpha.split(","), function(num) { return parseInt(num, 10); });
 		} else { opts.alpha = null; }
 
-		// $("#loading").show();
+		// Editor.$("#loading").show();
 
 		// URL or FileReader event
 		if (!window.FileReader) {
@@ -80,12 +84,12 @@ define([
 		// Wrong file type
 		if (TilesetView.config.filetypes.indexOf(type.toLowerCase()) == -1) {
 			alert("Wrong file type in \"" + opts.name + "\"\nSupported file types: " + TilesetView.config.filetypes.join(", "));
-			//$("#loading").hide();
+			//Editor.$("#loading").hide();
 
 		// Tileset does already exist
-		} else if ($("#tilesets select option:contains(" + opts.name + ")").length) {
+		} else if (Editor.$("#tilesets select option:contains(" + opts.name + ")").length) {
 			alert("File \"" + opts.name + "\" does already exist.");
-			//$("#loading").hide();
+			//Editor.$("#loading").hide();
 
 		// Process tileset
 		} else {
@@ -97,50 +101,67 @@ define([
 		}
 	};
 
+	/* ==================== */
+	/* ====== REMOVE ====== */
+	/* ==================== */
+
 	TilesetView.remove = function() {
 
-		var tileset = Editor.active_tileset;
+		var tileset = Editor.activeTileset;
 
 		if (!confirm("This will remove all tiles associated with \"" + tileset.name + "\", continue?")) { return; }
 		
-		$("style#tileset_" + tileset.id).remove();
-		$("#tiles div.ts_" + tileset.id).remove();
-		$(".layer[data-tileset='" + tileset.name + "']").removeAttr("data-tileset");
-		$("#tilesets select option:selected").remove();
+		Editor.$("style#tileset_" + tileset.id).remove();
+		Editor.$("#tiles div.ts_" + tileset.id).remove();
+		Editor.$(".layer[data-tileset='" + tileset.name + "']").removeAttr("data-tileset");
+		Editor.$("#tilesets select option:selected").remove();
 
 		delete Editor.Tilesets.collection[tileset.name];
 
-		$("#tileset_container").css({
+		Editor.$("#tileset_container").css({
 			width: 0,
 			height: 0
 		});
 
-		if ($("#tilesets select option").length) {
-			var name = $("#tilesets select option:eq(0)").html()
+		if (Editor.$("#tilesets select option").length) {
+			var name = Editor.$("#tilesets select option:eq(0)").html()
 
 			// TODO active previous tileset not the first one
-			$("#tilesets select option").removeAttr("selected");
-			$("#tilesets select option:eq(0)").attr("selected", true);
+			Editor.$("#tilesets select option").removeAttr("selected");
+			Editor.$("#tilesets select option:eq(0)").attr("selected", true);
 			Editor.Tilesets.set(name);
 		}
 	};
 
-	TilesetView.change_tileset = function(e) {
-		var name = $("#tilesets select option:selected").html();
+	/* ============================ */
+	/* ====== CHANGE TILESET ====== */
+	/* ============================ */
+
+	TilesetView.changeTileset = function(e) {
+		var name = Editor.$("#tilesets select option:selected").html();
 
 		Editor.Tilesets.set(name);
-		Editor.Tilesets.reset_selection();
-		Editor.Canvas.update_grid();
+		Editor.Tilesets.resetSelection();
+		Editor.Canvas.updateGrid();
 	};
+
+	/* ===================== */
+	/* ====== PROCESS ====== */
+	/* ===================== */
 
 	// Form validation is done
 	// task is passed to the model's add method
+
 	TilesetView.process = function(e, opts) {
 		var data = e ? e.target.result : TilesetView.tmp;
 
 		Editor.Tilesets.add(data, opts);
-		$("#dialog").dialog("close");
+		Editor.$("#dialog").dialog("close");
 	};
+
+	/* ======================== */
+	/* ====== CACHE FILE ====== */
+	/* ======================== */
 
 	TilesetView.cacheFile = function(e) {
 		if (!window.FileReader) {
@@ -148,20 +169,24 @@ define([
 			TilesetView.tmp = prompt("Your browser doesn't support local file upload.\nPlease insert an image URL below:", "");
 		} else if (e.type == "change") {
 			TilesetView.tmp = e.target.files[0];
-			$("#dialog input[name=tileset_file_overlay]").val(TilesetView.tmp.name);
+			Editor.$("#dialog input[name=tileset_file_overlay]").val(TilesetView.tmp.name);
 		}
 	};
 
-	TilesetView.make_selection = function(e) {
+	/* ============================ */
+	/* ====== MAKE SELECTION ====== */
+	/* ============================ */
 
-		if (!$("#tilesets select option:selected").length) { return; }
+	TilesetView.makeSelection = function(e) {
+
+		if (!Editor.$("#tilesets select option:selected").length) { return; }
 		var tileset, tw, th, ex, ey;
 
-		Editor.Utils.make_selection(e, "#tileset_container");
+		Editor.Utils.makeSelection(e, "#tileset_container");
 
 		if (e.type == "mouseup") {
 
-			tileset = Editor.active_tileset;
+			tileset = Editor.activeTileset;
 			tw = tileset.tilesize.width;
 			th = tileset.tilesize.height;
 
@@ -170,17 +195,17 @@ define([
 			ex = Editor.selection[1][0] * tw;
 			ey = Editor.selection[1][1] * th;
 
-			if (!$("#canvas .selection").length)
-			{ $("#canvas").append("<div class='selection'></div>"); }
+			if (!Editor.$("#canvas .selection").length)
+			{ Editor.$("#canvas").append("<div class='selection'></div>"); }
 
-			$("#canvas .selection").css({
+			Editor.$("#canvas .selection").css({
 				width: (ex-sx) + tw,
 				height: (ey-sy) + th,
 				backgroundColor: "transparent",
 				backgroundPosition: (-sx) + "px " + (-sy) + "px"
 			}).attr("class", "selection ts_" + tileset.id);
 
-			$("#tileset_container").find(".selection").remove();
+			Editor.$("#tileset_container").find(".selection").remove();
 			delete Editor.selection.custom;
 		}
 	};

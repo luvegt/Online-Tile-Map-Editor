@@ -19,7 +19,7 @@
 			<div>
 				<div>
 					<div>
-						<span class="icon-cog icon-spin"></span>
+						<span class="fa fa-cog fa-spin"></span>
 						<h1>Online Tile Map Editor</h1>
 						initializing ...
 					</div>
@@ -33,32 +33,32 @@
 			<li>
 				File
 				<ul>
-					<li data-template="new_file"><span class="icon-file"></span> New</li>
-					<li data-template="import"><span class="icon-signin"></span> Import</li>
-					<li data-template="export"><span class="icon-signout"></span> Export</li>
+					<li data-template="new_file"><span class="fa fa-file"></span> New</li>
+					<li data-template="import"><span class="fa fa-sign-in"></span> Import</li>
+					<li data-template="export"><span class="fa fa-sign-out"></span> Export</li>
 				</ul>
 			</li>
 			<li>
 				Edit
 				<ul>
-					<li data-template="viewport_settings"><span class="icon-cog"></span> Viewport Settings</li>
-					<li data-template="canvas_settings"><span class="icon-cog"></span> Canvas Settings</li>
+					<li data-template="viewport_settings"><span class="fa fa-cog"></span> Viewport Settings</li>
+					<li data-template="canvas_settings"><span class="fa fa-cog"></span> Canvas Settings</li>
 				</ul>
 			</li>
 			<li>
 				View
 				<ul>
-					<li data-toggle="visibility:#viewport"><span class="icon-check"></span> Viewport</li>
-					<li data-toggle="class:nogrid:#canvas"><span class="icon-check"></span> Grid</li>
-					<li data-toggle="visibility:#github_ribbon"><span class="icon-check"></span> GitHub Ribbon</li>
-					<li data-toggle="fullscreen:html"><span class="icon-resize-full"></span> <span class="text">Fullscreen</span></li>
+					<li data-toggle="visibility:#viewport"><span class="fa fa-check-square-o"></span> Viewport</li>
+					<li data-toggle="class:nogrid:#canvas"><span class="fa fa-check-square-o"></span> Grid</li>
+					<li data-toggle="visibility:#github_ribbon"><span class="fa fa-check-square-o"></span> GitHub Ribbon</li>
+					<li data-toggle="fullscreen:body"><span class="fa fa-expand"></span> <span class="text">Fullscreen</span></li>
 				</ul>
 			</li>
 			<li>
 				Help
 				<ul>
-					<li data-template="controls"><span class="icon-question-sign"></span> Controls</li>
-					<li data-template="about"><span class="icon-info-sign"></span> About</li>
+					<li data-template="controls"><span class="fa fa-question-circle"></span> Controls</li>
+					<li data-template="about"><span class="fa fa-info-circle"></span> About</li>
 				</ul>
 			</li>
 		</ul>
@@ -73,8 +73,8 @@
 					<div id="tileset"><div id="tileset_container"></div></div>
 
 					<div class="buttons">
-						<a href="#" data-template="tileset_form"><span class="icon-plus-sign"></span> Add tileset</a>
-						<a href="#" id="tilesets_remove" class="remove"><span class="icon-minus-sign"></span> Remove tileset</a>
+						<a href="#" data-template="tileset_form"><span class="fa fa-plus-sign"></span> Add tileset</a>
+						<a href="#" id="tilesets_remove" class="remove"><span class="fa fa-minus-sign"></span> Remove tileset</a>
 					</div>
 				</div>
 			</section>
@@ -85,7 +85,7 @@
 				<div>
 					<ul id="layerlist"></ul>
 					<div class="buttons">
-						<a href="#" id="layers_add"><span class="icon-plus-sign"></span> Add layer</a>
+						<a href="#" id="layers-add"><span class="fa fa-plus-sign"></span> Add layer</a>
 					</div>
 				</div>
 			</section>
@@ -98,9 +98,9 @@
 			</div>
 
 			<div id="tools">
-				<span class="icon-pencil active" data-tool="draw" title="Draw-Tool"></span>
-				<span class="icon-tint" data-tool="fill" title="Fill-Tool"></span>
-				<span class="icon-th" data-tool="repeat" title="Repeat-Tool"></span>
+				<span class="fa fa-pencil active" data-tool="draw" title="Draw-Tool"></span>
+				<span class="fa fa-tint" data-tool="fill" title="Fill-Tool"></span>
+				<span class="fa fa-th" data-tool="repeat" title="Repeat-Tool"></span>
 			</div>
 		</div>
 
@@ -114,5 +114,6 @@
 		</div>
 		
 		<script type="text/javascript" src="build/build.js"></script>
+		<!-- // <script type="text/javascript" data-main="../src/js/main.js" src="../src/js/libs/require.js"></script> -->
 	</body>
 </html>

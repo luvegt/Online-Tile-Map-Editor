@@ -1,19 +1,22 @@
 require.config({
 
-	baseUrl: "js",
-
 	shim: {
 		"jquery-ui": {
 			exports: "$",
-			deps: ["jquery", "jquery.mousewheel", "jquery.jscrollpane"]
+			deps: [
+				"jquery",
+				"jquery.mousewheel",
+				"jquery.jscrollpane",
+				"jquery.draggable"
+			]
 		},
+
+		"jquery.mousewheel": { deps: ["jquery"] },
+		"jquery.jscrollpane": { deps: ["jquery"] },
+		"jquery.draggable": { deps: ["jquery"] },
 
 		"underscore": {
 			exports: "_"
-		},
-
-		"jquery.draggable": {
-			deps: ["jquery-ui"]
 		}
 	},
 
@@ -24,14 +27,14 @@ require.config({
 		"jquery.jscrollpane": "plugins/jquery.jscrollpane",
 		"jquery.draggable": "plugins/jquery.draggable",
 
+		"editor": "modules/editor",
 		"underscore": "libs/underscore",
 		"text": "plugins/text",
 		"templates": "../templates"
 	}
 });
 
-require(["jquery", "modules/editor"], function($, Editor) {
-	$(document).ready(function() {
-		Editor.initialize();
-	});
+require(["jquery-ui", "editor"], function($, Editor) {
+	Editor.$ = $;
+	$(document).ready(Editor.initialize);
 });

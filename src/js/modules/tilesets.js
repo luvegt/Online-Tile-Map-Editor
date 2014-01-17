@@ -1,15 +1,16 @@
-define([
-	"jquery-ui",
-	"views/tilesets"
-], function($, TilesetView) {
+define(["views/tileset_view"], function(TilesetView) {
 
 	var Tilesets = {}, Editor;
 	Tilesets.collection = {};
 
-	Tilesets.initialize = function(namespace) {
+	/* ======================== */
+	/* ====== INITIALIZE ====== */
+	/* ======================== */
 
-		Editor = namespace;
-		this.view = TilesetView.initialize(Editor);
+	Tilesets.initialize = function() {
+
+		Editor = require("editor");
+		this.view = TilesetView.initialize();
 
 		// this.add("img/tilesets/forest_tiles.png", {
 		// 	tilesize: { width: 16, height: 16 },
@@ -24,24 +25,30 @@ define([
 		this.add("img/tilesets/mage_city.png", {
 			tilesize: { width: 32, height: 32 }
 		});
-
-		return this;
 	};
+
+	/* ================= */
+	/* ====== SET ====== */
+	/* ================= */
 
 	Tilesets.set = function(name) {
 
 		var tileset = Tilesets.collection[name];
-		Editor.active_tileset = tileset;
+		Editor.activeTileset = tileset;
 
-		$("#tileset_container").css({
+	Editor.$("#tileset_container").css({
 			width: tileset.width,
 			height: tileset.height,
 		}).attr("class", "ts_" + tileset.id);
 
-		$("#tilesets select").val(name);
-		$("#tilesets .loading").remove();
-		this.reset_selection();
+	Editor.$("#tilesets select").val(name);
+	Editor.$("#tilesets .loading").remove();
+		this.resetSelection();
 	};
+
+	/* ================= */
+	/* ====== ADD ====== */
+	/* ================= */
 
 	Tilesets.add = function(src, opts) {
 
@@ -74,26 +81,30 @@ define([
 
 			// Add a global css class so tiles can use
 			// it in conjunction with background-position
-			$(style).attr("id", "tileset_" + id);
+		Editor.$(style).attr("id", "tileset_" + id);
 			css = ".ts_" + id + ", .ts_" + id + " > div {\n";
 			css += "\twidth: " + opts.tilesize.width + "px;\n";
 			css += "\theight: " + opts.tilesize.height + "px;\n";
 			css += "\tbackground-image: url('" + opts.base64 + "');\n";
 			css += "}";
-			$(style).append(css);
+		Editor.$(style).append(css);
 
-			$("head").append(style);
+		Editor.$("head").append(style);
 
 			// Update select element
-			$("#tilesets select").append("<option>" + name + "</option>");
-			$("#tilesets select").val(name);
+		Editor.$("#tilesets select").append("<option>" + name + "</option>");
+		Editor.$("#tilesets select").val(name);
 
 			// Update custom scrollbars and grid
-			$("#tileset").jScrollPane();
-			Editor.Canvas.update_grid();
+		Editor.$("#tileset").jScrollPane();
+			Editor.Canvas.updateGrid();
 
 		}, false);
 	};
+
+	/* ======================= */
+	/* ====== SET ALPHA ====== */
+	/* ======================= */
 
 	// Filters specified color and makes it transparent
 	Tilesets.setAlpha = function(img, alpha) {
@@ -126,6 +137,10 @@ define([
 		bfr.putImageData(imgData, 0, 0);
 		return bfr.canvas.toDataURL();
 	};
+
+	/* =================== */
+	/* ====== SLICE ====== */
+	/* =================== */
 
 	// Slices the tileset according to tile size and margin
 	Tilesets.slice = function(img, opts) {
@@ -160,13 +175,21 @@ define([
 		return bfr.canvas.toDataURL();
 	};
 
-	Tilesets.reset_selection = function() {
-		$("#canvas .selection").remove();
-		$("#tileset .selection").remove();
+	/* ============================= */
+	/* ====== RESET SELECTION ====== */
+	/* ============================= */
+
+	Tilesets.resetSelection = function() {
+	Editor.$("#canvas .selection").remove();
+	Editor.$("#tileset .selection").remove();
 		delete Editor.selection;
 	};
 
-	Tilesets.get_active = function() { return Tilesets.collection[$("#tilesets select option:selected").val()]; }
+	/* ======================== */
+	/* ====== GET ACTIVE ====== */
+	/* ======================== */
+
+	Tilesets.getActive = function() { return Tilesets.collection[Editor.$("#tilesets select option:selected").val()]; }
 
 	return Tilesets;
 });

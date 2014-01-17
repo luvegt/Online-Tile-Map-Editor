@@ -1,21 +1,33 @@
-define(["jquery-ui"], function($) {
+define(function() {
 
 	var Tools = {}, Editor;
 
-	Tools.initialize = function(namespace) {
+	/* ======================== */
+	/* ====== INITIALIZE ====== */
+	/* ======================== */
 
-		Editor = namespace;
-		
-		$("*[data-tool]").on("click", this.select);
+	Tools.initialize = function() {
 
-		return this;
+		Editor = require("editor");
 	};
 
-	Tools.select = function(e) {
-		var $target = $(e.currentTarget);
+	/* ==================== */
+	/* ====== EVENTS ====== */
+	/* ==================== */
 
-		$("#tools").find("span").removeClass("active");
-		$target.addClass("active");
+	Tools.events = {
+		"click *[data-tool]": function(e) { Tools.select(e); }
+	};
+
+	/* ==================== */
+	/* ====== SELECT ====== */
+	/* ==================== */
+
+	Tools.select = function(e) {
+		var $target = Editor.$(e.currentTarget);
+
+	Editor.$("#tools").find("span").removeClass("active");
+	$target.addClass("active");
 		Editor.tool = $target.attr("data-tool");
 	};
 

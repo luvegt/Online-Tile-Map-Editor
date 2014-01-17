@@ -1,44 +1,61 @@
-define(["jquery-ui"], function($) {
+define(function() {
 
 	var Export = {}, Editor;
 
-	Export.initialize = function(namespace) {
+	/* ======================== */
+	/* ====== INITIALIZE ====== */
+	/* ======================== */
 
-		Editor = namespace;
+	Export.initialize = function() {
 
-		$("body").on("click", "#export", this.process);
-
-		return this;
+		Editor = require("editor");
 	};
 
-	// TODO comment this
-	Export.process = function() {
-		var type = $("select[name=export_format]").val(),
-			include_base64 = $("select[name=include_base64]").val() == "yes",
-			format_output = $("select[name=format_output]").val() == "yes",
-		    tileset = Editor.active_tileset,
+	/* ==================== */
+	/* ====== EVENTS ====== */
+	/* ==================== */
 
-		    w = $("#canvas").width() / tileset.tilesize.width,
-		    h = $("#canvas").height() / tileset.tilesize.height,
+	Export.events = {
+		"click #export": function(e) { Export.process(e); }
+	};
+
+	/* ===================== */
+	/* ====== PROCESS ====== */
+	/* ===================== */
+
+	// TODO comment this
+
+	Export.process = function() {
+
+		var type = Editor.$("select[name=export_format]").val(),
+			include_base64 = Editor.$("select[name=include_base64]").val() == "yes",
+			format_output = Editor.$("select[name=format_output]").val() == "yes",
+		    tileset = Editor.activeTileset,
+		    anchor = document.createElement("a"),
+
+		    w = Editor.$("#canvas").width() / tileset.tilesize.width,
+		    h = Editor.$("#canvas").height() / tileset.tilesize.height,
 
 		    output, layer, coords, y, x, query, elem, data;
+
+		anchor.download = "map." + type.toLowerCase();
 
 		if (type == "JSON") {
 			
 			output = {};
 			output.layers = [];
 
-			$(".layer").each(function() {
+		Editor.$(".layer").each(function() {
 
 				layer = {
-					name: $(this).attr("data-name"),
-					tileset: $(this).attr("data-tileset"),
+					name: Editor.$(this).attr("data-name"),
+					tileset: Editor.$(this).attr("data-tileset"),
 					data: []
 				};
 
 				for (y = 0; y < h; y++) {
 					for (x = 0; x < w; x++) {
-						query = $(this).find("div[data-coords='" + x + "." + y + "']");
+						query = Editor.$(this).find("div[data-coords='" + x + "." + y + "']");
 						coords = query.length ? parseFloat(query.attr("data-coords-tileset"), 10) : 0.0;
 						layer.data.push(coords);
 					}
@@ -63,24 +80,25 @@ define(["jquery-ui"], function($) {
 			}
 
 			output = JSON.stringify(output);
+			anchor.href = "data:application/json;charset=UTF-8;," + encodeURIComponent(output);
 
 		} else if (type == "XML") {
 
-			output = $("<root>").append("<layers>");
+			output = Editor.$("<root>").append("<layers>");
 
-			$(".layer").each(function() {
+		Editor.$(".layer").each(function() {
 
-				layer = $("<layer>");
+				layer = Editor.$("<layer>");
 				layer.attr({
-					name: $(this).attr("data-name"),
-					tileset: $(this).attr("data-tileset"),
+					name: Editor.$(this).attr("data-name"),
+					tileset: Editor.$(this).attr("data-tileset"),
 				});
 
 				data = [];
 
 				for (y = 0; y < h; y++) {
 					for (x = 0; x < w; x++) {
-						query = $(this).find("div[data-coords='" + x + "." + y + "']");
+						query = Editor.$(this).find("div[data-coords='" + x + "." + y + "']");
 						coords = query.length ? query.attr("data-coords-tileset") : "0.0";
 						if (x == w-1 && format_output) { coords += "\r\n"; }
 						data.push(coords);
@@ -96,7 +114,7 @@ define(["jquery-ui"], function($) {
 			for (tileset in Editor.Tilesets.collection) {
 				tileset = Editor.Tilesets.collection[tileset];
 
-				elem = $("<tileset>");
+				elem = Editor.$("<tileset>");
 
 				elem.attr({
 					name: tileset.name,
@@ -111,9 +129,10 @@ define(["jquery-ui"], function($) {
 			}
 
 			output = encodeURIComponent((new XMLSerializer()).serializeToString(output[0]));
+			anchor.href = "data:text/xml;charset=UTF-8;," + output;
 		}
 
-		window.open("data:text/" + type + ";charset=UTF-8;," + output, "_blank");
+		anchor.click();
 	};
 
 	return Export;

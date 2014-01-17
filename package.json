@@ -1,6 +1,6 @@
 {
   "name": "Online-Tile-Map-Editor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A web based tile map editor for all kinds of 2d games and applications.",
   "repository": {
     "type": "git",

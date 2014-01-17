@@ -1,35 +1,36 @@
-define([
-	"jquery-ui", 
-	"jquery.draggable"
-], function($) {
+define(function() {
 
 	var Canvas = {}, Editor;
 
 	Canvas.cursor = [];
-	Canvas.cursor.last = {}; // Yes that's possible
+	Canvas.cursor.last = {};
 
-	Canvas.initialize = function(namespace) {
+	/* ======================== */
+	/* ====== INITIALIZE ====== */
+	/* ======================== */
 
-		Editor = namespace;
+	Canvas.initialize = function() {
+
+		Editor = require("editor");
 
 		// Selection movement
-		$("#canvas").on("mousedown mousemove mouseup", function(e) {
+	Editor.$("#canvas").on("mousedown mousemove mouseup", function(e) {
 
-			if (!Editor.active_tileset) { return; }
-			if (e.which == 3) { Editor.Tilesets.reset_selection(); return; }
+			if (!Editor.activeTileset) { return; }
+			if (e.which == 3) { Editor.Tilesets.resetSelection(); return; }
 
-			var tileset = Editor.active_tileset,
+			var tileset = Editor.activeTileset,
 		        tw = tileset.tilesize.width,
 		        th = tileset.tilesize.height,
 
-			    offset = $("#canvas").offset(),
+			    offset = Editor.$("#canvas").offset(),
 			    x = Math.floor((e.pageX - offset.left) / tw),
 			    y = Math.floor((e.pageY - offset.top) / th);
 
 			Canvas.cursor[0] = x;
 			Canvas.cursor[1] = y;
 
-			$("#canvas").find(".selection").css({
+		Editor.$("#canvas").find(".selection").css({
 				top: y * th,
 				left: x * tw
 			});
@@ -62,7 +63,7 @@ define([
 
 					} else if (Editor.tool == "fill" && e.type == "mousedown") { Canvas.fill(); }
 					
-				} else if (!Editor.selection) { Canvas.make_selection(e); }
+				} else if (!Editor.selection) { Canvas.makeSelection(e); }
 
 				//On mouseup with selection clear last draw cache.
 				if (Editor.selection && !Editor.mousedown){
@@ -71,28 +72,30 @@ define([
 			}
 		});
 
-		$("#canvas").draggable({
+	Editor.$("#canvas").draggable({
 			mouseButton: 1,
 			cursor: "move",
 			start: function() {
 				if (!Editor.keystatus.spacebar) {
-					$("body").css("cursor", "");
+				Editor.$("body").css("cursor", "");
 					return false;
 				}
 			}
 		});
 
 		this.reposition();
-		$("#canvas").fadeIn();
-		$(window).on("resize", this.reposition);
-
-		return this;
+	Editor.$("#canvas").fadeIn();
+	Editor.$(window).on("resize", this.reposition);
 	};
+
+	/* ================== */
+	/* ====== DRAW ====== */
+	/* ================== */
 
 	Canvas.draw = function() {
 
-		var tileset = Editor.active_tileset,
-		    layer = Editor.Layers.get_active(),
+		var tileset = Editor.activeTileset,
+		    layer = Editor.Layers.getActive(),
 
 		    // Cursor position
 		    cx = this.cursor[0],
@@ -113,7 +116,7 @@ define([
 		    ly = ey - sy,
 
 		    // Background position
-		    bgpos = $("#canvas").find(".selection").css("background-position").split(" "),
+		    bgpos = Editor.$("#canvas").find(".selection").css("background-position").split(" "),
 		    bgx = parseInt(bgpos[0], 10),
 		    bgy = parseInt(bgpos[1], 10),
 
@@ -126,42 +129,42 @@ define([
 		// TODO optimize this:
 		// Checks if the current tileset differs
 		// from the one used on the current layer
-		if (!$(layer.elem).attr("data-tileset")) {
+		if (!Editor.$(layer.elem).attr("data-tileset")) {
 
-			$(layer.elem).addClass("ts_" + tileset.id);
-			$(layer.elem).attr("data-tileset", tileset.name);
+		Editor.$(layer.elem).addClass("ts_" + tileset.id);
+		Editor.$(layer.elem).attr("data-tileset", tileset.name);
 
-		} else if ($(layer.elem).attr("data-tileset") != tileset.name) {
+		} else if (Editor.$(layer.elem).attr("data-tileset") != tileset.name) {
 
-			if (!$("#canvas .warning:visible").length)
-			{ $("#canvas .warning").html("Cannot use different tilesets on one layer, please clear the layer first.").show().delay(2000).fadeOut(1000); }
+			if (!Editor.$("#canvas .warning:visible").length)
+			{ Editor.$("#canvas .warning").html("Cannot use different tilesets on one layer, please clear the layer first.").show().delay(2000).fadeOut(1000); }
 			
 			return;
 		}
 
 		if (Editor.selection.custom) {
-			console.log('DRAW CUSTOM')
+
 			cxp = cx*tw;
 			cyp = cy*th;
 
-			$("#canvas").find(".selection").find("div").each(function() {
-				top = parseInt($(this).css("top"), 10);
-				left = parseInt($(this).css("left"), 10);
+		Editor.$("#canvas").find(".selection").find("div").each(function() {
+				top = parseInt(Editor.$(this).css("top"), 10);
+				left = parseInt(Editor.$(this).css("left"), 10);
 
-				$tile = $(this).clone();
-				$tile.css({
+			$tile = Editor.$(this).clone();
+			$tile.css({
 					top: top + cyp,
 					left: left + cxp
 				});
 
 				coords = ((left+cxp)/tw) + "." + ((top+cyp)/th);
-				query = $(layer.elem).find("div[data-coords='" + coords + "']");
+				query = Editor.$(layer.elem).find("div[data-coords='" + coords + "']");
 
 				if (query.length) {
-					$(query).attr("style", $tile.attr("style"));
+				Editor.$(query).attr("style", $tile.attr("style"));
 				} else {
-					$tile.attr("data-coords", coords);
-					$(layer.elem).append($tile);
+				$tile.attr("data-coords", coords);
+				Editor.$(layer.elem).append($tile);
 				}
 			});
 
@@ -174,10 +177,10 @@ define([
 					pos_y = cy + y;
 					Canvas.cursor.last[[pos_x,pos_y]] = true;
 					coords = pos_x + "." + pos_y;
-					query = $(layer.elem).find("div[data-coords='" + coords + "']");
+					query = Editor.$(layer.elem).find("div[data-coords='" + coords + "']");
 
 					// Update existing tile or create a new one and position it
-					$div = query.length ? query : $("<div>").css({
+				$div = query.length ? query : Editor.$("<div>").css({
 						position: "absolute",
 						left: pos_x * tw,
 						top: pos_y * th
@@ -185,20 +188,25 @@ define([
 
 
 					// Set/update the tileset information
-					$div.attr("data-coords-tileset", (Math.abs(bgx/tw)+x) + "." + (Math.abs(bgy/th)+y));
-					$div.css("background-position", (bgx-(x*tw)) + "px" + " " + (bgy-(y*th)) + "px");
+				$div.attr("data-coords-tileset", (Math.abs(bgx/tw)+x) + "." + (Math.abs(bgy/th)+y));
+				$div.css("background-position", (bgx-(x*tw)) + "px" + " " + (bgy-(y*th)) + "px");
 
 					// Append the tile if it didn't on that coordinate
-					if (!query.length) { $(layer.elem).append($div); }
+					if (!query.length) { Editor.$(layer.elem).append($div); }
 				}
 			}
 		}
 	};
 
+	/* ================== */
+	/* ====== FILL ====== */
+	/* ================== */
+
 	// TODO throw this in a webworker
+
 	Canvas.fill = function(e) {
-		var tileset = Editor.active_tileset,
-		    layer = Editor.Layers.get_active(),
+		var tileset = Editor.activeTileset,
+		    layer = Editor.Layers.getActive(),
 
 		    // Cursor position
 		    cx = this.cursor[0],
@@ -215,14 +223,14 @@ define([
 		    ey = Editor.selection[1][1],
 
 		    // Field size in tiles
-		    fx = $("#canvas").width()/tw,
-		    fy = $("#canvas").height()/th,
+		    fx = Editor.$("#canvas").width()/tw,
+		    fy = Editor.$("#canvas").height()/th,
 
-		    bgpos = $("#canvas").find(".selection").css("background-position").split(" "),
+		    bgpos = Editor.$("#canvas").find(".selection").css("background-position").split(" "),
 		    bgx = parseInt(bgpos[0], 10),
 		    bgy = parseInt(bgpos[1], 10),
 
-		    query = $(layer.elem).find("div[data-coords='" + cx + "." + cy + "']"),
+		    query = Editor.$(layer.elem).find("div[data-coords='" + cx + "." + cy + "']"),
 		    search_bgpos = query.length ? query.attr("data-coords-tileset") : null,
 		    replace_bgpos = Math.abs(bgx/tw) + "." + Math.abs(bgy/th),
 		    
@@ -246,12 +254,12 @@ define([
 					if (x < 0 || x >= fx || y < 0 || y >= fy) { return; }
 					if (closedList.indexOf(x + "." + y) != -1) { return; }
 
-					$elem = $(layer.elem).find("div[data-coords='" + arr[0] + "." + arr[1] + "']");
+				$elem = Editor.$(layer.elem).find("div[data-coords='" + arr[0] + "." + arr[1] + "']");
 
 					if ((!$elem.length && !search_bgpos) || $elem.attr("data-coords-tileset") == search_bgpos) {
 
 						if (!$elem.length) {
-							$elem = $("<div>").css({
+						$elem = Editor.$("<div>").css({
 								position: "absolute",
 								left: x * tw,
 								top: y * th
@@ -261,8 +269,8 @@ define([
 							documentFragment.appendChild($elem[0]);
 						}
 
-						$elem.css("background-position", bgx + "px" + " " + bgy + "px");
-						$elem.attr("data-coords-tileset", replace_bgpos);
+					$elem.css("background-position", bgx + "px" + " " + bgy + "px");
+					$elem.attr("data-coords-tileset", replace_bgpos);
 
 						closedList.push(x + "." + y);
 						fill_recursive(x, y);
@@ -271,36 +279,40 @@ define([
 			};
 
 		// TODO make unify this
-		if (!$(layer.elem).attr("data-tileset")) {
+		if (!Editor.$(layer.elem).attr("data-tileset")) {
 
-			$(layer.elem).addClass("ts_" + tileset.id);
-			$(layer.elem).attr("data-tileset", tileset.name);
+		Editor.$(layer.elem).addClass("ts_" + tileset.id);
+		Editor.$(layer.elem).attr("data-tileset", tileset.name);
 
-		} else if ($(layer.elem).attr("data-tileset") != tileset.name) {
+		} else if (Editor.$(layer.elem).attr("data-tileset") != tileset.name) {
 
-			if (!$("#canvas .warning:visible").length)
-			{ $("#canvas .warning").html("Cannot use different tilesets on one layer, please clear the layer first.").show().delay(2000).fadeOut(1000); }
+			if (!Editor.$("#canvas .warning:visible").length)
+			{ Editor.$("#canvas .warning").html("Cannot use different tilesets on one layer, please clear the layer first.").show().delay(2000).fadeOut(1000); }
 			
 			return;
 		}
 
 		// Start the recursive search
 		fill_recursive(cx, cy);
-		$(layer.elem).append(documentFragment);
+	Editor.$(layer.elem).append(documentFragment);
 	};
 
-	Canvas.make_selection = function(e) {
+	/* ============================ */
+	/* ====== MAKE SELECTION ====== */
+	/* ============================ */
+
+	Canvas.makeSelection = function(e) {
 
 		var tileset, tw, th, ex, ey, $selection, layer, top, left, $tile;
 
-		Editor.Utils.make_selection(e, "#canvas");
+		Editor.Utils.makeSelection(e, "#canvas");
 
 		if (e.type == "mousedown") {
 
-			$("#canvas").find(".selection").css("background-color", "rgba(0, 0, 0, 0.3)");
+		Editor.$("#canvas").find(".selection").css("background-color", "rgba(0, 0, 0, 0.3)");
 
 		} else if (e.type == "mouseup") {
-			tileset = Editor.active_tileset;
+			tileset = Editor.activeTileset;
 			tw = tileset.tilesize.width;
 			th = tileset.tilesize.height;
 
@@ -309,47 +321,55 @@ define([
 			ex = Editor.selection[1][0] * tw;
 			ey = Editor.selection[1][1] * th;
 
-			$selection = $("#canvas").find(".selection");
-			layer = Editor.Layers.get_active();
+		$selection = Editor.$("#canvas").find(".selection");
+			layer = Editor.Layers.getActive();
 
 			// Find all elements that are in range of
 			// the selection and append a copy of them
-			$(layer.elem).find("div").each(function() {
-				top = parseInt($(this).css("top"), 10);
-				left = parseInt($(this).css("left"), 10);
+		Editor.$(layer.elem).find("div").each(function() {
+				top = parseInt(Editor.$(this).css("top"), 10);
+				left = parseInt(Editor.$(this).css("left"), 10);
 
 				if (left >= sx && left <= ex && top >= sy && top <= ey) {
-					$tile = $(this).clone();
+				$tile = Editor.$(this).clone();
 
-					$tile.css({
+				$tile.css({
 						top: top - sy,
 						left: left - sx
 					});
 					
-					$selection.append($tile);
+				$selection.append($tile);
 				}
 			});
 
-			$selection.css("background-color", "transparent");
-			$selection.addClass($(layer.elem).attr("class").replace("layer", "nobg"));
+		$selection.css("background-color", "transparent");
+		$selection.addClass(Editor.$(layer.elem).attr("class").replace("layer", "nobg"));
 			Editor.selection.custom = true;
 		}
 	};
 
-	Canvas.reposition = function(e) {
-		var extra = $("#toolbar").width() + $("#canvas").width() < $(window).width() ? $("#toolbar").width() / 2 : 0,
-		    left = ($(window).width() / 2) - ($("#canvas").width() / 2) + extra,
-		    top = ($(window).height() / 2) - ($("#canvas").height() / 2);
+	/* ======================== */
+	/* ====== REPOSITION ====== */
+	/* ======================== */
 
-		$("#canvas").css({ top: top, left: left });
+	Canvas.reposition = function(e) {
+		var extra = Editor.$("#toolbar").width() + Editor.$("#canvas").width() < Editor.$(window).width() ? Editor.$("#toolbar").width() / 2 : 0,
+		    left = (Editor.$(window).width() / 2) - (Editor.$("#canvas").width() / 2) + extra,
+		    top = (Editor.$(window).height() / 2) - (Editor.$("#canvas").height() / 2);
+
+	Editor.$("#canvas").css({ top: top, left: left });
 	};
+
+	/* ========================= */
+	/* ====== UPDATE GRID ====== */
+	/* ========================= */
 
 	// Creates a base64 image with two borders
 	// resulting in a grid when used as a repeated background
-	Canvas.update_grid = function() {
+	Canvas.updateGrid = function() {
 		var buffer = document.createElement("canvas"),
 		    bfr = buffer.getContext("2d"),
-		    tileset = Editor.active_tileset,
+		    tileset = Editor.activeTileset,
 		    tw = tileset.tilesize.width,
 		    th = tileset.tilesize.height;
 
@@ -360,8 +380,8 @@ define([
 		bfr.fillRect(0, th-1, tw, 1);
 		bfr.fillRect(tw-1, 0, 1, th);
 
-		$("#canvas").css("backgroundImage", "url(" + buffer.toDataURL() + ")");
-		$("#canvas").find(".selection").css({
+	Editor.$("#canvas").css("backgroundImage", "url(" + buffer.toDataURL() + ")");
+	Editor.$("#canvas").find(".selection").css({
 			width: tw,
 			height: th
 		});

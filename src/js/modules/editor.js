@@ -1,30 +1,40 @@
 define([
-	"jquery-ui", 
 	"modules/utils",
 	"modules/menubar",
 	"modules/tools",
 	"modules/canvas",
 	"modules/tilesets",
 	"modules/layers",
-	"modules/export",
-], function($, Utils, Menubar, Tools, Canvas, Tilesets, Layers, Export) {
+	"modules/import",
+	"modules/export"
+], function() {
 
-	var Editor = {}; 
+	var Editor = {};
+	var args = arguments;
+	var argNames = ["Utils", "Menubar", "Tools", "Canvas", "Tilesets", "Layers", "Export", "Import"];
 
 	Editor.tool = "draw";
 	Editor.keystatus = {};
 	Editor.mousedown = false;
 	Editor.selection = null;
 
-	Editor.Utils = Utils.initialize(Editor);
-	Editor.Menubar = Menubar.initialize(Editor);
-	Editor.Tools = Tools.initialize(Editor);
-	Editor.Canvas = Canvas.initialize(Editor);
-	Editor.Tilesets = Tilesets.initialize(Editor);
-	Editor.Layers = Layers.initialize(Editor);
-	Editor.Export = Export.initialize(Editor);
+	/* ======================== */
+	/* ====== INITIALIZE ====== */
+	/* ======================== */
 
 	Editor.initialize = function() {
+
+		// Initialize sub modules
+		argNames.forEach(function(v, i) {
+
+			Editor[v] = args[i];
+
+			if (Editor[v].initialize)
+			{ Editor[v].initialize(); }
+		});
+
+		// Register module events
+		Editor.registerEvents();
 
 		// Menubar interaction
 		$("#menubar > li").on("click mouseover", function(e) {
@@ -67,7 +77,29 @@ define([
 		$("#tileset, #canvas_wrapper").disableSelection();
 
 		// Hide the loading screen
-		$("#loading_screen").delay(500).fadeOut();
+		$("#loading_screen").delay(1000).fadeOut();
+	};
+
+
+	/* ============================= */
+	/* ====== REGISTER EVENTS ====== */
+	/* ============================= */
+
+	Editor.registerEvents = function() {
+
+		// Register module events
+		var pair, type, selector;
+
+		argNames.forEach(function(v) {
+			if (Editor[v].events) {
+				for (var evt in Editor[v].events) {
+					pair = evt.split(" ");
+					type = pair.shift().replace("|", " ");
+					selector = pair.join(" ");
+					$("body").on(type, selector, Editor[v].events[evt]);
+				}
+			}
+		});
 	};
 
 	return Editor;

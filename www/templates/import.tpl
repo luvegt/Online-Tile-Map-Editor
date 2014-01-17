@@ -4,7 +4,7 @@
 		<td>
 			<div id="file_container">
 				<input type="file" name="file">
-				<input type="button" name="file_overlay" value="choose map" class="stretch"></div>
+				<input type="button" name="file_overlay" value="choose file" class="stretch"></div>
 			</div>
 		</td>
 	</tr>
@@ -12,4 +12,4 @@
 
 <hr>
 
-<input type="button" value="import" class="stretch">
+<input type="button" value="import" class="stretch" disabled>
