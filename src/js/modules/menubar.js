@@ -23,15 +23,21 @@ define(function() {
 		"keydown|keyup #viewport_settings input": function(e) { Menubar.viewportSettings(e); }
 	};
 
+	/* ========================= */
+	/* ====== OPEN DIALOG ====== */
+	/* ========================= */
+
 	// Elements with a data-template attribute will
 	// automaticly open a dialog with the correspondig template
+
 	Menubar.openDialog = function(e) {
+
 		var template = Editor.$(e.currentTarget).attr("data-template"),
 		    title = Editor.$(e.currentTarget).text();
 
-	$.get("templates/" + template + ".tpl", function(data) {
+		$.get("templates/" + template + ".tpl", function(data) {
 
-		Editor.$("#dialog").html(data).dialog({
+			Editor.$("#dialog").html(data).dialog({
 				title: title,
 				modal: true,
 				closeText: "<span class='fa fa-times-circle'></span>",
@@ -39,14 +45,14 @@ define(function() {
 				width: "auto"
 			});
 
-		Editor.$("#dialog").find("input[data-value]").each(function() {
+			Editor.$("#dialog").find("input[data-value]").each(function() {
 				var pair = Editor.$(this).attr("data-value").split(":"),
 				    type = Editor.$(this).attr("type"),
 				    value = Editor.$(pair[0]).css(pair[1]);
 
 				if (type == "number") { value = parseInt(value, 10); }
 				if (pair[2] == "tiles") { value = Math.floor(value / Editor.activeTileset.tilesize[pair[1]]); }
-			Editor.$(this).val(value);
+				Editor.$(this).val(value);
 			});
 		});
 	};
@@ -59,6 +65,7 @@ define(function() {
 	// automaticly be toggled when clicked
 
 	Menubar.toggle = function(e) {
+
 		var value = Editor.$(e.currentTarget).attr("data-toggle"),
 		    extra = value.split(":"), status, elem;
 
@@ -66,13 +73,13 @@ define(function() {
 		if (extra[0] == "visibility") {
 
 			status = Editor.$(extra[1]).toggle();
-		Editor.$(e.currentTarget).find("span").toggleClass("fa-square-o", "fa-check-square-o");
+			Editor.$(e.currentTarget).find("span").toggleClass("fa-square-o", "fa-check-square-o");
 
 		// data-toggle="class:classname:elem"dddd
 		} else if (extra[0] == "class") {
 
 			status = Editor.$(extra[2]).toggleClass(extra[1]);
-		Editor.$(e.currentTarget).find("span").toggleClass("fa-square-o", "fa-check-square-o");
+			Editor.$(e.currentTarget).find("span").toggleClass("fa-square-o", "fa-check-square-o");
 
 		} else if (extra[0] == "fullscreen") {
 
@@ -88,8 +95,8 @@ define(function() {
 				else if (document.webkitCancelFullScreen) { document.webkitCancelFullScreen(); }
 			}
 
-		Editor.$(e.currentTarget).find(".text").html(Editor.fullscreen ? "Fullscreen" : "Windowed");
-		Editor.$(e.currentTarget).find("span:eq(0)").toggleClass("fa-compress", "fa-expand");
+			Editor.$(e.currentTarget).find(".text").html(Editor.fullscreen ? "Fullscreen" : "Windowed");
+			Editor.$(e.currentTarget).find("span:eq(0)").toggleClass("fa-compress", "fa-expand");
 			Editor.fullscreen = !Editor.fullscreen;
 
 		} else { Menubar.toggleFunctions[value](); }
@@ -100,14 +107,15 @@ define(function() {
 	/* ============================= */
 
 	Menubar.canvasSettings = function(e) {
+
 		var name = Editor.$(e.currentTarget).attr("name"),
 		    value = Editor.$(e.currentTarget).val(),
 		    tileset = Editor.activeTileset;
 
-		if (name == "width") { value = (+value) * tileset.tilesize.width; }
-		if (name == "height") { value = (+value) * tileset.tilesize.height; }
+		if (name == "width") { value = (+value) * tileset.tilewidth; }
+		if (name == "height") { value = (+value) * tileset.tileheight; }
 
-	Editor.$("#canvas").css(name, value);
+		Editor.$("#canvas").css(name, value);
 		Editor.Canvas.reposition();
 	};
 
@@ -116,15 +124,15 @@ define(function() {
 	/* =============================== */
 
 	Menubar.viewportSettings = function(e) {
-		var name = Editor.$(e.currentTarget).attr("name"),
-		    value = +Editor.$(e.currentTarget).val();
 
-	Editor.$("#viewport").css(name, value);
+		var name = Editor.$(e.currentTarget).attr("name"),
+		    value = + Editor.$(e.currentTarget).val();
+
+		Editor.$("#viewport").css(name, value);
 		Editor.Canvas.reposition();
 	};
 
-	Menubar.toggleFunctions = {
-	};
+	Menubar.toggleFunctions = {};
 
 	return Menubar;
 });

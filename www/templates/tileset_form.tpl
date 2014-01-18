@@ -3,7 +3,7 @@
 		<td>File</td>
 		<td>
 			<div id="file_container">
-				<input type="file" name="file">
+				<input type="file" name="file_tileset">
 				<input type="button" name="file_overlay" value="choose tileset" class="stretch"></div>
 			</div>
 		</td>

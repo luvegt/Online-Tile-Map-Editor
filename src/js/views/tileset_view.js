@@ -18,7 +18,7 @@ define(function() {
 
 		// Tileset UI functionality
 		Editor.$("body").on("change", "#tilesets select", this.changeTileset)
-		         .on("change", "input[name=file]", this.cacheFile)
+		         .on("change", "input[name=file_tileset]", this.cacheFile)
 		         .on("click",  "#tilesets_add",    this.add)
 		         .on("click",  "#tilesets_remove", this.remove);
 
@@ -34,30 +34,28 @@ define(function() {
 
 	TilesetView.add = function(e) {
 
-		var opts = {
+		var data = {
 
-			tilesize: {
-				width: +Editor.$("#dialog input[name=tile_width]").val(),
-				height: +Editor.$("#dialog input[name=tile_height]").val()
-			},
+			tilewidth: +Editor.$("#dialog input[name=tile_width]").val(),
+			tileheight: +Editor.$("#dialog input[name=tile_height]").val(),
 
 			margin: +Editor.$("#dialog input[name=tile_margin]").val(),
 			alpha: Editor.$("#dialog input[name=tile_alpha]").val()
 
-		}, hex = opts.alpha.match(/^#?(([0-9a-fA-F]{3}){1,2})$/), type, data;
+		}, hex = data.alpha.match(/^#?(([0-9a-fA-F]{3}){1,2})$/), type, data;
 		
 		// Parse HEX to rgb
 		if (hex && hex[1]) {
 			hex = hex[1];
 
 			if (hex.length == 3) {
-				opts.alpha = [
+				data.alpha = [
 					parseInt(hex[0]+hex[0], 16),
 					parseInt(hex[1]+hex[1], 16),
 					parseInt(hex[2]+hex[2], 16)
 				];
 			} else if (hex.length == 6) {
-				opts.alpha = [
+				data.alpha = [
 					parseInt(hex[0]+hex[1], 16),
 					parseInt(hex[2]+hex[3], 16),
 					parseInt(hex[5]+hex[6], 16)
@@ -65,30 +63,30 @@ define(function() {
 			}
 
 		// Parse RGB
-		} else if (opts.alpha.match(/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])(, ?|$)){3}$/)) {
-			opts.alpha = _.map(opts.alpha.split(","), function(num) { return parseInt(num, 10); });
-		} else { opts.alpha = null; }
+		} else if (data.alpha.match(/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])(, ?|$)){3}$/)) {
+			data.alpha = _.map(data.alpha.split(","), function(num) { return parseInt(num, 10); });
+		} else { data.alpha = null; }
 
 		// Editor.$("#loading").show();
 
 		// URL or FileReader event
 		if (!window.FileReader) {
 			data = TilesetView.tmp.match(/.+\/(.+)\.(.+)/);
-			opts.name = data[1];
+			data.name = data[1];
 			type = data[2].toLowerCase();
 		} else {
-			opts.name = TilesetView.tmp.name;
+			data.name = TilesetView.tmp.name;
 			type = TilesetView.tmp.type.split("/")[1];
 		}
 
 		// Wrong file type
 		if (TilesetView.config.filetypes.indexOf(type.toLowerCase()) == -1) {
-			alert("Wrong file type in \"" + opts.name + "\"\nSupported file types: " + TilesetView.config.filetypes.join(", "));
+			alert("Wrong file type in \"" + data.name + "\"\nSupported file types: " + TilesetView.config.filetypes.join(", "));
 			//Editor.$("#loading").hide();
 
 		// Tileset does already exist
-		} else if (Editor.$("#tilesets select option:contains(" + opts.name + ")").length) {
-			alert("File \"" + opts.name + "\" does already exist.");
+		} else if (Editor.$("#tilesets select option:contains(" + data.name + ")").length) {
+			alert("File \"" + data.name + "\" does already exist.");
 			//Editor.$("#loading").hide();
 
 		// Process tileset
@@ -96,8 +94,8 @@ define(function() {
 			if (window.FileReader) {
 				var reader = new FileReader();
 				reader.readAsDataURL(TilesetView.tmp);
-				reader.onload = function(e) { TilesetView.process(e, opts) };
-			} else { TilesetView.process(null, opts); }
+				reader.onload = function(e) { TilesetView.process(e, data) };
+			} else { TilesetView.process(null, data); }
 		}
 	};
 
@@ -152,10 +150,10 @@ define(function() {
 	// Form validation is done
 	// task is passed to the model's add method
 
-	TilesetView.process = function(e, opts) {
-		var data = e ? e.target.result : TilesetView.tmp;
+	TilesetView.process = function(e, data) {
+		data.image = e ? e.target.result : TilesetView.tmp;
 
-		Editor.Tilesets.add(data, opts);
+		Editor.Tilesets.add(data);
 		Editor.$("#dialog").dialog("close");
 	};
 
@@ -187,8 +185,8 @@ define(function() {
 		if (e.type == "mouseup") {
 
 			tileset = Editor.activeTileset;
-			tw = tileset.tilesize.width;
-			th = tileset.tilesize.height;
+			tw = tileset.tilewidth;
+			th = tileset.tileheight;
 
 			sx = Editor.selection[0][0] * tw;
 			sy = Editor.selection[0][1] * th;

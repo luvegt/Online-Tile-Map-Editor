@@ -18,18 +18,18 @@ define(function() {
 	Utils.makeSelection = function(e, container) {
 
 		var tileset = Editor.activeTileset,
-			tw = tileset.tilesize.width,
-			th = tileset.tilesize.height,
-			sx, sy;
+		    tw = tileset.tilewidth,
+		    th = tileset.tileheight,
+		    sx, sy;
 
-		$container = Editor.$(container),
-			offset =  $container.offset(),
+		    $container = Editor.$(container),
+		    offset =  $container.offset(),
 
 			// Current x position relative to the tileset area
-			x = Math.floor(((e.pageX - offset.left) + $container.scrollTop()) / tw) * tw,
-			y = Math.floor(((e.pageY - offset.top) + $container.scrollLeft()) / th) * th,
+		    x = Math.floor(((e.pageX - offset.left) + $container.scrollTop()) / tw) * tw,
+		    y = Math.floor(((e.pageY - offset.top) + $container.scrollLeft()) / th) * th,
 
-		$selection = $container.find(".selection");
+		    $selection = $container.find(".selection");
 
 		// Create and append selection div
 		if (e.type == "mousedown") {
@@ -37,7 +37,7 @@ define(function() {
 			if (!$selection.length)
 			{ $container.append("<div class='selection'></div>"); }
 
-		$selection.css({
+			$selection.css({
 				left: x,
 				top: y,
 				width: tw,
@@ -56,7 +56,7 @@ define(function() {
 				sy = Editor.tmp_selection[0][1];
 
 				var w = Math.abs((x-sx) + tw),
-					h = Math.abs((y-sy) + th);
+				    h = Math.abs((y-sy) + th);
 
 				// Selection goes right
 				if (sx <= x) { $selection.css({ left: sx, width: w }); }
@@ -81,8 +81,8 @@ define(function() {
 		} else if (e.type == "mouseup" && Editor.tmp_selection) {
 
 			var s = Editor.tmp_selection,
-				id = Editor.$("select[name=tileset_select] option:selected").index(),
-				ex, ey;
+			    id = Editor.$("select[name=tileset_select] option:selected").index(),
+			    ex, ey;
 
 			s[1][0] = x;
 			s[1][1] = y;

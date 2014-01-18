@@ -26,8 +26,8 @@ define(function() {
 	Tools.select = function(e) {
 		var $target = Editor.$(e.currentTarget);
 
-	Editor.$("#tools").find("span").removeClass("active");
-	$target.addClass("active");
+		Editor.$("#tools").find("span").removeClass("active");
+		$target.addClass("active");
 		Editor.tool = $target.attr("data-tool");
 	};
 

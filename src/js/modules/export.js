@@ -33,8 +33,8 @@ define(function() {
 		    tileset = Editor.activeTileset,
 		    anchor = document.createElement("a"),
 
-		    w = Editor.$("#canvas").width() / tileset.tilesize.width,
-		    h = Editor.$("#canvas").height() / tileset.tilesize.height,
+		    w = Editor.$("#canvas").width() / tileset.tilewidth,
+		    h = Editor.$("#canvas").height() / tileset.tileheight,
 
 		    output, layer, coords, y, x, query, elem, data;
 
@@ -45,7 +45,7 @@ define(function() {
 			output = {};
 			output.layers = [];
 
-		Editor.$(".layer").each(function() {
+			Editor.$(".layer").each(function() {
 
 				layer = {
 					name: Editor.$(this).attr("data-name"),
@@ -56,7 +56,7 @@ define(function() {
 				for (y = 0; y < h; y++) {
 					for (x = 0; x < w; x++) {
 						query = Editor.$(this).find("div[data-coords='" + x + "." + y + "']");
-						coords = query.length ? parseFloat(query.attr("data-coords-tileset"), 10) : 0.0;
+						coords = query.length ? parseFloat(query.attr("data-coords-tileset"), 10) : -1;
 						layer.data.push(coords);
 					}
 				}
@@ -74,10 +74,15 @@ define(function() {
 					image: include_base64 ? tileset.base64 : tileset.name,
 					imagewidth: tileset.width,
 					imageheight: tileset.height,
-					tilewidth: tileset.tilesize.width,
-					tileheight: tileset.tilesize.height
+					tilewidth: tileset.tilewidth,
+					tileheight: tileset.tileheight
 				});
 			}
+
+			output.canvas = {
+				width: window.parseInt(Editor.$("#canvas").css("width"), 10),
+				height: window.parseInt(Editor.$("#canvas").css("height"), 10)
+			};
 
 			output = JSON.stringify(output);
 			anchor.href = "data:application/json;charset=UTF-8;," + encodeURIComponent(output);
@@ -86,7 +91,7 @@ define(function() {
 
 			output = Editor.$("<root>").append("<layers>");
 
-		Editor.$(".layer").each(function() {
+			Editor.$(".layer").each(function() {
 
 				layer = Editor.$("<layer>");
 				layer.attr({
@@ -99,7 +104,7 @@ define(function() {
 				for (y = 0; y < h; y++) {
 					for (x = 0; x < w; x++) {
 						query = Editor.$(this).find("div[data-coords='" + x + "." + y + "']");
-						coords = query.length ? query.attr("data-coords-tileset") : "0.0";
+						coords = query.length ? query.attr("data-coords-tileset") : "-1";
 						if (x == w-1 && format_output) { coords += "\r\n"; }
 						data.push(coords);
 					}
@@ -121,12 +126,19 @@ define(function() {
 					image: include_base64 ? tileset.base64 : tileset.name,
 					imagewidth: tileset.width,
 					imageheight: tileset.height,
-					tilewidth: tileset.tilesize.width,
-					tileheight: tileset.tilesize.height
+					tilewidth: tileset.tilewidth,
+					tileheight: tileset.tileheight
 				});
 
 				output.find("tilesets").append(elem);
 			}
+
+			output.append(
+				"<canvas " +
+					"width=\"" + window.parseInt(Editor.$("#canvas").css("width"), 10) + "\"" +
+					"height=\"" + window.parseInt(Editor.$("#canvas").css("height"), 10) + "\"" +
+				" />"
+			);
 
 			output = encodeURIComponent((new XMLSerializer()).serializeToString(output[0]));
 			anchor.href = "data:text/xml;charset=UTF-8;," + output;

@@ -14,14 +14,14 @@ define(function() {
 		Editor = require("editor");
 
 		// Selection movement
-	Editor.$("#canvas").on("mousedown mousemove mouseup", function(e) {
+		Editor.$("#canvas").on("mousedown mousemove mouseup", function(e) {
 
 			if (!Editor.activeTileset) { return; }
 			if (e.which == 3) { Editor.Tilesets.resetSelection(); return; }
 
 			var tileset = Editor.activeTileset,
-		        tw = tileset.tilesize.width,
-		        th = tileset.tilesize.height,
+		        tw = tileset.tilewidth,
+		        th = tileset.tileheight,
 
 			    offset = Editor.$("#canvas").offset(),
 			    x = Math.floor((e.pageX - offset.left) / tw),
@@ -30,7 +30,7 @@ define(function() {
 			Canvas.cursor[0] = x;
 			Canvas.cursor[1] = y;
 
-		Editor.$("#canvas").find(".selection").css({
+			Editor.$("#canvas").find(".selection").css({
 				top: y * th,
 				left: x * tw
 			});
@@ -72,20 +72,20 @@ define(function() {
 			}
 		});
 
-	Editor.$("#canvas").draggable({
+		Editor.$("#canvas").draggable({
 			mouseButton: 1,
 			cursor: "move",
 			start: function() {
 				if (!Editor.keystatus.spacebar) {
-				Editor.$("body").css("cursor", "");
+					Editor.$("body").css("cursor", "");
 					return false;
 				}
 			}
 		});
 
 		this.reposition();
-	Editor.$("#canvas").fadeIn();
-	Editor.$(window).on("resize", this.reposition);
+		Editor.$("#canvas").fadeIn();
+		Editor.$(window).on("resize", this.reposition);
 	};
 
 	/* ================== */
@@ -102,8 +102,8 @@ define(function() {
 		    cy = this.cursor[1],
 
 		    // Tilsize
-		    tw = tileset.tilesize.width,
-		    th = tileset.tilesize.height,
+		    tw = tileset.tilewidth,
+		    th = tileset.tileheight,
 
 		    // Start x, Start x, End x, End y
 		    sx = Editor.selection[0][0],
@@ -131,8 +131,8 @@ define(function() {
 		// from the one used on the current layer
 		if (!Editor.$(layer.elem).attr("data-tileset")) {
 
-		Editor.$(layer.elem).addClass("ts_" + tileset.id);
-		Editor.$(layer.elem).attr("data-tileset", tileset.name);
+			Editor.$(layer.elem).addClass("ts_" + tileset.id);
+			Editor.$(layer.elem).attr("data-tileset", tileset.name);
 
 		} else if (Editor.$(layer.elem).attr("data-tileset") != tileset.name) {
 
@@ -147,12 +147,12 @@ define(function() {
 			cxp = cx*tw;
 			cyp = cy*th;
 
-		Editor.$("#canvas").find(".selection").find("div").each(function() {
+			Editor.$("#canvas").find(".selection").find("div").each(function() {
 				top = parseInt(Editor.$(this).css("top"), 10);
 				left = parseInt(Editor.$(this).css("left"), 10);
 
-			$tile = Editor.$(this).clone();
-			$tile.css({
+				$tile = Editor.$(this).clone();
+				$tile.css({
 					top: top + cyp,
 					left: left + cxp
 				});
@@ -161,10 +161,10 @@ define(function() {
 				query = Editor.$(layer.elem).find("div[data-coords='" + coords + "']");
 
 				if (query.length) {
-				Editor.$(query).attr("style", $tile.attr("style"));
+					Editor.$(query).attr("style", $tile.attr("style"));
 				} else {
-				$tile.attr("data-coords", coords);
-				Editor.$(layer.elem).append($tile);
+					$tile.attr("data-coords", coords);
+					Editor.$(layer.elem).append($tile);
 				}
 			});
 
@@ -180,7 +180,7 @@ define(function() {
 					query = Editor.$(layer.elem).find("div[data-coords='" + coords + "']");
 
 					// Update existing tile or create a new one and position it
-				$div = query.length ? query : Editor.$("<div>").css({
+					$div = query.length ? query : Editor.$("<div>").css({
 						position: "absolute",
 						left: pos_x * tw,
 						top: pos_y * th
@@ -188,8 +188,8 @@ define(function() {
 
 
 					// Set/update the tileset information
-				$div.attr("data-coords-tileset", (Math.abs(bgx/tw)+x) + "." + (Math.abs(bgy/th)+y));
-				$div.css("background-position", (bgx-(x*tw)) + "px" + " " + (bgy-(y*th)) + "px");
+					$div.attr("data-coords-tileset", (Math.abs(bgx/tw)+x) + "." + (Math.abs(bgy/th)+y));
+					$div.css("background-position", (bgx-(x*tw)) + "px" + " " + (bgy-(y*th)) + "px");
 
 					// Append the tile if it didn't on that coordinate
 					if (!query.length) { Editor.$(layer.elem).append($div); }
@@ -213,8 +213,8 @@ define(function() {
 		    cy = this.cursor[1],
 
 		    // Tilsize
-		    tw = tileset.tilesize.width,
-		    th = tileset.tilesize.height,
+		    tw = tileset.tilewidth,
+		    th = tileset.tileheight,
 
 		    // Start x, Start x, End x, End y
 		    sx = Editor.selection[0][0],
@@ -254,12 +254,12 @@ define(function() {
 					if (x < 0 || x >= fx || y < 0 || y >= fy) { return; }
 					if (closedList.indexOf(x + "." + y) != -1) { return; }
 
-				$elem = Editor.$(layer.elem).find("div[data-coords='" + arr[0] + "." + arr[1] + "']");
+					$elem = Editor.$(layer.elem).find("div[data-coords='" + arr[0] + "." + arr[1] + "']");
 
 					if ((!$elem.length && !search_bgpos) || $elem.attr("data-coords-tileset") == search_bgpos) {
 
 						if (!$elem.length) {
-						$elem = Editor.$("<div>").css({
+							$elem = Editor.$("<div>").css({
 								position: "absolute",
 								left: x * tw,
 								top: y * th
@@ -278,11 +278,11 @@ define(function() {
 				});
 			};
 
-		// TODO make unify this
+		// TODO unify this
 		if (!Editor.$(layer.elem).attr("data-tileset")) {
 
-		Editor.$(layer.elem).addClass("ts_" + tileset.id);
-		Editor.$(layer.elem).attr("data-tileset", tileset.name);
+			Editor.$(layer.elem).addClass("ts_" + tileset.id);
+			Editor.$(layer.elem).attr("data-tileset", tileset.name);
 
 		} else if (Editor.$(layer.elem).attr("data-tileset") != tileset.name) {
 
@@ -294,7 +294,7 @@ define(function() {
 
 		// Start the recursive search
 		fill_recursive(cx, cy);
-	Editor.$(layer.elem).append(documentFragment);
+		Editor.$(layer.elem).append(documentFragment);
 	};
 
 	/* ============================ */
@@ -309,26 +309,26 @@ define(function() {
 
 		if (e.type == "mousedown") {
 
-		Editor.$("#canvas").find(".selection").css("background-color", "rgba(0, 0, 0, 0.3)");
+			Editor.$("#canvas").find(".selection").css("background-color", "rgba(0, 0, 0, 0.3)");
 
 		} else if (e.type == "mouseup") {
 			tileset = Editor.activeTileset;
-			tw = tileset.tilesize.width;
-			th = tileset.tilesize.height;
+			tw = tileset.tilewidth;
+			th = tileset.tileheight;
 
 			sx = Editor.selection[0][0] * tw;
 			sy = Editor.selection[0][1] * th;
 			ex = Editor.selection[1][0] * tw;
 			ey = Editor.selection[1][1] * th;
 
-		$selection = Editor.$("#canvas").find(".selection");
+			$selection = Editor.$("#canvas").find(".selection");
 			layer = Editor.Layers.getActive();
 
 			// Find all elements that are in range of
 			// the selection and append a copy of them
-		Editor.$(layer.elem).find("div").each(function() {
-				top = parseInt(Editor.$(this).css("top"), 10);
-				left = parseInt(Editor.$(this).css("left"), 10);
+			Editor.$(layer.elem).find("div").each(function() {
+				top = parseInt(	Editor.$(this).css("top"), 10);
+				left = parseInt(	Editor.$(this).css("left"), 10);
 
 				if (left >= sx && left <= ex && top >= sy && top <= ey) {
 				$tile = Editor.$(this).clone();
@@ -342,8 +342,8 @@ define(function() {
 				}
 			});
 
-		$selection.css("background-color", "transparent");
-		$selection.addClass(Editor.$(layer.elem).attr("class").replace("layer", "nobg"));
+			$selection.css("background-color", "transparent");
+			$selection.addClass(	Editor.$(layer.elem).attr("class").replace("layer", "nobg"));
 			Editor.selection.custom = true;
 		}
 	};
@@ -357,7 +357,7 @@ define(function() {
 		    left = (Editor.$(window).width() / 2) - (Editor.$("#canvas").width() / 2) + extra,
 		    top = (Editor.$(window).height() / 2) - (Editor.$("#canvas").height() / 2);
 
-	Editor.$("#canvas").css({ top: top, left: left });
+		Editor.$("#canvas").css({ top: top, left: left });
 	};
 
 	/* ========================= */
@@ -366,12 +366,14 @@ define(function() {
 
 	// Creates a base64 image with two borders
 	// resulting in a grid when used as a repeated background
+	
 	Canvas.updateGrid = function() {
+
 		var buffer = document.createElement("canvas"),
 		    bfr = buffer.getContext("2d"),
 		    tileset = Editor.activeTileset,
-		    tw = tileset.tilesize.width,
-		    th = tileset.tilesize.height;
+		    tw = tileset.tilewidth,
+		    th = tileset.tileheight;
 
 		buffer.width = tw;
 		buffer.height = th;
@@ -380,8 +382,8 @@ define(function() {
 		bfr.fillRect(0, th-1, tw, 1);
 		bfr.fillRect(tw-1, 0, 1, th);
 
-	Editor.$("#canvas").css("backgroundImage", "url(" + buffer.toDataURL() + ")");
-	Editor.$("#canvas").find(".selection").css({
+		Editor.$("#canvas").css("backgroundImage", "url(" + buffer.toDataURL() + ")");
+		Editor.$("#canvas").find(".selection").css({
 			width: tw,
 			height: th
 		});

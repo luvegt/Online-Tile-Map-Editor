@@ -11,7 +11,7 @@ define(function() {
 		Editor = require("editor");
 
 		// Make layers sortable
-	Editor.$("#layerlist").sortable({
+		Editor.$("#layerlist").sortable({
 			axis: "y",
 			mouseButton: 1,
 			appendTo: document.body,
@@ -20,8 +20,8 @@ define(function() {
 		});
 
 		// Add predefined layers
-		this.add(null, "background");
-		this.add(null, "world");
+		this.add("background");
+		this.add("world");
 	};
 
 	/* ==================== */
@@ -29,25 +29,25 @@ define(function() {
 	/* ==================== */
 
 	Layers.events = {
+		
 		"click #layer-clear": function(e) { Layers.clear(e); },
 		"click #layer-rename": function(e) { Layers.rename(e); },
 		"click #layer-remove": function(e) { Layers.remove(e); },
-		"click #layers-add": function(e) { Layers.add(e); },
-
+		"click #layers-add": function(e) { Layers.add(); },
 
 		// Layer UI functionality
 		"click #layerlist li": function(e) {
-		Editor.$("#layerlist li").removeClass("active");
-		Editor.$(e.currentTarget).addClass("active");
+			Editor.$("#layerlist li").removeClass("active");
+			Editor.$(e.currentTarget).addClass("active");
 		},
 
 		"click #layerlist li span:first-child": function(e) { Layers.toggleVisibility(e); },
 		"click #layerlist li span:last-child": function(e) { Layers.openContextmenu(e); },
 
 		"mousedown": function(e) {
-			if (Editor.$(e.target).parent().attr("id") != "contextmenu") {
-				if (Editor.$("body #contextmenu").length)
-				{ Editor.$("body #contextmenu").remove(); }
+			if ($(e.target).parent().attr("id") != "contextmenu") {
+				if ($("body #contextmenu").length)
+				{ $("body #contextmenu").remove(); }
 			}
 		}
 	};
@@ -56,12 +56,12 @@ define(function() {
 	/* ====== ADD ====== */
 	/* ================= */
 
-	Layers.add = function(e, name) {
+	Layers.add = function(name) {
 
 		var id = 0, ids = [];
 
-		if (Editor.$("#layerlist li").length) {
-		Editor.$("#layerlist li").each(function() { ids.push(+this.getAttribute("data-id")); });
+		if ($("#layerlist li").length) {
+			Editor.$("#layerlist li").each(function() { ids.push(+this.getAttribute("data-id")); });
 			while (ids.indexOf(id) != -1) { id++; }
 		}
 
@@ -71,12 +71,12 @@ define(function() {
 			return;
 		}
 
-	Editor.$("#layerlist li").removeClass("active");
-	Editor.$("#layerlist").append("<li class='active' data-id='" + id + "'><span class='fa fa-eye'></span> " + name + "<span class='fa fa-cog'></span></li>");
-	Editor.$("#layerlist").sortable("refresh");
+		Editor.$("#layerlist li").removeClass("active");
+		Editor.$("#layerlist").append("<li class='active' data-id='" + id + "'><span class='fa fa-eye'></span> " + name + "<span class='fa fa-cog'></span></li>");
+		Editor.$("#layerlist").sortable("refresh");
 
 		// Create and append an associated layer div inside the canvas
-	Editor.$("#tiles").append("<div class='layer' data-name='" + name + "' data-id='" + id + "'></div>");
+		Editor.$("#tiles").append("<div class='layer' data-name='" + name + "' data-id='" + id + "'></div>");
 		Layers.sortByIndex();
 	};
 
@@ -86,20 +86,20 @@ define(function() {
 
 	Layers.remove = function() {
 
-		var name = Editor.$(Layers.contextTarget).text().trim(),
-		    id = Editor.$(Layers.contextTarget).attr("data-id");
+		var name = $(Layers.contextTarget).text().trim(),
+		    id = $(Layers.contextTarget).attr("data-id");
 
 		if (confirm("Remove \"" + name + "\" ?")) {
 
 			// TODO make this possible?
-			if (Editor.$("#layerlist li").length == 1) {
+			if ($("#layerlist li").length == 1) {
 				alert("Cannot remove last layer!");
 				return;
 			}
 
-		Editor.$(Layers.contextTarget).remove();
-		Editor.$("#contextmenu").remove();
-		Editor.$(".layer[data-id=" + id + "]").remove();
+			Editor.$(Layers.contextTarget).remove();
+			Editor.$("#contextmenu").remove();
+			Editor.$(".layer[data-id=" + id + "]").remove();
 		}
 	};
 
@@ -109,16 +109,16 @@ define(function() {
 
 	Layers.clear = function(e) {
 
-		var name = Editor.$(Layers.contextTarget).text().trim(),
-		    id = Editor.$(Layers.contextTarget).attr("data-id");
+		var name = $(Layers.contextTarget).text().trim(),
+		    id = $(Layers.contextTarget).attr("data-id");
 
 		if (confirm("Remove all tiles from \"" + name + "\" ?")) {
-		Editor.$(".layer[data-id=" + id + "]").html("").attr({
+			Editor.$(".layer[data-id=" + id + "]").html("").attr({
 				"data-tileset": "",
 				"class": "layer"
 			});
 
-		Editor.$("#contextmenu").remove();
+			Editor.$("#contextmenu").remove();
 		}
 	};
 
@@ -128,8 +128,8 @@ define(function() {
 
 	Layers.rename = function(e) {
 
-		var name = Editor.$(Layers.contextTarget).text().trim(),
-		    id = Editor.$(Layers.contextTarget).attr("data-id"),
+		var name = $(Layers.contextTarget).text().trim(),
+		    id = $(Layers.contextTarget).attr("data-id"),
 		    newName = prompt("Enter new name for \"" + name + "\":");
 
 		if (!newName || newName.length < 3) {
@@ -138,11 +138,11 @@ define(function() {
 		}
 
 		// Rename associated div too
-	Editor.$(".layer[data-id=" + id + "]").attr("data-name", newName);
+		Editor.$(".layer[data-id=" + id + "]").attr("data-name", newName);
 
 		// Create and append a new layer element to the toolbar
-	Editor.$(Layers.contextTarget).html("<span class='fa fa-eye'></span> " + newName + "<span class='fa fa-cog'></span>");
-	Editor.$("#contextmenu").remove();
+		Editor.$(Layers.contextTarget).html("<span class='fa fa-eye'></span> " + newName + "<span class='fa fa-cog'></span>");
+		Editor.$("#contextmenu").remove();
 	};
 
 	/* ======================== */
@@ -151,11 +151,11 @@ define(function() {
 
 	Layers.getActive = function() {
 
-		var id = Editor.$("#layerlist li.active").attr("data-id");
+		var id = $("#layerlist li.active").attr("data-id");
 
 		return { 
-			id: Editor.$("#layerlist li.active").attr("data-id"),
-			elem: Editor.$(".layer[data-id=" + id + "]")[0]
+			id: $("#layerlist li.active").attr("data-id"),
+			elem: $(".layer[data-id=" + id + "]")[0]
 		}
 	};
 
@@ -167,9 +167,9 @@ define(function() {
 
 	Layers.sortByIndex = function(e, ui) {
 
-	Editor.$("#layerlist li").each(function(i) {
-			var id = Editor.$(this).attr("data-id");
-		Editor.$(".layer[data-id=" + id + "]").css("z-index", i);
+		Editor.$("#layerlist li").each(function(i) {
+			var id = $(this).attr("data-id");
+			Editor.$(".layer[data-id=" + id + "]").css("z-index", i);
 		});
 	};
 
@@ -179,12 +179,12 @@ define(function() {
 
 	Layers.toggleVisibility = function(e) {
 
-		var visible = Editor.$(e.currentTarget).hasClass("fa fa-eye"),
+		var visible = $(e.currentTarget).hasClass("fa fa-eye"),
 		    className = visible ? "fa fa-eye-slash" : "fa fa-eye",
-		    id = Editor.$(e.currentTarget).parent().attr("data-id");
+		    id = $(e.currentTarget).parent().attr("data-id");
 
-	Editor.$(e.currentTarget).attr("class", "icon " + className);
-	Editor.$(".layer[data-id=" + id + "]").toggle(!visible);
+		Editor.$(e.currentTarget).attr("class", "icon " + className);
+		Editor.$(".layer[data-id=" + id + "]").toggle(!visible);
 	};
 
 	/* ============================== */
@@ -193,12 +193,12 @@ define(function() {
 
 	Layers.openContextmenu = function(e) {
 
-		Layers.contextTarget = Editor.$(e.currentTarget).parent();
+		Layers.contextTarget = $(e.currentTarget).parent();
 
-	$.get("templates/cm_layer.tpl", function(data) {
-		Editor.$("body").append(data);
-		Editor.$("#contextmenu").css("left", e.pageX);
-		Editor.$("#contextmenu").css("top", e.pageY);
+		Editor.$.get("templates/cm_layer.tpl", function(data) {
+			Editor.$("body").append(data);
+			Editor.$("#contextmenu").css("left", e.pageX);
+			Editor.$("#contextmenu").css("top", e.pageY);
 		});
 	};
 
