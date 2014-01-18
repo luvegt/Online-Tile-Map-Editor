@@ -13,8 +13,30 @@ define(function() {
 
 		Editor = require("editor");
 
+		Editor.$("#canvas").draggable({
+			mouseButton: 1,
+			cursor: "move",
+			start: function() {
+				if (!Editor.keystatus.spacebar) {
+					Editor.$("body").css("cursor", "");
+					return false;
+				}
+			}
+		});
+
+		this.reposition();
+		Editor.$("#canvas").fadeIn();
+		Editor.$(window).on("resize", this.reposition);
+	};
+
+	/* ==================== */
+	/* ====== EVENTS ====== */
+	/* ==================== */
+
+	Canvas.events = {
+
 		// Selection movement
-		Editor.$("#canvas").on("mousedown mousemove mouseup", function(e) {
+		"mousedown|mousemove|mouseup #canvas": function(e) {
 
 			if (!Editor.activeTileset) { return; }
 			if (e.which == 3) { Editor.Tilesets.resetSelection(); return; }
@@ -70,22 +92,7 @@ define(function() {
 					Canvas.cursor.last = {};
 				}
 			}
-		});
-
-		Editor.$("#canvas").draggable({
-			mouseButton: 1,
-			cursor: "move",
-			start: function() {
-				if (!Editor.keystatus.spacebar) {
-					Editor.$("body").css("cursor", "");
-					return false;
-				}
-			}
-		});
-
-		this.reposition();
-		Editor.$("#canvas").fadeIn();
-		Editor.$(window).on("resize", this.reposition);
+		}
 	};
 
 	/* ================== */

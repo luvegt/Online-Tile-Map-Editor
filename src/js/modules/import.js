@@ -16,6 +16,7 @@ define(function() {
 	/* ==================== */
 
 	Import.events = {
+		
 		"change input[name=file_import]": function(e) { Import.cacheFile(e); },
 		"click #import": function(e) {
 

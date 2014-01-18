@@ -1,4 +1,5 @@
 define([
+	"underscore",
 	"modules/utils",
 	"modules/menubar",
 	"modules/tools",
@@ -11,7 +12,7 @@ define([
 
 	var Editor = {};
 	var args = arguments;
-	var argNames = ["Utils", "Menubar", "Tools", "Canvas", "Tilesets", "Layers", "Export", "Import"];
+	var argNames = ["_", "Utils", "Menubar", "Tools", "Canvas", "Tilesets", "Layers", "Export", "Import"];
 
 	Editor.tool = "draw";
 	Editor.keystatus = {};
@@ -29,7 +30,7 @@ define([
 
 			Editor[v] = args[i];
 
-			if (Editor[v].initialize)
+			if (typeof Editor[v].initialize == "function")
 			{ Editor[v].initialize(); }
 		});
 
@@ -94,7 +95,7 @@ define([
 			if (Editor[v].events) {
 				for (var evt in Editor[v].events) {
 					pair = evt.split(" ");
-					type = pair.shift().replace("|", " ");
+					type = pair.shift().replace(/\|/g, " ");
 					selector = pair.join(" ");
 					$("body").on(type, selector, Editor[v].events[evt]);
 				}

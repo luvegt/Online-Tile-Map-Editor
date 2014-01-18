@@ -16,6 +16,7 @@ define(function() {
 	/* ==================== */
 
 	Menubar.events = {
+		
 		"click *[data-template]": function(e) { Menubar.openDialog(e); },
 		"click *[data-toggle]": function(e) { Menubar.toggle(e); },
 

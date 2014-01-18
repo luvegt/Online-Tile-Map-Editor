@@ -64,7 +64,7 @@ define(function() {
 
 		// Parse RGB
 		} else if (data.alpha.match(/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9]?[0-9])(, ?|$)){3}$/)) {
-			data.alpha = _.map(data.alpha.split(","), function(num) { return parseInt(num, 10); });
+			data.alpha = Editor._.map(data.alpha.split(","), function(num) { return parseInt(num, 10); });
 		} else { data.alpha = null; }
 
 		// Editor.$("#loading").show();
