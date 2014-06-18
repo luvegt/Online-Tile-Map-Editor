@@ -1,4 +1,4 @@
-define(["views/tileset_view"], function(TilesetView) {
+define(["views/tileset_view", "jquery.mousewheel", "jquery.jscrollpane"], function(TilesetView) {
 
 	var Tilesets = {}, Editor;
 	Tilesets.collection = {};
