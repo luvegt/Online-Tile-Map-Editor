@@ -51,6 +51,8 @@ a:hover { text-decoration: underline; }
 	box-shadow: inset 0px 1px #C00 !important;
 }
 
+.disabled { pointer-events: none; }
+
 a span { padding-right: 2px; }
 
 /* ============================ */
