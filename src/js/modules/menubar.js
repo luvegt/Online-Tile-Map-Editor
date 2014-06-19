@@ -20,8 +20,8 @@ define(function() {
 		"click *[data-template]": function(e) { Menubar.openDialog(e); },
 		"click *[data-toggle]": function(e) { Menubar.toggle(e); },
 
-		"keydown|keyup #canvas_settings input": function(e) { Menubar.canvasSettings(e); },
-		"keydown|keyup #viewport_settings input": function(e) { Menubar.viewportSettings(e); }
+		"keydown|keyup|change #canvas_settings input": function(e) { Menubar.canvasSettings(e); },
+		"keydown|keyup|change #viewport_settings input": function(e) { Menubar.viewportSettings(e); }
 	};
 
 	/* ========================= */
@@ -52,7 +52,8 @@ define(function() {
 				    value = Editor.$(pair[0]).css(pair[1]);
 
 				if (type == "number") { value = parseInt(value, 10); }
-				if (pair[2] == "tiles") { value = Math.floor(value / Editor.activeTileset.tilesize[pair[1]]); }
+				if (pair[2] == "tiles") { value = Math.floor(value / Editor.activeTileset["tile"+pair[1]]); }
+
 				Editor.$(this).val(value);
 			});
 		});
