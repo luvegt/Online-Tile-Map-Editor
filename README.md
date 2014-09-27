@@ -1,4 +1,4 @@
-Online Tile Map Editor [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+Online Tile Map Editor
 ======================
 
 A web based tile map editor for all kinds of 2d games and applications.  
