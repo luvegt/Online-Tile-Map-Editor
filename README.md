@@ -3,13 +3,13 @@ Online Tile Map Editor [![Built with Grunt](https://cdn.gruntjs.com/builtwith.pn
 
 A web based tile map editor for all kinds of 2d games and applications.  
 **Open source under the [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) license.**  
-**Live Demo: [http://elias-schuett.de/git/Online-Tile-Map-Editor/](http://elias-schuett.de/git/Online-Tile-Map-Editor/)**  
+**Live Demo: [http://apps.elias.media/Online-Tile-Map-Editor/](http://apps.elias.media/Online-Tile-Map-Editor/)**  
 
 Please note that this is just a hobby project with no set goals to finish it in the future. Also the code is a little messy here and there and could use some thorough optimizations.
 
 ----
 
-![preview](http://elias-schuett.de/img/content/online-tile-map-editor.png)
+![Screeshot](https://i.imgur.com/kxhYIiE.png)
 
 ##Features
 
