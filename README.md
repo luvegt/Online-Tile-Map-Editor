@@ -52,7 +52,7 @@ Version info will be added soon.
 ##How to Contribute
 
 1. Install [**git**](http://git-scm.com/), [**node**](http://nodejs.org/)  and [**grunt-cli**](http://gruntjs.com/getting-started) and fork this repo:  
-   `git clone https://github.com/elias94xx/Online-Tile-Map-Editor.git`
+   `git clone https://github.com/elias-schuett/Online-Tile-Map-Editor.git`
 3. Enter the direcotry:  
    `cd Online-Tile-Map-Editor`
 3. Install grunt and its plugins to your directory:  
