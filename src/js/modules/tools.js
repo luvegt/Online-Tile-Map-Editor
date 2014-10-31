@@ -29,6 +29,8 @@ define(function() {
 		Editor.$("#tools").find("span").removeClass("active");
 		$target.addClass("active");
 		Editor.tool = $target.attr("data-tool");
+
+		if (Editor.tool == "erase") { Editor.Tilesets.resetSelection(); }
 	};
 
 	return Tools;

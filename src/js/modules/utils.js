@@ -29,13 +29,13 @@ define(function() {
 		    x = Math.floor(((e.pageX - offset.left) + $container.scrollTop()) / tw) * tw,
 		    y = Math.floor(((e.pageY - offset.top) + $container.scrollLeft()) / th) * th,
 
-		    $selection = $container.find(".selection");
+		    $selection = Editor.$(".selection");
 
 		// Create and append selection div
 		if (e.type == "mousedown") {
 
-			if (!$selection.length)
-			{ $container.append("<div class='selection'></div>"); }
+			if ($selection.length) { $selection.remove(); }
+			$container.append("<div class='selection'></div>");
 
 			$selection.css({
 				left: x,

@@ -52,7 +52,7 @@ define(function() {
 			Canvas.cursor[0] = x;
 			Canvas.cursor[1] = y;
 
-			Editor.$("#canvas").find(".selection").css({
+			Editor.$(".selection").css({
 				top: y * th,
 				left: x * tw
 			});
@@ -83,9 +83,13 @@ define(function() {
 
 						Canvas.draw();
 
-					} else if (Editor.tool == "fill" && e.type == "mousedown") { Canvas.fill(); }
-					
-				} else if (!Editor.selection) { Canvas.makeSelection(e); }
+					}
+
+					else if (Editor.tool == "fill" && e.type == "mousedown") { Canvas.fill(); }	
+				}
+
+				else if (Editor.tool == "erase" && Editor.mousedown) { Canvas.erase(); }
+				else if (!Editor.selection) { Canvas.makeSelection(e); }
 
 				//On mouseup with selection clear last draw cache.
 				if (Editor.selection && !Editor.mousedown){
@@ -93,6 +97,22 @@ define(function() {
 				}
 			}
 		}
+	};
+
+	/* =================== */
+	/* ====== ERASE ====== */
+	/* =================== */
+
+	Canvas.erase = function() {
+
+		var layer = Editor.Layers.getActive(),
+
+		    // Cursor position
+		    cx = this.cursor[0],
+		    cy = this.cursor[1];
+
+		$tile = Editor.$(layer.elem).find("div[data-coords='" + cx + "." + cy + "']");
+		if ($tile.length) { $tile.remove(); }
 	};
 
 	/* ================== */
@@ -123,7 +143,7 @@ define(function() {
 		    ly = ey - sy,
 
 		    // Background position
-		    bgpos = Editor.$("#canvas").find(".selection").css("background-position").split(" "),
+		    bgpos = Editor.$(".selection").css("background-position").split(" "),
 		    bgx = parseInt(bgpos[0], 10),
 		    bgy = parseInt(bgpos[1], 10),
 
@@ -154,7 +174,7 @@ define(function() {
 			cxp = cx*tw;
 			cyp = cy*th;
 
-			Editor.$("#canvas").find(".selection").find("div").each(function() {
+			Editor.$(".selection").find("div").each(function() {
 				top = parseInt(Editor.$(this).css("top"), 10);
 				left = parseInt(Editor.$(this).css("left"), 10);
 
@@ -212,6 +232,7 @@ define(function() {
 	// TODO throw this in a webworker
 
 	Canvas.fill = function(e) {
+
 		var tileset = Editor.activeTileset,
 		    layer = Editor.Layers.getActive(),
 
@@ -233,7 +254,7 @@ define(function() {
 		    fx = Editor.$("#canvas").width()/tw,
 		    fy = Editor.$("#canvas").height()/th,
 
-		    bgpos = Editor.$("#canvas").find(".selection").css("background-position").split(" "),
+		    bgpos = Editor.$(".selection").css("background-position").split(" "),
 		    bgx = parseInt(bgpos[0], 10),
 		    bgy = parseInt(bgpos[1], 10),
 
@@ -316,9 +337,10 @@ define(function() {
 
 		if (e.type == "mousedown") {
 
-			Editor.$("#canvas").find(".selection").css("background-color", "rgba(0, 0, 0, 0.3)");
+			Editor.$(".selection").css("background-color", "rgba(0, 0, 0, 0.3)");
 
 		} else if (e.type == "mouseup") {
+
 			tileset = Editor.activeTileset;
 			tw = tileset.tilewidth;
 			th = tileset.tileheight;
@@ -328,29 +350,30 @@ define(function() {
 			ex = Editor.selection[1][0] * tw;
 			ey = Editor.selection[1][1] * th;
 
-			$selection = Editor.$("#canvas").find(".selection");
+			$selection = Editor.$(".selection");
 			layer = Editor.Layers.getActive();
 
 			// Find all elements that are in range of
 			// the selection and append a copy of them
 			Editor.$(layer.elem).find("div").each(function() {
-				top = parseInt(	Editor.$(this).css("top"), 10);
-				left = parseInt(	Editor.$(this).css("left"), 10);
+
+				top = parseInt(Editor.$(this).css("top"), 10);
+				left = parseInt(Editor.$(this).css("left"), 10);
 
 				if (left >= sx && left <= ex && top >= sy && top <= ey) {
-				$tile = Editor.$(this).clone();
+					$tile = Editor.$(this).clone();
 
-				$tile.css({
+					$tile.css({
 						top: top - sy,
 						left: left - sx
 					});
-					
-				$selection.append($tile);
+						
+					$selection.append($tile);
 				}
 			});
 
 			$selection.css("background-color", "transparent");
-			$selection.addClass(	Editor.$(layer.elem).attr("class").replace("layer", "nobg"));
+			$selection.addClass(Editor.$(layer.elem).attr("class").replace("layer", "nobg"));
 			Editor.selection.custom = true;
 		}
 	};
@@ -390,7 +413,7 @@ define(function() {
 		bfr.fillRect(tw-1, 0, 1, th);
 
 		Editor.$("#canvas").css("backgroundImage", "url(" + buffer.toDataURL() + ")");
-		Editor.$("#canvas").find(".selection").css({
+		Editor.$(".selection").css({
 			width: tw,
 			height: th
 		});
