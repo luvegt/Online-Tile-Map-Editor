@@ -174,8 +174,7 @@ define(["views/tileset_view", "jquery.mousewheel", "jquery.jscrollpane"], functi
 	/* ============================= */
 
 	Tilesets.resetSelection = function() {
-		Editor.$("#canvas .selection").remove();
-		Editor.$("#tileset .selection").remove();
+		Editor.$(".selection").remove();
 		delete Editor.selection;
 	};
 
